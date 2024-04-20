@@ -5,7 +5,6 @@ import Star from "../Helpers/icons/Star";
 import PageTitle from "../Helpers/PageTitle";
 import SimpleSlider from "../Helpers/SliderCom";
 import Layout from "../Partials/Layout";
-
 import blog from "../../data/blogs.json";
 import DataIteration from "../Helpers/DataIteration";
 

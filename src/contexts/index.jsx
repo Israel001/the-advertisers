@@ -30,6 +30,7 @@ const ContextProvider = ({ children }) => {
     );
   };
 
+
   const saveWishlist = async () => {
     await axios.post(
       `${import.meta.env.VITE_HOST_URL}/users/save-wishlist`,
@@ -54,6 +55,11 @@ const ContextProvider = ({ children }) => {
       toast.success("Item removed from cart successfully");
     }
   };
+
+  const clearCart = async () => {
+    setProfile({ ...profile, cart: [] });
+    await saveCart();
+  }
 
   const removeFromWishlist = async (product) => {
     const existingWishlistIdx = profile.wishlist.findIndex(
@@ -153,6 +159,7 @@ const ContextProvider = ({ children }) => {
         cart,
         setCart,
         saveCart,
+        clearCart,
         isLoggedIn,
         setIsLoggedIn,
         profile,
