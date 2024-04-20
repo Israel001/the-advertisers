@@ -7,6 +7,8 @@ import "./index.css";
 import "react-range-slider-input/dist/style.css";
 import { registerSW } from "virtual:pwa-register";
 import { ContextProvider as AppContextProvider } from "./contexts";
+
+
 if (import.meta.env.MODE === "production") {
   registerSW();
 }

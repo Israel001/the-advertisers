@@ -2,8 +2,125 @@ import InputCom from "../Helpers/InputCom";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/Layout";
 import withDashboardContext from "../../hoc/withDashboardContext";
+import { useAppContext } from "../../contexts";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { usePaystackPayment } from "react-paystack";
+import { toast } from "react-toastify";
+import axios from "axios";
+import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
 
 function CheakoutPage() {
+  const { profile, cart, clearCart } = useAppContext();
+  const [shippingAddress, setShippingAddressg] = useState(
+    profile?.addresses[0]?.address
+  );
+  const [reference, setReference] = useState("");
+  const [selectedShipping, setSelectedShipping] = useState(0);
+  const [selectedShippingType, setSelectedShippingType] =
+    useState("free_shipping");
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setSelectedShipping(parseInt(e.target.value));
+    setSelectedShippingType(e.target.name);
+  };
+  const config = {
+    email: profile?.email,
+    publicKey: import.meta.env.VITE_PAYSTACK_KEY,
+    metadata: {
+      address: shippingAddress,
+      phone: profile?.phone,
+    },
+    amount:
+      (profile?.cart?.reduce((prev, cur) => prev + cur.total, 0) +
+        selectedShipping) *
+      100,
+  };
+
+  const verifyPayment = (reference) => {
+    setLoading(true);
+    axios
+      .post(
+        `${
+          import.meta.env.VITE_HOST_URL
+        }/order/verify-transaction/${reference}`,
+        {
+          amount:
+            profile?.cart?.reduce((prev, cur) => prev + cur.total, 0) +
+            selectedShipping,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        axios
+          .post(
+            `${import.meta.env.VITE_HOST_URL}/order`,
+            {
+              details: JSON.stringify({
+                cart: profile?.cart,
+                personalDetails: {
+                  full_name: profile?.fullname,
+                  email: profile?.email,
+                  phone: profile?.phone,
+                  address: shippingAddress,
+                },
+
+                shipping: {
+                  type: selectedShippingType,
+                  amount: selectedShipping,
+                },
+              }),
+
+              paymentId: Number(response?.data.id),
+            },
+
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          )
+          .then(async (response) => {
+            setLoading(false);
+            await clearCart();
+            toast.success(
+              "Payment successfully completed. Thank you for shopping!!"
+            );
+            navigate("/");
+          })
+          .catch((error) => {
+            setLoading(false);
+            toast.error("Error completing order, try again later!");
+          });
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error("Error completing payment, try again later!");
+      });
+  };
+
+  const onSuccess = ({ reference }) => {
+    setReference(reference);
+    verifyPayment(reference);
+  };
+
+  const onClose = () => {
+    toast.error("Your payment was unsuccessful, try again later!");
+  };
+
+  const initializePayment = usePaystackPayment(config);
+
+  if (loading) {
+    return <LoaderStyleOne />;
+  }
+
   return (
     <Layout childrenClasses="pt-0 pb-0">
       <div className="checkout-page-wrapper w-full bg-white pb-[60px]">
@@ -18,33 +135,17 @@ function CheakoutPage() {
         </div>
         <div className="checkout-main-content w-full">
           <div className="container-x mx-auto">
-            <div className="w-full sm:mb-10 mb-5">
-              <div className="sm:flex sm:space-x-[18px] s">
-                <div className="sm:w-1/2 w-full mb-5 h-[70px]">
-                  <a href="#">
-                    <div className="w-full h-full bg-[#F6F6F6] text-qblack flex justify-center items-center">
-                      <span className="text-[15px] font-medium">
-                        Log into your Account
-                      </span>
-                    </div>
-                  </a>
-                </div>
-                <div className="flex-1 h-[70px]">
-                  <a href="#">
-                    <div className="w-full h-full bg-[#F6F6F6] text-qblack flex justify-center items-center">
-                      <span className="text-[15px] font-medium">
-                        Enter Coupon Code
-                      </span>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
             <div className="w-full lg:flex lg:space-x-[30px]">
               <div className="lg:w-1/2 w-full">
                 <h1 className="sm:text-2xl text-xl text-qblack font-medium mb-5">
-                  Billing Details
+                  Personal Details
                 </h1>
+                <span className="text-xs mb-5 block">
+                  To edit or change your information, kindly{" "}
+                  <Link to="/profile">
+                    <span className="underline">click here</span>
+                  </Link>
+                </span>
                 <div className="form-area">
                   <form>
                     <div className="sm:flex sm:space-x-5 items-center mb-6">
@@ -52,14 +153,18 @@ function CheakoutPage() {
                         <InputCom
                           label="First Name*"
                           placeholder="Demo Name"
+                          value={profile?.fullName.split(" ")[0]}
                           inputClasses="w-full h-[50px]"
+                          disable
                         />
                       </div>
                       <div className="flex-1">
                         <InputCom
                           label="Last Name*"
-                          placeholder="Demo Name"
+                          placeholder="Last Name"
+                          value={profile?.fullName.split(" ")[1]}
                           inputClasses="w-full h-[50px]"
+                          disable
                         />
                       </div>
                     </div>
@@ -69,107 +174,47 @@ function CheakoutPage() {
                           label="Email Address*"
                           placeholder="demoemial@gmail.com"
                           inputClasses="w-full h-[50px]"
+                          value={profile?.email}
+                          disable
                         />
                       </div>
                       <div className="flex-1">
                         <InputCom
                           label="Phone Number*"
+                          value={profile?.phone}
                           placeholder="012 3  *******"
                           inputClasses="w-full h-[50px]"
+                          disable
                         />
                       </div>
                     </div>
                     <div className="mb-6">
                       <h1 className="input-label capitalize block  mb-2 text-qgray text-[13px] font-normal">
-                        Country*
+                        Address{" "}
                       </h1>
                       <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
-                        <span className="text-[13px] text-qgraytwo">
-                          Select Country
-                        </span>
-                        <span>
-                          <svg
-                            width="11"
-                            height="7"
-                            viewBox="0 0 11 7"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M5.4 6.8L0 1.4L1.4 0L5.4 4L9.4 0L10.8 1.4L5.4 6.8Z"
-                              fill="#222222"
-                            ></path>
-                          </svg>
-                        </span>
-                      </div>
-                    </div>
-                    <div className=" mb-6">
-                      <div className="w-full">
-                        <InputCom
-                          label="Address*"
-                          placeholder="your address here"
-                          inputClasses="w-full h-[50px]"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex space-x-5 items-center mb-6">
-                      <div className="w-1/2">
-                        <h1 className="input-label capitalize block  mb-2 text-qgray text-[13px] font-normal">
-                          Town / City*
-                        </h1>
-                        <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center">
-                          <span className="text-[13px] text-qgraytwo">
-                            Miyami Town
-                          </span>
-                          <span>
-                            <svg
-                              width="11"
-                              height="7"
-                              viewBox="0 0 11 7"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M5.4 6.8L0 1.4L1.4 0L5.4 4L9.4 0L10.8 1.4L5.4 6.8Z"
-                                fill="#222222"
-                              ></path>
-                            </svg>
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <InputCom
-                          label="Postcode / ZIP*"
-                          placeholder=""
-                          inputClasses="w-full h-[50px]"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex space-x-2 items-center mb-10">
-                      <div>
-                        <input type="checkbox" name="" id="create" />
-                      </div>
-                      <label
-                        htmlFor="create"
-                        className="text-qblack text-[15px] select-none"
-                      >
-                        Create an account?
-                      </label>
-                    </div>
-                    <div>
-                      <h1 className="text-2xl text-qblack font-medium mb-3">
-                        Billing Details
-                      </h1>
-                      <div className="flex space-x-2 items-center mb-10">
-                        <div>
-                          <input type="checkbox" name="" id="address" />
-                        </div>
-                        <label
-                          htmlFor="address"
-                          className="text-qblack text-[15px] select-none"
+                        <select
+                          style={{ outline: "none", width: "100%" }}
+                          onChange={(event) => {
+                            event.target.value
+                              ? setShippingAddressg("")
+                              : setShippingAddressg(
+                                  "Shipping address is required"
+                                );
+                            setShippingAddressg(event.target.value);
+                          }}
                         >
-                          Ship to a different address
-                        </label>
+                          <option value="">
+                            {profile?.addresses[0]?.address || "Choose address"}
+                          </option>
+                          {profile?.addresses.slice(1).map((state) => {
+                            return (
+                              <option value={state.id} key={state.id}>
+                                {state.address}
+                              </option>
+                            );
+                          })}
+                        </select>
                       </div>
                     </div>
                   </form>
@@ -184,7 +229,7 @@ function CheakoutPage() {
                   <div className="sub-total mb-6">
                     <div className=" flex justify-between mb-5">
                       <p className="text-[13px] font-medium text-qblack uppercase">
-                        PROduct
+                        product
                       </p>
                       <p className="text-[13px] font-medium text-qblack uppercase">
                         total
@@ -194,66 +239,28 @@ function CheakoutPage() {
                   </div>
                   <div className="product-list w-full mb-[30px]">
                     <ul className="flex flex-col space-y-5">
-                      <li>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="text-[15px] text-qblack mb-2.5">
-                              Apple Watch
-                              <sup className="text-[13px] text-qgray ml-2 mt-2">
-                                x1
-                              </sup>
-                            </h4>
-                            <p className="text-[13px] text-qgray">
-                              64GB, Black, 44mm, Chain Belt
-                            </p>
+                      {profile?.cart?.map((x) => (
+                        <li>
+                          <div className="flex justify-between items-center gap-14">
+                            <div>
+                              <h4 className="text-[15px] text-qblack mb-2.5">
+                                {x?.name}
+                                <sup className="text-[13px] text-qgray ml-2 mt-2">
+                                  x{x.quantity}
+                                </sup>
+                              </h4>
+                              {/* <p className="text-[13px] text-qgray">
+                                64GB, Black, 44mm, Chain Belt
+                              </p> */}
+                            </div>
+                            <div>
+                              <span className="text-[15px] text-qblack font-medium">
+                                N{x.price}
+                              </span>
+                            </div>
                           </div>
-                          <div>
-                            <span className="text-[15px] text-qblack font-medium">
-                              $38
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="text-[15px] text-qblack mb-2.5">
-                              Apple Watch
-                              <sup className="text-[13px] text-qgray ml-2 mt-2">
-                                x1
-                              </sup>
-                            </h4>
-                            <p className="text-[13px] text-qgray">
-                              64GB, Black, 44mm, Chain Belt
-                            </p>
-                          </div>
-                          <div>
-                            <span className="text-[15px] text-qblack font-medium">
-                              $38
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="text-[15px] text-qblack mb-2.5">
-                              Apple Watch
-                              <sup className="text-[13px] text-qgray ml-2 mt-2">
-                                x1
-                              </sup>
-                            </h4>
-                            <p className="text-[13px] text-qgray">
-                              64GB, Black, 44mm, Chain Belt
-                            </p>
-                          </div>
-                          <div>
-                            <span className="text-[15px] text-qblack font-medium">
-                              $38
-                            </span>
-                          </div>
-                        </div>
-                      </li>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div className="w-full h-[1px] bg-[#EDEDED]"></div>
@@ -264,105 +271,120 @@ function CheakoutPage() {
                         SUBTOTAL
                       </p>
                       <p className="text-[15px] font-medium text-qblack uppercase">
-                        $365
+                        N
+                        {profile?.cart?.reduce(
+                          (prev, cur) => prev + cur.total,
+                          0
+                        )}
                       </p>
                     </div>
                   </div>
 
                   <div className="w-full mt-[30px]">
                     <div className="sub-total mb-6">
-                      <div className=" flex justify-between mb-5">
-                        <div>
-                          <span className="text-xs text-qgraytwo mb-3 block">
-                            SHIPPING
-                          </span>
-                          <p className="text-base font-medium text-qblack">
-                            Free Shipping
-                          </p>
-                        </div>
-                        <p className="text-[15px] font-medium text-qblack">
-                          +$0
-                        </p>
-                      </div>
-                      <div className="w-full h-[1px] bg-[#EDEDED]"></div>
+                      <span className="text-[15px] font-medium text-qblack mb-[18px] block">
+                        Shipping
+                      </span>
+                      <form>
+                        <ul className="flex flex-col space-y-1">
+                          <li>
+                            <div className="flex justify-between items-center">
+                              <div className="flex space-x-2.5 items-center">
+                                <div className="input-radio">
+                                  <input
+                                    type="radio"
+                                    name="free_shipping"
+                                    value={0}
+                                    className="accent-pink-500"
+                                    onChange={handleChange}
+                                    checked={selectedShipping === 0}
+                                  />
+                                </div>
+                                <span className="text-[13px] text-normal text-qgraytwo">
+                                  Free Shipping
+                                </span>
+                              </div>
+                              <span className="text-[13px] text-normal text-qgraytwo">
+                                +N00.00
+                              </span>
+                            </div>
+                          </li>
+                          <li>
+                            <div className="flex justify-between items-center">
+                              <div className="flex space-x-2.5 items-center">
+                                <div className="input-radio">
+                                  <input
+                                    type="radio"
+                                    name="flat_rate"
+                                    value={1000}
+                                    onChange={handleChange}
+                                    className="accent-pink-500"
+                                    checked={selectedShipping === 1000}
+                                  />
+                                </div>
+                                <span className="text-[13px] text-normal text-qgraytwo">
+                                  Flat Rate
+                                </span>
+                              </div>
+                              <span className="text-[13px] text-normal text-qgraytwo">
+                                +N1000.00
+                              </span>
+                            </div>
+                          </li>
+                          <li>
+                            <div className="flex justify-between items-center">
+                              <div className="flex space-x-2.5 items-center">
+                                <div className="input-radio">
+                                  <input
+                                    type="radio"
+                                    name="local_delivery"
+                                    value={800}
+                                    onChange={handleChange}
+                                    className="accent-pink-500"
+                                    checked={selectedShipping === 800}
+                                  />
+                                </div>
+                                <span className="text-[13px] text-normal text-qgraytwo">
+                                  Local Delivery
+                                </span>
+                              </div>
+                              <span className="text-[13px] text-normal text-qgraytwo">
+                                +N800.00
+                              </span>
+                            </div>
+                          </li>
+                        </ul>
+                      </form>
                     </div>
                   </div>
 
                   <div className="mt-[30px]">
                     <div className=" flex justify-between mb-5">
                       <p className="text-2xl font-medium text-qblack">Total</p>
-                      <p className="text-2xl font-medium text-qred">$365</p>
+                      <p className="text-2xl font-medium text-qred">
+                        N
+                        {profile?.cart?.reduce(
+                          (prev, cur) => prev + cur.total,
+                          0
+                        ) + selectedShipping}
+                      </p>
                     </div>
                   </div>
-                  <div className="shipping mt-[30px]">
-                    <ul className="flex flex-col space-y-1">
-                      <li className=" mb-5">
-                        <div className="flex space-x-2.5 items-center mb-4">
-                          <div className="input-radio">
-                            <input
-                              type="radio"
-                              name="price"
-                              className="accent-pink-500"
-                              id="transfer"
-                            />
-                          </div>
-                          <label
-                            htmlFor="transfer"
-                            className="text-[18px] text-normal text-qblack"
-                          >
-                            Direct Bank Transfer
-                          </label>
-                        </div>
-                        <p className="text-qgraytwo text-[15px] ml-6">
-                          Make your payment directly into our bank account.
-                          Please use your Order ID as the payment reference.
-                        </p>
-                      </li>
-                      <li>
-                        <div className="flex space-x-2.5 items-center mb-5">
-                          <div className="input-radio">
-                            <input
-                              type="radio"
-                              name="price"
-                              className="accent-pink-500"
-                              id="delivery"
-                            />
-                          </div>
-                          <label
-                            htmlFor="delivery"
-                            className="text-[18px] text-normal text-qblack"
-                          >
-                            Cash on Delivery
-                          </label>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex space-x-2.5 items-center mb-5">
-                          <div className="input-radio">
-                            <input
-                              type="radio"
-                              name="price"
-                              className="accent-pink-500"
-                              id="bank"
-                            />
-                          </div>
-                          <label
-                            htmlFor="bank"
-                            className="text-[18px] text-normal text-qblack"
-                          >
-                            Credit/Debit Cards or Paypal
-                          </label>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <a href="#">
-                    <div className="w-full h-[50px] black-btn flex justify-center items-center">
+
+                  <div className="w-full h-[50px] black-btn flex justify-center items-center">
+                    <button
+                      onClick={() => {
+                        initializePayment({
+                          onSuccess,
+                          onClose,
+                        });
+                      }}
+                    >
                       <span className="text-sm font-semibold">
                         Place Order Now
                       </span>
-                    </div>
-                  </a>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
