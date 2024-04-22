@@ -30,7 +30,6 @@ const ContextProvider = ({ children }) => {
     );
   };
 
-
   const saveWishlist = async () => {
     await axios.post(
       `${import.meta.env.VITE_HOST_URL}/users/save-wishlist`,
@@ -57,6 +56,8 @@ const ContextProvider = ({ children }) => {
   };
 
   const clearCart = async () => {
+    localStorage.removeItem('cart');
+    setCart([]);
     setProfile({ ...profile, cart: [] });
     await saveCart();
   }

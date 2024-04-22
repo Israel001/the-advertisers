@@ -85,7 +85,7 @@ function Profile() {
                         </div>
                       </Link>
                     </div>
-                    {profile.type !== "STORE" && (
+                    {profile?.type !== "STORE" && (
                       <div className="item group">
                         <Link to="/profile#address">
                           <div className="flex space-x-3 items-center text-qgray hover:text-qblack">

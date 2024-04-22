@@ -71,29 +71,22 @@ function CheakoutPage() {
                   phone: profile?.phone,
                   address: shippingAddress,
                 },
-
                 shipping: {
                   type: selectedShippingType,
                   amount: selectedShipping,
                 },
               }),
-
               paymentId: Number(response?.data.id),
             },
-
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
               },
             }
           )
-          .then(async (response) => {
+          .then(async () => {
             setLoading(false);
-            await clearCart();
-            toast.success(
-              "Payment successfully completed. Thank you for shopping!!"
-            );
-            navigate("/");
+            clearCart().then(() => navigate("/profile#order"));
           })
           .catch((error) => {
             setLoading(false);
