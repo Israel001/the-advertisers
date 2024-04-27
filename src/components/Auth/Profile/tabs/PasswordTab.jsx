@@ -35,6 +35,7 @@ export default function PasswordTab() {
       }
     }
   };
+  
   return (
     <div className="changePasswordTab w-full">
       <div className="w-full flex xl:flex-row flex-col-reverse space-x-5 xl:items-center">

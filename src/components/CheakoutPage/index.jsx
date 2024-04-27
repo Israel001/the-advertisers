@@ -86,7 +86,7 @@ function CheakoutPage() {
           )
           .then(async () => {
             setLoading(false);
-            clearCart().then(() => navigate("/profile#order"));
+            clearCart().then(() => navigate("/thank-you"));
           })
           .catch((error) => {
             setLoading(false);
