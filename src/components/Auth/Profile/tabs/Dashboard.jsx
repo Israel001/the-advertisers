@@ -1,8 +1,64 @@
 import React from "react";
 import { useAppContext } from "../../../../contexts";
+import { FaEdit } from "react-icons/fa";
+import CustomModal from "../../../Modal/modal";
+import axios from "axios";
+import LoadingSvg from "../../../Modal/LoadingSvg";
+import { toast } from "react-toastify";
+
 
 export default function Dashboard() {
   const { profile } = useAppContext();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [loading, setLoading] = React.useState(false);
+
+  const mainAddress = profile?.addresses?.filter(
+    (address) => address.isMainAddress
+  );
+
+  const [formData, setFormData] = React.useState({
+    fullName: profile?.fullName,
+    email: profile?.email,
+    phone: profile?.phone,
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    axios
+      .put(
+        `${import.meta.env.VITE_HOST_URL}/users/customer/${profile?.id}`,
+        {
+          fullName: formData?.fullName,
+          email: formData?.email,
+          phone: formData?.phone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then(async (response) => {
+        setLoading(false);
+        toast.success("Profile infomation updated successfully");
+        setOpen(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error("Error updating profile, try again later!");
+      });
+  };
 
   return (
     <>
@@ -71,7 +127,7 @@ export default function Dashboard() {
           </p>
           <span className="text-[40px] text-white group-hover:text-qblacktext font-bold leading-none mt-1 block">
             {
-              profile?.orders?.filter(
+              profile?.orders?.data?.filter(
                 (order) =>
                   order.status === "PENDING" || order.status === "IN_PROGRESS"
               ).length
@@ -108,7 +164,7 @@ export default function Dashboard() {
           </p>
           <span className="text-[40px] text-white group-hover:text-qblacktext font-bold leading-none mt-1 block">
             {
-              profile?.orders?.filter((order) => order.status === "DELIVERED")
+              profile?.orders?.data?.filter((order) => order.status === "DELIVERED")
                 .length
             }
           </span>
@@ -127,6 +183,14 @@ export default function Dashboard() {
             <p className="title text-[22px] font-semibold">
               Personal Information
             </p>
+            <div>
+              <FaEdit
+                size={18}
+                color="#b91c1c"
+                className=" cursor-pointer"
+                onClick={handleOpen}
+              />
+            </div>
           </div>
           <div className="mt-5">
             <span className="text-base text-qgraytwo">Full Name:</span>{" "}
@@ -149,105 +213,89 @@ export default function Dashboard() {
           <div className="mt-5">
             <span className="text-base text-qgraytwo">Main Address:</span>{" "}
             <span className="text-base text-qblack font-medium">
-              {profile?.address || profile?.store?.address}
+              {mainAddress && mainAddress[0]?.address}
             </span>
           </div>
         </div>
-        {/* <div className="">
-          <p className="title text-[22px] font-semibold">
-            Parsonal Information
-          </p>
-          <div className="mt-5">
-            <table>
-              <tbody>
-                <tr className="inline-flex mb-5">
-                  <td className="text-base text-qgraytwo w-[100px] block">
-                    <div>Name:</div>
-                  </td>
-                  <td className="text-base text-qblack font-medium">
-                    Shuvo khan
-                  </td>
-                </tr>
-                <tr className="inline-flex mb-5">
-                  <td className="text-base text-qgraytwo w-[100px] block">
-                    <div>Email:</div>
-                  </td>
-                  <td className="text-base text-qblack font-medium">
-                    rafiqulislamsuvobd@gmail.com
-                  </td>
-                </tr>
-                <tr className="inline-flex mb-5">
-                  <td className="text-base text-qgraytwo w-[100px] block">
-                    <div>Phone:</div>
-                  </td>
-                  <td className="text-base text-qblack font-medium">
-                    01792166627
-                  </td>
-                </tr>
-                <tr className="inline-flex mb-5">
-                  <td className="text-base text-qgraytwo w-[100px] block">
-                    <div>City:</div>
-                  </td>
-                  <td className="text-base text-qblack font-medium">
-                    Dhaka,Bangladesh
-                  </td>
-                </tr>
-                <tr className="inline-flex mb-5">
-                  <td className="text-base text-qgraytwo w-[100px] block">
-                    <div>Zip:</div>
-                  </td>
-                  <td className="text-base text-qblack font-medium">4040</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="w-[1px] h-[164px] bg-[#E4E4E4]"></div>
-        <div className="ml-6">
-          <p className="title text-[22px] font-semibold">Shop Info</p>
-          <div className="mt-5">
-            <table>
-              <tr className="inline-flex mb-5">
-                <td className="text-base text-qgraytwo w-[100px] block">
-                  <div>Name:</div>
-                </td>
-                <td className="text-base text-qblack font-medium">
-                  Shuvo khan
-                </td>
-              </tr>
-              <tr className="inline-flex mb-5">
-                <td className="text-base text-qgraytwo w-[100px] block">
-                  <div>Email:</div>
-                </td>
-                <td className="text-base text-qblack font-medium">
-                  rafiqulislamsuvobd@gmail.com
-                </td>
-              </tr>
-              <tr className="inline-flex mb-5">
-                <td className="text-base text-qgraytwo w-[100px] block">
-                  <div>Phone:</div>
-                </td>
-                <td className="text-base text-qblack font-medium">
-                  01792166627
-                </td>
-              </tr>
-              <tr className="inline-flex mb-5">
-                <td className="text-base text-qgraytwo w-[100px] block">
-                  <div>City:</div>
-                </td>
-                <td className="text-base text-qblack font-medium">
-                  Dhaka,Bangladesh
-                </td>
-              </tr>
-              <tr className="inline-flex mb-5">
-                <td className="text-base text-qgraytwo w-[100px] block">
-                  <div>Zip:</div>
-                </td>
-                <td className="text-base text-qblack font-medium">4040</td>
-              </tr>
-            </table>
-          </div>
-        </div> */}
+        <CustomModal open={open} handleClose={handleClose}>
+          <form onSubmit={handleSubmit}>
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="fullName"
+                >
+                  Full Name
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  onChange={handleChange}
+                  defaultValue={profile?.fullName || profile?.name}
+                  placeholder="Full Name"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="email"
+                >
+                  Email
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="email"
+                  name="email"
+                  type="email"
+                  onChange={handleChange}
+                  defaultValue={profile?.email}
+                  placeholder="Email"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="phone"
+                >
+                  Phone
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  onChange={handleChange}
+                  defaultValue={profile?.phone}
+                  placeholder="Phone"
+                />
+              </div>
+              <div className="mb-6">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="mainAddress"
+                >
+                  Main Address
+                </label>
+                <textarea
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Main Address"
+                  defaultValue={mainAddress && mainAddress[0]?.address}
+                  disabled
+                ></textarea>
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  className="bg-[#b91c1c] hover:bg-[#b91c1c] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="submit"
+                >
+                  {loading ? <LoadingSvg /> : "Submit"}
+                </button>
+              </div>
+            </div>
+          </form>
+        </CustomModal>
       </div>
     </>
   );

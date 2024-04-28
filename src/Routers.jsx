@@ -23,6 +23,10 @@ import SingleProductPage from "./components/SingleProductPage";
 import TermsCondition from "./components/TermsCondition/index";
 import TrackingOrder from "./components/TrackingOrder";
 import Wishlist from "./components/Wishlist";
+import ThankYou from "./components/ThankYou/ThankYou";
+import ViewOrder from "./components/ViewOrder/ViewOrder";
+
+
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -34,6 +38,9 @@ const router = createBrowserRouter([
   { path: "/single-product/:id", element: <SingleProductPage /> },
   { path: "/cart", element: <CardPage /> },
   { path: "/checkout", element: <CheakoutPage /> },
+  { path: "/thank-you", element: <ThankYou /> },
+  // { path: "/view-order/:id", element: <ViewOrder /> },
+
   { path: "/wishlist", element: <Wishlist /> },
   // { path: "/flash-sale", element: <FlashSale /> },
   { path: "/saller-page", element: <SallerPage /> },
