@@ -24,6 +24,7 @@ import SupportTab from "./tabs/SupportTab";
 import WishlistTab from "./tabs/WishlistTab";
 import withDashboardContext from "../../../hoc/withDashboardContext";
 import { useAppContext } from "../../../contexts";
+import ViewOrder from "../../ViewOrder/ViewOrder";
 
 function Profile() {
   const [switchDashboard, setSwitchDashboard] = useState(false);
@@ -166,6 +167,10 @@ function Profile() {
                     ) : active === "review" ? (
                       <>
                         <ReviewTab products={datas.products} />
+                      </>
+                    ) : active === "/view-order/:id" ? (
+                      <>
+                        <ViewOrder />
                       </>
                     ) : (
                       ""

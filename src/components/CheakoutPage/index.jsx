@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import InputCom from "../Helpers/InputCom";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/Layout";
@@ -86,7 +87,7 @@ function CheakoutPage() {
           )
           .then(async () => {
             setLoading(false);
-            clearCart()
+            clearCart();
             // Show your order has been received page
           })
           .catch((error) => {
