@@ -40,7 +40,7 @@ function CheakoutPage() {
       100,
   };
 
-  const verifyPayment = (reference) => {
+  const verifyPayment = async (reference) => {
     setLoading(true);
     axios
       .post(
@@ -86,14 +86,15 @@ function CheakoutPage() {
           )
           .then(async () => {
             setLoading(false);
-            clearCart().then(() => navigate("/profile#order"));
+            clearCart()
+            // Show your order has been received page
           })
           .catch((error) => {
             setLoading(false);
             toast.error("Error completing order, try again later!");
           });
       })
-      .catch((error) => {
+      .catch(() => {
         setLoading(false);
         toast.error("Error completing payment, try again later!");
       });
@@ -366,7 +367,7 @@ function CheakoutPage() {
 
                   <div className="w-full h-[50px] black-btn flex justify-center items-center">
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         initializePayment({
                           onSuccess,
                           onClose,

@@ -12,6 +12,11 @@ const ContextProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
+    saveCart();
+    saveWishlist();
+  }, [profile]);
+
+  useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart"));
     if (savedCart) setCart(savedCart);
   }, []);
@@ -56,11 +61,10 @@ const ContextProvider = ({ children }) => {
   };
 
   const clearCart = async () => {
-    localStorage.removeItem('cart');
+    localStorage.removeItem("cart");
     setCart([]);
     setProfile({ ...profile, cart: [] });
-    await saveCart();
-  }
+  };
 
   const removeFromWishlist = async (product) => {
     const existingWishlistIdx = profile.wishlist.findIndex(
