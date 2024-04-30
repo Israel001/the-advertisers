@@ -13,7 +13,7 @@ import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
 
 function CheakoutPage() {
   const { profile, cart, clearCart } = useAppContext();
-  const [shippingAddress, setShippingAddressg] = useState(
+  const [shippingAddress, setShippingAddress] = useState(
     profile?.addresses[0]?.address
   );
   const [reference, setReference] = useState("");
@@ -25,9 +25,11 @@ function CheakoutPage() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    e.stopPropagation();
     setSelectedShipping(parseInt(e.target.value));
     setSelectedShippingType(e.target.name);
   };
+
   const config = {
     email: profile?.email,
     publicKey: import.meta.env.VITE_PAYSTACK_KEY,
@@ -39,6 +41,7 @@ function CheakoutPage() {
       (profile?.cart?.reduce((prev, cur) => prev + cur.total, 0) +
         selectedShipping) *
       100,
+    channels: ["card", "bank_transfer"],
   };
 
   const verifyPayment = async (reference) => {
@@ -87,7 +90,7 @@ function CheakoutPage() {
           )
           .then(async () => {
             setLoading(false);
-            clearCart();
+            clearCart().then(() => navigate("/thank-you"));
             // Show your order has been received page
           })
           .catch((error) => {
@@ -107,7 +110,7 @@ function CheakoutPage() {
   };
 
   const onClose = () => {
-    toast.error("Your payment was unsuccessful, try again later!");
+    // toast.error("Your payment was unsuccessful, try again later!");
   };
 
   const initializePayment = usePaystackPayment(config);
@@ -192,11 +195,11 @@ function CheakoutPage() {
                           style={{ outline: "none", width: "100%" }}
                           onChange={(event) => {
                             event.target.value
-                              ? setShippingAddressg("")
-                              : setShippingAddressg(
+                              ? setShippingAddress("")
+                              : setShippingAddress(
                                   "Shipping address is required"
                                 );
-                            setShippingAddressg(event.target.value);
+                            setShippingAddress(event.target.value);
                           }}
                         >
                           <option value="">
@@ -282,7 +285,20 @@ function CheakoutPage() {
                       </span>
                       <form>
                         <ul className="flex flex-col space-y-1">
-                          <li>
+                          <li
+                            id="free_shipping_0"
+                            onClick={(event) => {
+                              const listEl =
+                                event.target.parentNode.closest("li");
+                              const splittedId = listEl.id.split("_");
+                              setSelectedShipping(
+                                parseInt(splittedId[splittedId.length - 1])
+                              );
+                              splittedId.pop();
+                              setSelectedShippingType(splittedId.join("_"));
+                            }}
+                            style={{ cursor: "pointer" }}
+                          >
                             <div className="flex justify-between items-center">
                               <div className="flex space-x-2.5 items-center">
                                 <div className="input-radio">
@@ -304,7 +320,20 @@ function CheakoutPage() {
                               </span>
                             </div>
                           </li>
-                          <li>
+                          <li
+                            id="flat_rate_1000"
+                            onClick={(event) => {
+                              const listEl =
+                                event.target.parentNode.closest("li");
+                              const splittedId = listEl.id.split("_");
+                              setSelectedShipping(
+                                parseInt(splittedId[splittedId.length - 1])
+                              );
+                              splittedId.pop();
+                              setSelectedShippingType(splittedId.join("_"));
+                            }}
+                            style={{ cursor: "pointer" }}
+                          >
                             <div className="flex justify-between items-center">
                               <div className="flex space-x-2.5 items-center">
                                 <div className="input-radio">
@@ -326,7 +355,20 @@ function CheakoutPage() {
                               </span>
                             </div>
                           </li>
-                          <li>
+                          <li
+                            id="local_delivery_800"
+                            onClick={(event) => {
+                              const listEl =
+                                event.target.parentNode.closest("li");
+                              const splittedId = listEl.id.split("_");
+                              setSelectedShipping(
+                                parseInt(splittedId[splittedId.length - 1])
+                              );
+                              splittedId.pop();
+                              setSelectedShippingType(splittedId.join("_"));
+                            }}
+                            style={{ cursor: "pointer" }}
+                          >
                             <div className="flex justify-between items-center">
                               <div className="flex space-x-2.5 items-center">
                                 <div className="input-radio">
@@ -366,19 +408,19 @@ function CheakoutPage() {
                     </div>
                   </div>
 
-                  <div className="w-full h-[50px] black-btn flex justify-center items-center">
-                    <button
-                      onClick={async () => {
-                        initializePayment({
-                          onSuccess,
-                          onClose,
-                        });
-                      }}
-                    >
-                      <span className="text-sm font-semibold">
-                        Place Order Now
-                      </span>
-                    </button>
+                  <div
+                    className="w-full h-[50px] black-btn flex justify-center items-center"
+                    onClick={async () => {
+                      initializePayment({
+                        onSuccess,
+                        onClose,
+                      });
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span className="text-sm font-semibold">
+                      Place Order Now
+                    </span>
                   </div>
                 </div>
               </div>

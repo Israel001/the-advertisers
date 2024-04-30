@@ -22,38 +22,41 @@ export default function PasswordTab() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!loading) {
+      if (newPassword !== confirmPassword) {
+        setError("Passwords do not match");
+        return;
+      } else {
+        setError("");
+        setLoading(true);
+        axios
+          .post(
+            `${import.meta.env.VITE_HOST_URL}/auth/change-password`,
+            { newPassword: newPassword, oldPassword: oldPassword },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          )
+          .then(async (response) => {
+            setLoading(false);
+            toast.success("Password Changed successfully");
+            setOldPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
+          })
+          .catch((error) => {
+            setLoading(false);
+            if (error?.response?.data?.statusCode) {
+              return toast.error(
+                "Provided old password is incorrect, try confirm and try again!"
+              );
+            }
 
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    } else {
-      setError("");
-      setLoading(true);
-      console.log("");
-      axios
-        .post(
-          `${import.meta.env.VITE_HOST_URL}/auth/change-password`,
-          { newPassword: newPassword, oldPassword: oldPassword },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-          }
-        )
-        .then(async (response) => {
-          setLoading(false);
-          toast.success("Password Changed successfully");
-        })
-        .catch((error) => {
-          setLoading(false);
-          if (error?.response?.data?.statusCode) {
-          return  toast.error(
-              "Provided old password is incorrect, try confirm and try again!"
-            );
-          }
-
-          toast.error("Error changing password, try again later!");
-        });
+            toast.error("Error changing password, try again later!");
+          });
+      }
     }
   };
 
@@ -186,16 +189,14 @@ export default function PasswordTab() {
               <div className="sm:flex sm:space-x-[30px] items-center">
                 <div className="w-[180px] h-[50px]">
                   <button type="submit" className="yellow-btn">
-                    <div className="w-full text-sm text-white font-semibold">
+                    <div
+                      className="w-full text-sm text-white font-semibold"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
                       {loading ? <LoadingSvg /> : "Update Password"}
                     </div>
                   </button>
                 </div>
-                <button type="button">
-                  <div className="w-full text-sm font-semibold text-qblack mb-5 sm:mb-0">
-                    Cancel
-                  </div>
-                </button>
               </div>
             </div>
           </form>

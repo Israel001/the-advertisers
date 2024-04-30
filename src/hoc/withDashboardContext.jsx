@@ -21,6 +21,7 @@ const withDashboardContext = (Component) => {
         })
         .then((response) => {
           setProfile(response.data);
+          setLoading(false);
         })
         .catch((error) => {
           if (error.response?.data?.statusCode === 401) {
@@ -45,7 +46,6 @@ const withDashboardContext = (Component) => {
       }
       setIsLoggedIn(true);
       getProfile(accessToken);
-      setLoading(false);
     }, []);
 
     return isLoading ? <LoaderStyleOne /> : <Component />;

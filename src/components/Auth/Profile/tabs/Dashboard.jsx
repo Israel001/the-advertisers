@@ -102,7 +102,7 @@ export default function Dashboard() {
             Total Orders
           </p>
           <span className="text-[40px] text-white group-hover:text-qblacktext font-bold leading-none mt-1 block">
-            {profile?.orders?.length}
+            {profile?.orders?.data?.length}
           </span>
         </div>
         <div className="qv-item w-[252px] h-[208px] bg-qblack group hover:bg-qyellow transition-all duration-300 ease-in-out p-6">

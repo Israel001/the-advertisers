@@ -92,7 +92,7 @@ export default function Cart({ className, type }) {
                 <a href="/checkout">
                   <div className="w-full h-[50px]">
                     <div className={type === 3 ? "blue-btn" : "yellow-btn"}>
-                      <span className="text-sm">Checkout Now</span>
+                      <span className="text-sm text-white">Checkout Now</span>
                     </div>
                   </div>
                 </a>
