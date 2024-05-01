@@ -152,7 +152,7 @@ function CheakoutPage() {
                           label="First Name*"
                           placeholder="Demo Name"
                           value={profile?.fullName.split(" ")[0]}
-                          inputClasses="w-full h-[50px]"
+                          inputClasses="w-full h-[50px] appearance-none block w-full bg-gray-200 text-gray-500 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none "
                           disable
                         />
                       </div>
@@ -161,7 +161,7 @@ function CheakoutPage() {
                           label="Last Name*"
                           placeholder="Last Name"
                           value={profile?.fullName.split(" ")[1]}
-                          inputClasses="w-full h-[50px]"
+                          inputClasses="w-full h-[50px] appearance-none block w-full bg-gray-200 text-gray-500 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none"
                           disable
                         />
                       </div>
@@ -171,7 +171,7 @@ function CheakoutPage() {
                         <InputCom
                           label="Email Address*"
                           placeholder="demoemial@gmail.com"
-                          inputClasses="w-full h-[50px]"
+                          inputClasses="w-full h-[50px] appearance-none block w-full bg-gray-200 text-gray-500 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none"
                           value={profile?.email}
                           disable
                         />
@@ -181,7 +181,7 @@ function CheakoutPage() {
                           label="Phone Number*"
                           value={profile?.phone}
                           placeholder="012 3  *******"
-                          inputClasses="w-full h-[50px]"
+                          inputClasses="w-full h-[50px] appearance-none block w-full bg-gray-200 text-gray-500 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none"
                           disable
                         />
                       </div>

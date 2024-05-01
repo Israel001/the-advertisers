@@ -73,7 +73,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="quick-view-grid w-full flex justify-between items-center mt-3 ">
-        <div className="qv-item w-[252px] h-[208px] bg-qblack group hover:bg-qyellow transition-all duration-300 ease-in-out p-6">
+        <div className="qv-item w-[252px] h-[208px] bg-qblack group hover:bg-qyellow hover:text-white transition-all duration-300 ease-in-out p-6">
           <div className="w-[62px] h-[62px] rounded bg-white flex justify-center items-center">
             <span>
               <svg
@@ -98,10 +98,10 @@ export default function Dashboard() {
               </svg>
             </span>
           </div>
-          <p className="text-xl text-white group-hover:text-qblacktext mt-5">
+          <p className="text-xl text-white group-hover:text-white text mt-5">
             Total Orders
           </p>
-          <span className="text-[40px] text-white group-hover:text-qblacktext font-bold leading-none mt-1 block">
+          <span className="text-[40px] text-white group-hover:text-white text font-bold leading-none mt-1 block">
             {profile?.orders?.data?.length}
           </span>
         </div>
@@ -122,10 +122,10 @@ export default function Dashboard() {
               </svg>
             </span>
           </div>
-          <p className="text-xl text-white group-hover:text-qblacktext mt-5">
+          <p className="text-xl text-white group-hover:text-white text mt-5">
             Pending Orders
           </p>
-          <span className="text-[40px] text-white group-hover:text-qblacktext font-bold leading-none mt-1 block">
+          <span className="text-[40px] text-white group-hover:text-white text font-bold leading-none mt-1 block">
             {
               profile?.orders?.data?.filter(
                 (order) =>
@@ -159,10 +159,10 @@ export default function Dashboard() {
               </svg>
             </span>
           </div>
-          <p className="text-xl text-white group-hover:text-qblacktext mt-5">
+          <p className="text-xl text-white group-hover:text-white text mt-5">
             Completed Orders
           </p>
-          <span className="text-[40px] text-white group-hover:text-qblacktext font-bold leading-none mt-1 block">
+          <span className="text-[40px] text-white group-hover:text-white text font-bold leading-none mt-1 block">
             {
               profile?.orders?.data?.filter((order) => order.status === "DELIVERED")
                 .length

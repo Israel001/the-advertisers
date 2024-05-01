@@ -224,6 +224,9 @@ export default function AddressesTab() {
                   {x.state?.name || "-----"}
                 </span>
               </div>
+              <p className=" float-end text-[#b91c1c] font-semibold">
+                {x.isMainAddress ? "Main Address" : ""}
+              </p>
             </div>
           </div>
         ))}

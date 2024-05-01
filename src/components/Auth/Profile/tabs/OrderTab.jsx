@@ -1,16 +1,53 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../../../contexts";
 import moment from "moment";
 import Pagination from "@mui/material/Pagination";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import LoaderStyleOne from "../../../Helpers/Loaders/LoaderStyleOne";
 
 export default function OrderTab() {
   const { profile } = useAppContext();
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [allOrders, setAllOrders] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const getOrderData = () => {
+    setLoading(true);
+    axios
+      .get(
+        `${
+          import.meta.env.VITE_HOST_URL
+        }/order?pagination[page]=${page}&pagination[limit]=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        setAllOrders(response?.data?.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getOrderData();
+  }, [page]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
-    // You can use the value to fetch data for the new page, etc.
   };
+
+  if (loading) {
+    return <LoaderStyleOne />;
+  }
+
   return (
     <>
       <div className="relative w-full overflow-x-auto sm:rounded-lg">
@@ -27,7 +64,7 @@ export default function OrderTab() {
               <td className="py-4 whitespace-nowrap  text-center">Action</td>
             </tr>
             {/* table heading end */}
-            {profile?.orders?.data?.map((order) => {
+            {allOrders?.map((order) => {
               return (
                 <>
                   <tr
@@ -55,28 +92,33 @@ export default function OrderTab() {
                       </span>
                     </td>
                     <td className="text-center py-4">
-                      <button
-                        type="button"
-                        className="w-[116px] h-[46px] bg-qyellow font-bold"
-                      >
-                        View Details
-                      </button>
+                      <Link to={`/profile#/view-order/${order?.id}`}>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            localStorage.setItem("orderId", order?.id)
+                          }
+                          className="w-[116px] h-[46px] text-white bg-qyellow font-bold"
+                        >
+                          View Details
+                        </button>
+                      </Link>
                     </td>
                   </tr>
                 </>
               );
             })}
-            <tr>
-              {" "}
-              <Pagination
-                count={profile?.orders?.length}
-                page={page}
-                onChange={handlePageChange}
-                color="secondary"
-              />
-            </tr>
           </tbody>
         </table>
+        <div className="flex justify-center mt-6 ">
+          {" "}
+          <Pagination
+            count={profile?.orders?.pagination?.total / limit}
+            page={page}
+            onChange={handlePageChange}
+            color="error"
+          />
+        </div>
       </div>
     </>
   );
