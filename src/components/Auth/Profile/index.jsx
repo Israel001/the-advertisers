@@ -64,13 +64,19 @@ function Profile() {
               <div className="profile-wrapper w-full mt-8 flex space-x-10">
                 <div className="w-[236px] min-h-[600px] border-r border-[rgba(0, 0, 0, 0.1)]">
                   <div className="flex flex-col space-y-10">
-                    <div className="item group">
+                    <div className={`item group `}>
                       <Link to="/profile#dashboard">
-                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                        <div
+                          className={`flex space-x-3 items-center text-qgray hover:text-qblack ${
+                            active === "dashboard"
+                              ? " bg-red-700 text-white px-2 py-3 hover:text-white"
+                              : ""
+                          } `}
+                        >
                           <span>
                             <IcoDashboard />
                           </span>
-                          <span className=" font-normal text-base">
+                          <span className={` font-normal text-base`}>
                             Dashboard
                           </span>
                         </div>
@@ -78,7 +84,14 @@ function Profile() {
                     </div>
                     <div className="item group">
                       <Link to="/profile#order">
-                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                        <div
+                          className={`flex space-x-3 items-center text-qgray hover:text-qblack ${
+                            active === "order" ||
+                            active.includes("/view-order/")
+                              ? " bg-red-700 text-white px-2 py-3 hover:text-white"
+                              : ""
+                          } `}
+                        >
                           <span>
                             <IcoCart />
                           </span>
@@ -89,11 +102,17 @@ function Profile() {
                     {profile?.type !== "STORE" && (
                       <div className="item group">
                         <Link to="/profile#address">
-                          <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                          <div
+                            className={`flex space-x-3 items-center text-qgray hover:text-qblack ${
+                              active === "address"
+                                ? " bg-red-700 text-white px-2 py-3 hover:text-white"
+                                : ""
+                            } `}
+                          >
                             <span>
                               <IcoAdress />
                             </span>
-                            <span className=" font-normal text-base">
+                            <span className="font-normal text-base">
                               Address
                             </span>
                           </div>
@@ -102,7 +121,13 @@ function Profile() {
                     )}
                     <div className="item group">
                       <Link to="/profile#password">
-                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                        <div
+                          className={`flex space-x-3 items-center text-qgray hover:text-qblack ${
+                            active === "password"
+                              ? " bg-red-700 text-white px-2 py-3 hover:text-white"
+                              : ""
+                          } `}
+                        >
                           <span>
                             <IcoPassword />
                           </span>
@@ -168,7 +193,7 @@ function Profile() {
                       <>
                         <ReviewTab products={datas.products} />
                       </>
-                    ) : active === "/view-order/:id" ? (
+                    ) : active.includes("/view-order/") ? (
                       <>
                         <ViewOrder />
                       </>
