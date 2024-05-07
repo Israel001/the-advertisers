@@ -6,26 +6,18 @@ import { toast } from "react-toastify";
 const AppContext = createContext({});
 
 const ContextProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profile, setProfile] = useState();
-  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-    saveCart();
     saveWishlist();
   }, [profile]);
 
-  useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart"));
-    if (savedCart) setCart(savedCart);
-  }, []);
-
-  const saveCart = async () => {
+  const saveCart = async (cartData) => {
     await axios.post(
       `${import.meta.env.VITE_HOST_URL}/users/save-cart`,
       {
-        cartData: JSON.stringify(profile.cart),
+        cartData: JSON.stringify(cartData),
       },
       {
         headers: {
@@ -55,14 +47,12 @@ const ContextProvider = ({ children }) => {
       const clonedProfile = { ...profile };
       clonedProfile.cart.splice(existingCartIdx, 1);
       setProfile(clonedProfile);
-      await saveCart();
+      await saveCart(clonedProfile.cart);
       toast.success("Item removed from cart successfully");
     }
   };
 
   const clearCart = async () => {
-    localStorage.removeItem("cart");
-    setCart([]);
     setProfile({ ...profile, cart: [] });
   };
 
@@ -97,7 +87,7 @@ const ContextProvider = ({ children }) => {
         total: clonedProfile.cart[existingCartIdx].price * newQuantity,
       };
       setProfile(clonedProfile);
-      await saveCart();
+      await saveCart(clonedProfile.cart);
     } else {
       toast.error("Item does not exist");
     }
@@ -112,12 +102,12 @@ const ContextProvider = ({ children }) => {
     const prodPrice =
       product.discount_price > 0 ? product.discount_price : product.price;
     const existingCartIdx = profile.cart.findIndex((c) => c.id === product.id);
+    let clonedProfile = { ...profile };
     if (existingCartIdx !== -1) {
       if (profile.cart[existingCartIdx].quantity + prodQty > product.quantity) {
         toast.error("Quantity is more than quantity available");
         return;
       }
-      const clonedProfile = { ...profile };
       clonedProfile.cart[existingCartIdx] = {
         ...clonedProfile.cart[existingCartIdx],
         quantity: clonedProfile.cart[existingCartIdx].quantity + prodQty,
@@ -135,11 +125,10 @@ const ContextProvider = ({ children }) => {
         quantity: prodQty,
         total: prodPrice * prodQty,
       };
-      const clonedProfile = { ...profile };
       clonedProfile.cart.push(cartObj);
       setProfile(clonedProfile);
     }
-    await saveCart();
+    await saveCart(clonedProfile.cart);
     toast.success("Product added to cart successfully");
   };
 
@@ -161,8 +150,6 @@ const ContextProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
-        cart,
-        setCart,
         saveCart,
         clearCart,
         isLoggedIn,

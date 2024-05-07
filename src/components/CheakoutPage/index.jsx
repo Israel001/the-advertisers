@@ -12,7 +12,7 @@ import axios from "axios";
 import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
 
 function CheakoutPage() {
-  const { profile, cart, clearCart } = useAppContext();
+  const { profile, clearCart, setIsLoggedIn } = useAppContext();
   const [shippingAddress, setShippingAddress] = useState(
     profile?.addresses[0]?.address
   );
@@ -70,7 +70,7 @@ function CheakoutPage() {
               details: JSON.stringify({
                 cart: profile?.cart,
                 personalDetails: {
-                  full_name: profile?.fullname,
+                  full_name: profile?.fullName,
                   email: profile?.email,
                   phone: profile?.phone,
                   address: shippingAddress,
@@ -98,9 +98,17 @@ function CheakoutPage() {
             toast.error("Error completing order, try again later!");
           });
       })
-      .catch(() => {
-        setLoading(false);
-        toast.error("Error completing payment, try again later!");
+      .catch((error) => {
+        if (error.response?.data?.statusCode === 401) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("user");
+          localStorage.removeItem("date");
+          setIsLoggedIn(false);
+          navigate("/login");
+        } else {
+          setLoading(false);
+          toast.error("Error completing payment, try again later!");
+        }
       });
   };
 
@@ -190,30 +198,33 @@ function CheakoutPage() {
                       <h1 className="input-label capitalize block  mb-2 text-qgray text-[13px] font-normal">
                         Address{" "}
                       </h1>
-                      <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
-                        <select
-                          style={{ outline: "none", width: "100%" }}
-                          onChange={(event) => {
-                            event.target.value
-                              ? setShippingAddress("")
-                              : setShippingAddress(
-                                  "Shipping address is required"
-                                );
-                            setShippingAddress(event.target.value);
-                          }}
-                        >
-                          <option value="">
-                            {profile?.addresses[0]?.address || "Choose address"}
-                          </option>
-                          {profile?.addresses.slice(1).map((state) => {
-                            return (
-                              <option value={state.id} key={state.id}>
-                                {state.address}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
+                      <select
+                        className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2"
+                        style={{
+                          outline: "none",
+                          width: "100%",
+                          cursor: "pointer",
+                        }}
+                        onChange={(event) => {
+                          event.target.value
+                            ? setShippingAddress("")
+                            : setShippingAddress(
+                                "Shipping address is required"
+                              );
+                          setShippingAddress(event.target.value);
+                        }}
+                      >
+                        <option value="">
+                          {profile?.addresses[0]?.address || "Choose address"}
+                        </option>
+                        {profile?.addresses.slice(1).map((state) => {
+                          return (
+                            <option value={state.id} key={state.id}>
+                              {state.address}
+                            </option>
+                          );
+                        })}
+                      </select>
                     </div>
                   </form>
                 </div>
