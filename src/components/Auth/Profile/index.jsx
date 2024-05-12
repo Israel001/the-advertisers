@@ -28,6 +28,7 @@ import { useAppContext } from "../../../contexts";
 import ViewOrder from "../../ViewOrder/ViewOrder";
 import ViewProduct from "../../ViewProduct/ViewProduct";
 import { RiMenu4Fill } from "react-icons/ri";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 function Profile({ action }) {
   const [switchDashboard, setSwitchDashboard] = useState(false);
@@ -63,7 +64,8 @@ function Profile({ action }) {
                 { name: "profile", path: "/profile" },
               ]}
             />
-            <div className="w-full bg-white px-6 md:px-10 py-9">
+            <div className="w-full bg-white px-3 md:px-10 py-9">
+              {/* <div className="flex justify-between items-center"> */}
               <div className="title-area w-full flex gap-6 items-center">
                 <button className="md:hidden flex" onClick={toggleNavbar}>
                   <RiMenu4Fill size={30} />
@@ -72,6 +74,7 @@ function Profile({ action }) {
                   Your Dashboard
                 </h1>
               </div>
+              {/* </div> */}
               <div className="profile-wrapper w-full mt-8 flex md:space-x-10">
                 {/* For the mobile navbar beginning */}
 

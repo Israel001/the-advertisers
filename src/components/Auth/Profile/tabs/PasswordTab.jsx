@@ -103,7 +103,7 @@ export default function PasswordTab() {
               >
                 Old Password*
               </label>
-              <div className="input-wrapper border border-[#E8E8E8] w-full  h-[58px] overflow-hidden relative ">
+              <div className="input-wrapper border border-[#E8E8E8] w-[340px] sm:w-full  h-[58px] overflow-hidden relative ">
                 <input
                   placeholder="● ● ● ● ● ●"
                   className="input-field placeholder:text-base text-bese px-4 text-dark-gray w-full h-full bg-[#FAFAFA] focus:ring-0 focus:outline-none"
@@ -132,7 +132,7 @@ export default function PasswordTab() {
               >
                 Password*
               </label>
-              <div className="input-wrapper border border-[#E8E8E8] w-full  h-[58px] overflow-hidden relative ">
+              <div className="input-wrapper border border-[#E8E8E8] w-[340px] sm:w-full  h-[58px] overflow-hidden relative ">
                 <input
                   placeholder="● ● ● ● ● ●"
                   required
@@ -161,7 +161,7 @@ export default function PasswordTab() {
               >
                 Re-enter Password*
               </label>
-              <div className="input-wrapper border border-[#E8E8E8] w-full  h-[58px] overflow-hidden relative ">
+              <div className="input-wrapper border border-[#E8E8E8] w-[340px] sm:w-full  h-[58px] overflow-hidden relative ">
                 <input
                   placeholder="● ● ● ● ● ●"
                   required

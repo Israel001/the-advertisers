@@ -72,7 +72,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <div className="quick-view-grid w-full grid place-content-center grid-cols-2  md:grid-cols-3 gap-6 mt-3 ">
+        <div className="quick-view-grid w-full grid place-content-center sm:grid-cols-2  md:grid-cols-3 gap-6 mt-3 ">
           <div className="qv-item w-[100%] h-[208px] bg-qblack group hover:bg-qyellow hover:text-white transition-all duration-300 ease-in-out p-6">
             <div className="w-[62px] h-[62px] rounded bg-white flex justify-center items-center">
               <span>

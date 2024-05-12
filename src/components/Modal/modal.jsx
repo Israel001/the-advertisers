@@ -14,7 +14,9 @@ const style = {
   borderRadius: "10px",
   boxShadow: 24,
   p: "14px 34px 34px 34px",
-  outline:"none"
+  outline: "none",
+  height: "500px",
+  overflow: "scroll",
 };
 
 export default function CustomModal({ open, handleClose, children }) {
