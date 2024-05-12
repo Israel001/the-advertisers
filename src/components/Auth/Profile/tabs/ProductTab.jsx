@@ -53,6 +53,7 @@ const ProductTab = () => {
   if (loading) {
     return <LoaderStyleOne />;
   }
+
   return (
     <>
       <div className="relative w-full overflow-x-auto sm:rounded-lg">
