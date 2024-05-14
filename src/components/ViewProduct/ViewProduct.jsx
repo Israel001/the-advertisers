@@ -62,10 +62,6 @@ function ViewProduct() {
       });
   };
 
-  useEffect(() => {
-    deleteProduct();
-  }, []);
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
