@@ -3,13 +3,11 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CustomEditor from "./CustomEditor";
+import { RiLoader2Fill } from "react-icons/ri";
 
 function CreateProductModal({ isEditMode, product }) {
   const navigate = useNavigate();
-  // eslint-disable-next-line no-undef
-  //   const CustomEditor = dynamic(() => import("./CustomEditor"), {
-  //     ssr: false,
-  //   });
+  const [loading, setLoading] = useState(false);
   const [productName, setProductName] = useState(
     isEditMode ? product.name : ""
   );
@@ -199,6 +197,7 @@ function CreateProductModal({ isEditMode, product }) {
   const editorRef = useRef(null);
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     if (
       !mainCategoryError &&
@@ -240,6 +239,7 @@ function CreateProductModal({ isEditMode, product }) {
           })
           .then(() => {
             window.location.reload();
+            setLoading(false);
           })
           .catch((error) => {
             if (error.response?.data?.statusCode === 401) {
@@ -247,6 +247,7 @@ function CreateProductModal({ isEditMode, product }) {
               localStorage.removeItem("user");
               localStorage.removeItem("date");
               navigate.push("/login");
+              setLoading(false);
             } else {
               alert(error.response?.data?.message);
             }
@@ -281,7 +282,7 @@ function CreateProductModal({ isEditMode, product }) {
       <h2 className="text-[18px] font-[600]">Create Product</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4">
-        <div>
+        <div className="flex flex-col gap-2">
           <label htmlFor="productName">Name:</label>
           <input
             type="text"
@@ -296,12 +297,13 @@ function CreateProductModal({ isEditMode, product }) {
             style={
               productNameError ? { border: "1px solid red", color: "red" } : {}
             }
+            className="rounded h-[50px] pl-2 outline-none border border-gray-400"
           />
           {productNameError && (
             <span style={{ color: "red" }}>{productNameError}</span>
           )}
         </div>
-        <div>
+        <div className="flex flex-col gap-2">
           <label htmlFor="productQuantity">Quantity:</label>
           <input
             type="text"
@@ -318,32 +320,33 @@ function CreateProductModal({ isEditMode, product }) {
                 ? { border: "1px solid red", color: "red" }
                 : {}
             }
+            className="rounded h-[50px] pl-2 outline-none border border-gray-400"
           />
           {productQuantityError && (
             <span style={{ color: "red" }}>{productQuantityError}</span>
           )}
         </div>
-        <div className="flex  justify-between">
-          <div className="flex gap-2">
-            <label>Out of Stock:</label>
-            <input
-              type="checkbox"
-              name="outOfStock"
-              checked={outOfStock}
-              onChange={() => setOutOfStock(!outOfStock)}
-            />
-          </div>
-          <div className="flex gap-2">
-            <label>Published:</label>
-            <input
-              type="checkbox"
-              name="published"
-              checked={published}
-              onChange={() => setOutOfStock(!outOfStock)}
-            />
-          </div>
+        {/* <div className="flex  justify-between"> */}
+        <div className="flex gap-2">
+          <label>Out of Stock:</label>
+          <input
+            type="checkbox"
+            name="outOfStock"
+            checked={outOfStock}
+            onChange={() => setOutOfStock(!outOfStock)}
+          />
         </div>
-        <div className="flex items-center gap-3 justify-between">
+        <div className="flex gap-2">
+          <label>Published:</label>
+          <input
+            type="checkbox"
+            name="published"
+            checked={published}
+            onChange={() => setPublished(!published)}
+          />
+        </div>
+        {/* </div> */}
+        <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-2">
             <label htmlFor="productPrice">Price:</label>
             <input
@@ -361,6 +364,7 @@ function CreateProductModal({ isEditMode, product }) {
                   ? { border: "1px solid red", color: "red" }
                   : {}
               }
+              className="rounded h-[50px] pl-2 outline-none border border-gray-400"
             />
             {productPriceError && (
               <span style={{ color: "red" }}>{productPriceError}</span>
@@ -380,6 +384,7 @@ function CreateProductModal({ isEditMode, product }) {
                   ? { border: "1px solid red", color: "red" }
                   : {}
               }
+              className="rounded h-[50px] pl-2 outline-none border border-gray-400"
             />
             {discountPriceError && (
               <span style={{ color: "red" }}>{discountPriceError}</span>
@@ -390,16 +395,6 @@ function CreateProductModal({ isEditMode, product }) {
           <label className="text-[15px] font-medium">Description:</label>
           <CustomEditor description={description} editorRef={editorRef} />
         </div>
-        {/* <div className="flex flex-col gap-2">
-          <label className="text-[15px] font-medium">Attributes:</label>
-          <input
-            type="text"
-            name="attributes"
-            value={productData.attributes}
-            onChange={handleChange}
-            className="border w-[100%] border-gray-400 pl-3 h-[40px] outline-none rounded"
-          />
-        </div> */}
         <div>
           <label htmlFor="mainCategory">Main Category:</label>
           <select
@@ -449,6 +444,7 @@ function CreateProductModal({ isEditMode, product }) {
               setBrand(e.target.value);
             }}
             style={brandError ? { border: "1px solid red", color: "red" } : {}}
+            className="rounded h-[50px] pl-2 outline-none border border-gray-400"
           />
           {brandError && <span style={{ color: "red" }}>{brandError}</span>}
         </div>
@@ -526,64 +522,15 @@ function CreateProductModal({ isEditMode, product }) {
           //   disabled={loading}
           className="flex items-center m-auto mt-4 rounded justify-center gap-3 bg-red-700 h-[60px] w-[250px] transform focus:scale-75 hover:scale-105 duration-500 text-white text-[16px]"
         >
-          {/* {loading ? (
+          {loading ? (
             <RiLoader2Fill size={20} className="animate-spin" />
           ) : (
             "Create Product"
-          )} */}
-          Create Product
+          )}
         </button>
-        {/* <p className="text-center">{error && <p>{error}</p>}</p> */}
       </form>
     </div>
   );
 }
 
 export default CreateProductModal;
-
-// const [selectedFile, setSelectedFile] = useState(null);
-// const [loading, setLoading] = useState(false);
-// const [error, setError] = useState(null);
-
-// const handleChange = (e) => {
-//   const { name, value } = e.target;
-//   setProductData((prevData) => ({
-//     ...prevData,
-//     [name]: value,
-//   }));
-// };
-
-// const handleFileChange = (e) => {
-//   setSelectedFile(e.target.files[0]);
-// };
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setLoading(true);
-//   try {
-//     const formData = new FormData();
-//     for (const key in productData) {
-//       formData.append(key, productData[key]);
-//     }
-//     formData.append("featuredImage", selectedFile);
-
-//     console.log("Data being sent:", formData);
-
-//     const response = await axios.post(
-//       `${import.meta.env.VITE_HOST_URL}/products`,
-//       formData,
-//       {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-//         },
-//       }
-//     );
-//     console.log("Product created:", response.data);
-//     setLoading(false);
-//   } catch (error) {
-//     console.error("Error creating product:", error);
-//     setError("Error creating product. Please try again.");
-//     setLoading(false);
-//   }
-// };

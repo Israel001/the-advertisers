@@ -17,6 +17,9 @@ const style = {
   outline: "none",
   height: "500px",
   overflow: "scroll",
+  "::-webkit-scrollbar": {
+    display: "none",
+  },
 };
 
 export default function CustomModal({ open, handleClose, children }) {
