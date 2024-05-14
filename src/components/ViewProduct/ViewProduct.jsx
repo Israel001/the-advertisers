@@ -52,7 +52,7 @@ function ViewProduct() {
         },
       })
       .then(() => {
-        window.location.reload();
+        navigate("/profile#product");
         setLoading(false);
       })
       .catch((error) => {

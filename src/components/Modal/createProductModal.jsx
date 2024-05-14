@@ -238,7 +238,7 @@ function CreateProductModal({ isEditMode, product }) {
             },
           })
           .then(() => {
-            window.location.reload();
+            navigate("/profile#product");
             setLoading(false);
           })
           .catch((error) => {
