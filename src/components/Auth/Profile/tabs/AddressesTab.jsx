@@ -151,7 +151,7 @@ export default function AddressesTab() {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-[30px]">
+      <div className="grid sm:grid-cols-2 gap-[30px]">
         {profile?.addresses?.map((x) => (
           <div className="w-full bg-primarygray p-5 border" key={x.id}>
             <div className="flex justify-between items-center">
