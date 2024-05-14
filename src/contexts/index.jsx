@@ -54,6 +54,7 @@ const ContextProvider = ({ children }) => {
 
   const clearCart = async () => {
     setProfile({ ...profile, cart: [] });
+    await saveCart([]);
   };
 
   const removeFromWishlist = async (product) => {

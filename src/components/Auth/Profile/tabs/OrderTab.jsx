@@ -48,6 +48,8 @@ export default function OrderTab() {
     return <LoaderStyleOne />;
   }
 
+  console.log(profile?.orders)
+
   return (
     <>
       <div className="relative w-full overflow-x-auto sm:rounded-lg">
@@ -113,7 +115,7 @@ export default function OrderTab() {
         <div className="flex justify-center mt-6 ">
           {" "}
           <Pagination
-            count={profile?.orders?.pagination?.total / limit}
+            count={profile?.orders?.pagination?.pages}
             page={page}
             onChange={handlePageChange}
             color="error"
