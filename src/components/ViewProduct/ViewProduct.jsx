@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
-// import { useAppContext } from "../../contexts";
 import axios from "axios";
+import { MdDelete } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { Box, Modal } from "@mui/material";
+import { TiDelete } from "react-icons/ti";
 import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
 
 function ViewProduct() {
-  //   const { profile } = useAppContext();
   const productId = localStorage.getItem("productId");
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
   const [loading, setLoading] = useState(false);
+  const [openDeleteQuery, setDeleteQuery] = useState(false);
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getProduct = () => {
     setLoading(true);
     axios
@@ -23,7 +29,6 @@ function ViewProduct() {
         }
       )
       .then((response) => {
-        console.log("data", response.data);
         setProduct(response.data);
         setLoading(false);
       })
@@ -37,6 +42,30 @@ function ViewProduct() {
     getProduct();
   }, []);
 
+  const deleteProduct = () => {
+    console.log("...");
+    setLoading(true);
+    axios
+      .delete(`${import.meta.env.VITE_HOST_URL}/products/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then(() => {
+        window.location.reload();
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("error", error);
+        setLoading(false);
+        // Handle error during deletion
+      });
+  };
+
+  useEffect(() => {
+    deleteProduct();
+  }, []);
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -44,7 +73,7 @@ function ViewProduct() {
   if (loading) {
     return <LoaderStyleOne />;
   }
-  //   console.log(profile);
+
   const renderStars = () => {
     const rating = parseFloat(product?.avgRating);
     const stars = [];
@@ -65,8 +94,57 @@ function ViewProduct() {
     }
     return stars;
   };
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #fff",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: "14px 34px 34px 34px",
+    outline: "none",
+    overflow: "scroll",
+    "::-webkit-scrollbar": {
+      display: "none",
+    },
+  };
+
   return (
     <div className="checkout-page-wrapper w-full bg-white pb-[60px]">
+      <button onClick={handleOpen} className="flex items-center ml-auto mb-2">
+        <MdDelete size={30} />
+      </button>
+      <Modal open={open}>
+        <Box sx={style}>
+          <TiDelete
+            size={30}
+            className="flex items-center ml-auto right-0 cursor-pointer"
+            color="red"
+            onClick={handleClose}
+          />
+          <p className="py-4 text-center font-[500] text-[16px]">
+            Are you sure you want to delete this product?
+          </p>
+          <div className="flex items-center justify-center gap-6 mt-3">
+            <button
+              className="h-[40px] text-[15px] font-[500] w-[80px] rounded bg-red-600 transform hover:scale-110 duration-300"
+              onClick={deleteProduct}
+            >
+              Yes
+            </button>
+            <button
+              className="h-[40px] text-[15px] font-[500] w-[80px] rounded bg-white shadow-lg transform hover:scale-110 duration-300"
+              onClick={handleClose}
+            >
+              No
+            </button>
+          </div>
+        </Box>
+      </Modal>
       <div className="checkout-main-content w-full">
         <div className="w-full  ">
           <div className="flex flex-col lg:flex-row justify-center gap-6">
@@ -79,7 +157,7 @@ function ViewProduct() {
             <div className="lg:w-[50%] flex flex-col gap-4 w-full h-[300px]">
               <p className="font-[500] text-[16px]">{product?.name} </p>
               <p className="text-gray-400 text-[14px]">
-                {product?.category.name} | {product?.mainCategory.name} {"   "}
+                {product?.category.name} | {product?.mainCategory.name}{" "}
                 <span
                   className={`${
                     product?.outOfStock === true
@@ -94,7 +172,7 @@ function ViewProduct() {
                 Brand: <span className="text-blue-700">{product?.brand}</span>
               </p>
               <p className="text-[14px] text-gray-400 font-[400]">
-                Quantity: {product?.quantity} {"   "}
+                Quantity: {product?.quantity}{" "}
               </p>
               <p className="text-[18px] md:font-[20px] font-bold flex gap-4 items-center">
                 ₦ {product?.price}{" "}
@@ -115,13 +193,6 @@ function ViewProduct() {
               </p>
             </div>
           </div>
-          {/* <div className="rounded-lg p-4 shadow-lg mt-10">
-            <p className="font-semibold text-lg pb-4">Product Description</p>
-            <div
-              className="leading-[40px] text-[14px]"
-              dangerouslySetInnerHTML={{ __html: product?.description }}
-            />
-          </div> */}
           <div className="rounded-lg p-4 shadow-lg mt-10">
             <div className="flex gap-4">
               <button
@@ -170,13 +241,3 @@ function ViewProduct() {
 }
 
 export default ViewProduct;
-
-// Quantity
-// OutOfStock - optional
-// Description - optional
-// DiscountPrice - optional
-// Brand
-// Average Rating
-// Category
-// Main Category
-// Images - optional
