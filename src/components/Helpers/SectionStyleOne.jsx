@@ -61,8 +61,8 @@ export default function SectionStyleOne({
             </div>
             {popularSales.map((product) => {
               return (
-                <div key={product.id} className="item">
-                  <Link to={`/single-product/${product.id}`}>
+                <div key={product?.id} className="item">
+                  <Link to={`/single-product/${product?.id}`}>
                     <div
                       className="product-card-one w-full h-full bg-white relative group overflow-hidden"
                       style={{
@@ -73,7 +73,7 @@ export default function SectionStyleOne({
                         className="product-card-img w-full h-[300px]"
                         style={{
                           background: `url(${import.meta.env.VITE_HOST_URL}/${
-                            product.featured_image
+                            product?.featured_image
                           }) no-repeat center`,
                         }}
                       ></div>
