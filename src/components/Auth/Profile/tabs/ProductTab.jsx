@@ -102,7 +102,11 @@ const ProductTab = () => {
                       : product.name}{" "}
                   </span>
                   <br />
-                  {product.published === true ? "(Published)" : "(Unpublished)"}
+                  <span className="text-center">
+                    {product.published === true
+                      ? "(Published)"
+                      : "(Unpublished)"}
+                  </span>
                 </td>
 
                 <td className="text-center py-4 px-2">

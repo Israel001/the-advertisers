@@ -6,6 +6,7 @@ import CustomEditor from "./CustomEditor";
 import { RiLoader2Fill } from "react-icons/ri";
 
 function CreateProductModal({ isEditMode, product }) {
+  const productId = localStorage.getItem("productId");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [productName, setProductName] = useState(
@@ -27,9 +28,7 @@ function CreateProductModal({ isEditMode, product }) {
   const [description, setDescription] = useState(
     isEditMode ? product.description : ""
   );
-  const [published, setPublished] = useState(
-    isEditMode ? product.published : true
-  );
+  const [published] = useState(isEditMode ? product.published : false);
   const [categories, setCategories] = useState([]);
   const [mainCategories, setMainCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(
@@ -61,7 +60,7 @@ function CreateProductModal({ isEditMode, product }) {
       setDiscountPrice(product.discountPrice);
       setBrand(product.brand);
       setDescription(product.description);
-      setPublished(product.published);
+      // setPublished(product.published);
       setSelectedCategory(product.category.id.toString());
       setSelectedMainCategory(product.mainCategory.id.toString());
       setFeaturedImage(
@@ -232,12 +231,17 @@ function CreateProductModal({ isEditMode, product }) {
       formData.append("published", String(published));
       if (isEditMode) {
         axios
-          .put(`${import.meta.env.VITE_HOST_URL}/{product.id}`, formData, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-          })
+          .put(
+            `${import.meta.env.VITE_HOST_URL}/products/${productId}`,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          )
           .then(() => {
+            console.log(formData);
             navigate("/profile#product");
             setLoading(false);
           })
@@ -250,6 +254,7 @@ function CreateProductModal({ isEditMode, product }) {
               setLoading(false);
             } else {
               alert(error.response?.data?.message);
+              setLoading(false);
             }
           });
       } else {
@@ -260,7 +265,9 @@ function CreateProductModal({ isEditMode, product }) {
             },
           })
           .then(() => {
-            window.location.reload();
+            // window.location.reload();
+            navigate("/profile#product");
+            console.log(formData);
           })
           .catch((error) => {
             if (error.response?.data?.statusCode === 401) {
@@ -271,6 +278,7 @@ function CreateProductModal({ isEditMode, product }) {
             } else {
               console.log(error);
               alert(error.response?.data?.message);
+              setLoading(false);
             }
           });
       }
@@ -342,7 +350,7 @@ function CreateProductModal({ isEditMode, product }) {
             type="checkbox"
             name="published"
             checked={published}
-            onChange={() => setPublished(!published)}
+            // onChange={() => setPublished(!published)}
           />
         </div>
         {/* </div> */}
@@ -489,6 +497,7 @@ function CreateProductModal({ isEditMode, product }) {
               if (e.target.files && e.target.files.length > 10) {
                 alert("You can only upload a maximum of 10 images");
                 e.target.value = null;
+                setLoading(false);
               } else {
                 previewImage(e, false);
               }
@@ -519,7 +528,7 @@ function CreateProductModal({ isEditMode, product }) {
         </div>
         <button
           type="submit"
-          //   disabled={loading}
+          disabled={loading}
           className="flex items-center m-auto mt-4 rounded justify-center gap-3 bg-red-700 h-[60px] w-[250px] transform focus:scale-75 hover:scale-105 duration-500 text-white text-[16px]"
         >
           {loading ? (
