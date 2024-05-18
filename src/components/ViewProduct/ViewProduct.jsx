@@ -5,6 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
 import { TiDelete } from "react-icons/ti";
 import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { AiOutlineEdit } from "react-icons/ai";
+import CustomModal from "../Modal/modal";
+import EditProductModal from "../Modal/EditProductModal";
 
 function ViewProduct() {
   const productId = localStorage.getItem("productId");
@@ -16,6 +22,10 @@ function ViewProduct() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const handleEditOpen = () => setOpenEdit(true);
+  const handleEditClose = () => setOpenEdit(false);
+  const [images, setImages] = useState([]);
 
   const getProduct = () => {
     setLoading(true);
@@ -29,7 +39,11 @@ function ViewProduct() {
         }
       )
       .then((response) => {
-        setProduct(response.data);
+        const productData = response.data;
+        setProduct(productData);
+        const imageUrls = productData.images.split(",");
+        console.log(imageUrls);
+        setImages(imageUrls);
         setLoading(false);
       })
       .catch((error) => {
@@ -43,7 +57,6 @@ function ViewProduct() {
   }, []);
 
   const deleteProduct = () => {
-    console.log("...");
     setLoading(true);
     axios
       .delete(`${import.meta.env.VITE_HOST_URL}/products/${productId}`, {
@@ -52,7 +65,7 @@ function ViewProduct() {
         },
       })
       .then(() => {
-        window.location.reload();
+        navigate("/profile#product");
         setLoading(false);
       })
       .catch((error) => {
@@ -109,130 +122,177 @@ function ViewProduct() {
     },
   };
 
-  return (
-    <div className="checkout-page-wrapper w-full bg-white pb-[60px]">
-      <button onClick={handleOpen} className="flex items-center ml-auto mb-2">
-        <MdDelete size={30} />
-      </button>
-      <Modal open={open}>
-        <Box sx={style}>
-          <TiDelete
-            size={30}
-            className="flex items-center ml-auto right-0 cursor-pointer"
-            color="red"
-            onClick={handleClose}
-          />
-          <p className="py-4 text-center font-[500] text-[16px]">
-            Are you sure you want to delete this product?
-          </p>
-          <div className="flex items-center justify-center gap-6 mt-3">
-            <button
-              className="h-[40px] text-[15px] font-[500] w-[80px] rounded bg-red-600 transform hover:scale-110 duration-300"
-              onClick={deleteProduct}
-            >
-              Yes
-            </button>
-            <button
-              className="h-[40px] text-[15px] font-[500] w-[80px] rounded bg-white shadow-lg transform hover:scale-110 duration-300"
-              onClick={handleClose}
-            >
-              No
-            </button>
-          </div>
-        </Box>
-      </Modal>
-      <div className="checkout-main-content w-full">
-        <div className="w-full  ">
-          <div className="flex flex-col lg:flex-row justify-center gap-6">
-            <img
-              src={`${import.meta.env.VITE_HOST_URL}/${product?.featuredImage}`}
-              alt={product?.name}
-              className="lg:w-[300px] lg:h-[300px] w-full rounded-lg"
-            />
+  const settings = {
+    infinite: true,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 500,
+    autoplaySpeed: 2000,
+    cssEase: "linear",
+    dots: false,
+  };
 
-            <div className="lg:w-[50%] flex flex-col gap-4 w-full h-[300px]">
-              <p className="font-[500] text-[16px]">{product?.name} </p>
-              <p className="text-gray-400 text-[14px]">
-                {product?.category.name} | {product?.mainCategory.name}{" "}
-                <span
+  const handleUpdate = () => {
+    localStorage.setItem("particularId", productId);
+    handleEditOpen();
+  };
+
+  return (
+    <>
+      <div className="checkout-page-wrapper w-full bg-white pb-[60px]">
+        <div className="flex items-center gap-6">
+          <button
+            onClick={handleOpen}
+            className="flex items-center ml-auto mb-2"
+          >
+            <MdDelete size={30} />
+          </button>
+          <button onClick={handleUpdate}>
+            <AiOutlineEdit size={30} />
+          </button>
+        </div>
+        <Modal open={open}>
+          <Box sx={style}>
+            <TiDelete
+              size={30}
+              className="flex items-center ml-auto right-0 cursor-pointer"
+              color="red"
+              onClick={handleClose}
+            />
+            <p className="py-4 text-center font-[500] text-[16px]">
+              Are you sure you want to delete this product?
+            </p>
+            <div className="flex items-center justify-center gap-6 mt-3">
+              <button
+                className="h-[40px] text-[15px] font-[500] w-[80px] rounded bg-red-600 transform hover:scale-110 duration-300"
+                onClick={deleteProduct}
+              >
+                Yes
+              </button>
+              <button
+                className="h-[40px] text-[15px] font-[500] w-[80px] rounded bg-white shadow-lg transform hover:scale-110 duration-300"
+                onClick={handleClose}
+              >
+                No
+              </button>
+            </div>
+          </Box>
+        </Modal>
+        <div className="checkout-main-content w-full">
+          <div className="w-full  ">
+            <div className="flex flex-col lg:flex-row gap-6 items-center">
+              <img
+                src={`${import.meta.env.VITE_HOST_URL}/${
+                  product?.featuredImage
+                }`}
+                alt={product?.name}
+                className="lg:w-[300px] lg:h-[300px] w-full rounded-lg"
+              />
+
+              <div className="lg:w-[50%] flex flex-col gap-4 w-full h-[300px]">
+                <p className="font-[500] text-[16px]">{product?.name} </p>
+                <p className="text-gray-400 text-[14px]">
+                  {product?.category.name} | {product?.mainCategory.name}{" "}
+                  <span
+                    className={`${
+                      product?.outOfStock === true
+                        ? "bg-green-500/40 p-2 text-green-700 rounded-lg"
+                        : "bg-pink-500/40 p-2 text-red-700 rounded-lg"
+                    } text-[11px] `}
+                  >
+                    {product?.outOfStock === true ? "In stock" : "Out of Stock"}
+                  </span>
+                </p>
+                <p className="text-[12px]">
+                  Brand: <span className="text-blue-700">{product?.brand}</span>
+                </p>
+                <p className="text-[14px] text-gray-400 font-[400]">
+                  Quantity: {product?.quantity}{" "}
+                </p>
+                <p className="text-[18px] md:font-[20px] font-bold flex gap-4 items-center">
+                  ₦ {product?.price}{" "}
+                  <span className="text-gray-400 line-through text-[12px]">
+                    {product?.discountPrice === "0" ? (
+                      <></>
+                    ) : (
+                      <>₦ {product?.discountPrice}</>
+                    )}
+                  </span>
+                </p>
+                <p>{renderStars()}</p>
+                <p className="text-gray-500 text-[12px] flex gap-14">
+                  <span>
+                    Status:{" "}
+                    {product?.published === true ? "Published" : "Unpublished"}
+                  </span>
+                </p>
+              </div>
+            </div>
+            {product?.images === "" ? (
+              ""
+            ) : (
+              <Slider className="w-[300px] sm:mt-6" {...settings}>
+                {images.map((url, index) => (
+                  <div key={index} className="w-[0px">
+                    <img
+                      className="w-[50px] h-[50px] rounded"
+                      src={`${import.meta.env.VITE_HOST_URL}/${url}`}
+                      alt=""
+                    />
+                  </div>
+                ))}
+              </Slider>
+            )}
+
+            <div className="rounded-lg p-4 shadow-lg mt-10">
+              <div className="flex gap-4">
+                <button
+                  onClick={() => handleTabClick("description")}
                   className={`${
-                    product?.outOfStock === true
-                      ? "bg-green-500/40 p-2 text-green-700 rounded-lg"
-                      : "bg-pink-500/40 p-2 text-red-700 rounded-lg"
-                  } text-[11px] `}
+                    activeTab === "description"
+                      ? "bg-red-700 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  } py-2 px-4 rounded outline-none`}
                 >
-                  {product?.outOfStock === true ? "In stock" : "Out of Stock"}
-                </span>
-              </p>
-              <p className="text-[12px]">
-                Brand: <span className="text-blue-700">{product?.brand}</span>
-              </p>
-              <p className="text-[14px] text-gray-400 font-[400]">
-                Quantity: {product?.quantity}{" "}
-              </p>
-              <p className="text-[18px] md:font-[20px] font-bold flex gap-4 items-center">
-                ₦ {product?.price}{" "}
-                <span className="text-gray-400 line-through text-[12px]">
-                  {product?.discountPrice === "0" ? (
-                    <></>
-                  ) : (
-                    <>₦ {product?.discountPrice}</>
-                  )}
-                </span>
-              </p>
-              <p>{renderStars()}</p>
-              <p className="text-gray-500 text-[12px] flex gap-14">
-                <span>
-                  Status:{" "}
-                  {product?.published === true ? "Published" : "Unpublished"}
-                </span>
-              </p>
-            </div>
-          </div>
-          <div className="rounded-lg p-4 shadow-lg mt-10">
-            <div className="flex gap-4">
-              <button
-                onClick={() => handleTabClick("description")}
-                className={`${
-                  activeTab === "description"
-                    ? "bg-red-700 text-white"
-                    : "bg-gray-200 text-gray-700"
-                } py-2 px-4 rounded outline-none`}
-              >
-                Description
-              </button>
-              <button
-                onClick={() => handleTabClick("reviews")}
-                className={`${
-                  activeTab === "reviews"
-                    ? "bg-red-700 text-white"
-                    : "bg-gray-200 text-gray-700"
-                } py-2 px-4 rounded outline-none`}
-              >
-                Reviews
-              </button>
-            </div>
-            <div className="mt-4">
-              {activeTab === "description" && (
-                <div
-                  className="leading-[40px] text-[14px]"
-                  dangerouslySetInnerHTML={{ __html: product?.description }}
-                />
-              )}
-              {activeTab === "reviews" && (
-                <div>
-                  <p>
-                    {product?.reviews === null
-                      ? "No reviews yet"
-                      : product?.reviews}
-                  </p>
-                </div>
-              )}
+                  Description
+                </button>
+                <button
+                  onClick={() => handleTabClick("reviews")}
+                  className={`${
+                    activeTab === "reviews"
+                      ? "bg-red-700 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  } py-2 px-4 rounded outline-none`}
+                >
+                  Reviews
+                </button>
+              </div>
+              <div className="mt-4">
+                {activeTab === "description" && (
+                  <div
+                    className="leading-[40px] text-[14px]"
+                    dangerouslySetInnerHTML={{ __html: product?.description }}
+                  />
+                )}
+                {activeTab === "reviews" && (
+                  <div>
+                    <p>
+                      {product?.reviews === null
+                        ? "No reviews yet"
+                        : product?.reviews}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <CustomModal open={openEdit} handleClose={handleEditClose}>
+        <EditProductModal />
+      </CustomModal>
+    </>
   );
 }
 
