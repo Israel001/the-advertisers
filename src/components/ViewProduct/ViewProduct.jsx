@@ -79,6 +79,13 @@ function ViewProduct() {
     setActiveTab(tab);
   };
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+    }).format(price);
+  };
+
   if (loading) {
     return <LoaderStyleOne />;
   }
@@ -197,11 +204,11 @@ function ViewProduct() {
                   <span
                     className={`${
                       product?.outOfStock === true
-                        ? "bg-green-500/40 p-2 text-green-700 rounded-lg"
-                        : "bg-pink-500/40 p-2 text-red-700 rounded-lg"
-                    } text-[11px] `}
+                        ? "bg-pink-500/40 p-2 text-red-700 rounded-lg"
+                        : "bg-green-500/40 p-2 text-green-700 rounded-lg"
+                    } text-[11px] w-[60px]`}
                   >
-                    {product?.outOfStock === true ? "In stock" : "Out of Stock"}
+                    {product?.outOfStock === true ? "Out of Stock" : "In stock"}
                   </span>
                 </p>
                 <p className="text-[12px]">
@@ -211,12 +218,12 @@ function ViewProduct() {
                   Quantity: {product?.quantity}{" "}
                 </p>
                 <p className="text-[18px] md:font-[20px] font-bold flex gap-4 items-center">
-                  ₦ {product?.price}{" "}
+                  {formatPrice(product?.price)}{" "}
                   <span className="text-gray-400 line-through text-[12px]">
                     {product?.discountPrice === "0" ? (
                       <></>
                     ) : (
-                      <>₦ {product?.discountPrice}</>
+                      <>{formatPrice(product?.discountPrice)} </>
                     )}
                   </span>
                 </p>

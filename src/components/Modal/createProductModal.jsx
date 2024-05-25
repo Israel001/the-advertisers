@@ -28,7 +28,9 @@ function CreateProductModal({ isEditMode, product }) {
   const [description, setDescription] = useState(
     isEditMode ? product.description : ""
   );
-  const [published] = useState(isEditMode ? product.published : false);
+  const [published, setPublished] = useState(
+    isEditMode ? product.published : false
+  );
   const [categories, setCategories] = useState([]);
   const [mainCategories, setMainCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(
@@ -60,7 +62,7 @@ function CreateProductModal({ isEditMode, product }) {
       setDiscountPrice(product.discountPrice);
       setBrand(product.brand);
       setDescription(product.description);
-      // setPublished(product.published);
+      setPublished(product.published);
       setSelectedCategory(product.category.id.toString());
       setSelectedMainCategory(product.mainCategory.id.toString());
       setFeaturedImage(
@@ -86,7 +88,7 @@ function CreateProductModal({ isEditMode, product }) {
   );
   const [discountPriceError, setDiscountPriceError] = useState("");
   const [brandError, setBrandError] = useState("Brand is required");
-  const [categoryError, setCategoryError] = useState("Category is required");
+  // const [categoryError, setCategoryError] = useState("Category is required");
   const [mainCategoryError, setMainCategoryError] = useState(
     "Main category is required"
   );
@@ -158,9 +160,6 @@ function CreateProductModal({ isEditMode, product }) {
   };
 
   const handleSubCategoryChange = async (event) => {
-    event.target.value
-      ? setCategoryError("")
-      : setCategoryError("Category is required");
     setSelectedCategory(event.target.value);
   };
 
@@ -200,7 +199,6 @@ function CreateProductModal({ isEditMode, product }) {
     e.preventDefault();
     if (
       !mainCategoryError &&
-      !categoryError &&
       !featuredImageError &&
       !imagesError &&
       !productNameError &&
@@ -211,7 +209,9 @@ function CreateProductModal({ isEditMode, product }) {
     ) {
       const formData = new FormData();
       formData.append("mainCategoryId", selectedMainCategory);
-      formData.append("categoryId", selectedCategory);
+      if (selectedCategory) {
+        formData.append("categoryId", selectedCategory);
+      }
       if (featuredImageForBackend)
         formData.append("featuredImage", featuredImageForBackend);
       formData.append("name", productName);
@@ -241,9 +241,10 @@ function CreateProductModal({ isEditMode, product }) {
             }
           )
           .then(() => {
+            setLoading(false);
+            // window.location.reload();
             console.log(formData);
             navigate("/profile#product");
-            setLoading(false);
           })
           .catch((error) => {
             if (error.response?.data?.statusCode === 401) {
@@ -255,6 +256,7 @@ function CreateProductModal({ isEditMode, product }) {
             } else {
               alert(error.response?.data?.message);
               setLoading(false);
+              console.log(formData);
             }
           });
       } else {
@@ -265,8 +267,9 @@ function CreateProductModal({ isEditMode, product }) {
             },
           })
           .then(() => {
-            // window.location.reload();
-            navigate("/profile#product");
+            setLoading(false);
+            window.location.reload();
+            // navigate("/profile#product");
             console.log(formData);
           })
           .catch((error) => {
@@ -279,6 +282,7 @@ function CreateProductModal({ isEditMode, product }) {
               console.log(error);
               alert(error.response?.data?.message);
               setLoading(false);
+              console.log(formData);
             }
           });
       }
@@ -350,7 +354,7 @@ function CreateProductModal({ isEditMode, product }) {
             type="checkbox"
             name="published"
             checked={published}
-            // onChange={() => setPublished(!published)}
+            onChange={() => setPublished(!published)}
           />
         </div>
         {/* </div> */}
@@ -404,7 +408,12 @@ function CreateProductModal({ isEditMode, product }) {
           <CustomEditor description={description} editorRef={editorRef} />
         </div>
         <div>
-          <label htmlFor="mainCategory">Main Category:</label>
+          <label
+            htmlFor="mainCategory"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Main Category:
+          </label>
           <select
             id="state"
             value={selectedMainCategory}
@@ -412,6 +421,7 @@ function CreateProductModal({ isEditMode, product }) {
             style={
               mainCategoryError ? { border: "1px solid red", color: "red" } : {}
             }
+            className="h-[40px] w-full mt-1 rounded-md p-2 outline-none"
           >
             <option value="">Select Main Category</option>
             {mainCategories.map((category, index) => (
@@ -422,14 +432,17 @@ function CreateProductModal({ isEditMode, product }) {
           </select>
         </div>
         <div>
-          <label htmlFor="subCategory">Sub Category:</label>
+          <label
+            htmlFor="subCategory"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Sub Category:
+          </label>
           <select
             id="state"
             value={selectedCategory}
             onChange={handleSubCategoryChange}
-            style={
-              categoryError ? { border: "1px solid red", color: "red" } : {}
-            }
+            className="h-[40px] w-full mt-1 rounded-md p-2 outline-none"
           >
             <option value="">Select Sub Category</option>
             {categories.map((category, index) => (
@@ -473,6 +486,7 @@ function CreateProductModal({ isEditMode, product }) {
                 ? { border: "1px solid red", color: "red" }
                 : {}
             }
+            className="mt-1 p-2 block w-full border rounded-md"
           />
           {featuredImageError && (
             <span style={{ color: "red", display: "block" }}>
@@ -507,6 +521,7 @@ function CreateProductModal({ isEditMode, product }) {
             }}
             style={imagesError ? { border: "1px solid red", color: "red" } : {}}
             multiple
+            className="mt-1 p-2 block w-full border rounded-md"
           />
           {imagesError && (
             <span style={{ color: "red", display: "block" }}>
