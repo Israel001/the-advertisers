@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { RiLoader2Fill } from "react-icons/ri";
+import CustomEditor from "./CustomEditor";
 
 function EditProductModal() {
   const productId = localStorage.getItem("particularId");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState({
     name: "",
@@ -14,6 +15,7 @@ function EditProductModal() {
     description: "",
     quantity: 0,
     outOfStock: true,
+    published: true,
     brand: "",
     category: { id: "" },
     mainCategory: { id: "" },
@@ -24,6 +26,8 @@ function EditProductModal() {
   const [images, setImages] = useState([]);
   const [featuredImageForBackend, setFeaturedImageForBackend] = useState(null);
   const [imagesForBackend, setImagesForBackend] = useState([]);
+  // const [mainCategories, setMainCategories] = useState([]);
+  // const [subCategories, setSubCategories] = useState([]);
 
   const getProduct = () => {
     setLoading(true);
@@ -56,8 +60,55 @@ function EditProductModal() {
   };
 
   useEffect(() => {
+    // fetchMainCategories();
     getProduct();
   }, []);
+
+  // const fetchMainCategories = async () => {
+  //   const accessToken = localStorage.getItem("accessToken");
+  //   await axios
+  //     .get(`${import.meta.env.VITE_HOST_URL}/category/all-main-categories`, {
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       setMainCategories(response.data);
+  //     })
+  //     .catch((error) => {
+  //       if (error.response?.data?.statusCode === 401) {
+  //         localStorage.removeItem("accessToken");
+  //         localStorage.removeItem("user");
+  //         localStorage.removeItem("date");
+  //         // navigate.push("/login");
+  //       }
+  //     });
+  // };
+
+  // const fetchSubCategories = async (categoryId) => {
+  //   const accessToken = localStorage.getItem("accessToken");
+  //   await axios
+  //     .get(
+  //       `${
+  //         import.meta.env.VITE_HOST_URL
+  //       }/category/${categoryId}/all-sub-categories`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       setSubCategories(response.data);
+  //     })
+  //     .catch((error) => {
+  //       if (error.response?.data?.statusCode === 401) {
+  //         localStorage.removeItem("accessToken");
+  //         localStorage.removeItem("user");
+  //         localStorage.removeItem("date");
+  //       }
+  //     });
+  // };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -66,6 +117,35 @@ function EditProductModal() {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+  // const handleMainCategoryChange = async (e) => {
+  //   const selectedCategoryId = e.target.value;
+  //   const selectedCategory = mainCategories.find(
+  //     (category) => category.id === selectedCategoryId
+  //   );
+
+  //   setProduct((prevProduct) => ({
+  //     ...prevProduct,
+  //     mainCategory: { id: selectedCategoryId, name: selectedCategory?.name },
+  //     category: { id: "" },
+  //   }));
+  //   await fetchSubCategories(selectedCategoryId);
+  // };
+
+  // const handleSubCategoryChange = (e) => {
+  //   const selectedSubCategoryId = e.target.value;
+  //   const selectedSubCategory = subCategories.find(
+  //     (category) => category.id === selectedSubCategoryId
+  //   );
+
+  //   setProduct((prevProduct) => ({
+  //     ...prevProduct,
+  //     category: {
+  //       id: selectedSubCategoryId,
+  //       name: selectedSubCategory?.name,
+  //     },
+  //   }));
+  // };
 
   const previewImage = (event, isFeaturedImage) => {
     if (event.target.files) {
@@ -87,13 +167,11 @@ function EditProductModal() {
             setFeaturedImage(images[0]);
             setFeaturedImageForBackend(files[0]);
           } else {
-            setImages((prevImages) => [
-              ...prevImages,
-              ...images.map((image, index) => ({
-                src: image,
-                file: files[index],
-              })),
-            ]);
+            const newImages = images.map((image, index) => ({
+              src: image,
+              file: files[index],
+            }));
+            setImages((prevImages) => [...prevImages, ...newImages]);
             setImagesForBackend((prevImages) => [...prevImages, ...files]);
           }
         },
@@ -101,6 +179,7 @@ function EditProductModal() {
       );
     }
   };
+  const editorRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -109,9 +188,13 @@ function EditProductModal() {
     formData.append("name", product.name);
     formData.append("price", product.price);
     formData.append("discountPrice", product.discountPrice);
-    formData.append("description", product.description);
+    if (editorRef.current) {
+      const desc = editorRef.current.getData();
+      formData.append("description", desc);
+    }
     formData.append("quantity", product.quantity);
     formData.append("outOfStock", product.outOfStock);
+    formData.append("published", product.published);
     formData.append("brand", product.brand);
     formData.append("categoryId", product.category.id);
     formData.append("mainCategoryId", product.mainCategory.id);
@@ -130,8 +213,9 @@ function EditProductModal() {
       .then(() => {
         // console.log(response.data);
         setLoading(false);
-        alert("Product updated");
+        // alert("Product updated");
         // navigate(`/profile#/view-product/${productId}`);
+        window.location.reload();
       })
       .catch((error) => {
         console.error("error", error);
@@ -182,11 +266,9 @@ function EditProductModal() {
           <label className="block text-sm font-medium text-gray-700">
             Description
           </label>
-          <textarea
-            name="description"
-            value={product.description}
-            onChange={handleChange}
-            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+          <CustomEditor
+            description={product.description}
+            editorRef={editorRef}
           />
         </div>
         <div className="mb-4">
@@ -201,14 +283,24 @@ function EditProductModal() {
             className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
+        <div className="mb-4 flex gap-2 items-center">
+          <label className="text-sm font-medium text-gray-700">
             Out of Stock
           </label>
           <input
             type="checkbox"
             name="outOfStock"
             checked={product.outOfStock}
+            onChange={handleChange}
+            className="mt-1"
+          />
+        </div>
+        <div className="mb-4 flex gap-2 items-center">
+          <label className="text-sm font-medium text-gray-700">Published</label>
+          <input
+            type="checkbox"
+            name="published"
+            checked={product.published}
             onChange={handleChange}
             className="mt-1"
           />
@@ -225,6 +317,48 @@ function EditProductModal() {
             className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
           />
         </div>
+        {/* <div className="flex flex-col gap-2">
+          <label
+            htmlFor="mainCategory"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Main Category:
+          </label>
+          <select
+            id="state"
+            value={product.mainCategory.id}
+            onChange={handleMainCategoryChange}
+            className="h-[40px] w-full mt-1 rounded-md p-2 outline-none"
+          >
+            <option value="">Select Main Category</option>
+            {mainCategories.map((category, index) => (
+              <option key={index} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label
+            htmlFor="subCategory"
+            className="block text-sm py-3 font-medium text-gray-700"
+          >
+            Sub Category:
+          </label>
+          <select
+            id="subCategory"
+            value={product.category.id}
+            onChange={handleSubCategoryChange}
+            className="h-[40px] w-full mt-1 rounded-md p-2 outline-none"
+          >
+            <option value="">Select Sub Category</option>
+            {subCategories.map((category, index) => (
+              <option key={index} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div> */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
             Featured Image
