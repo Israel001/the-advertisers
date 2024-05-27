@@ -8,9 +8,10 @@ import LoaderStyleOne from "../../../Helpers/Loaders/LoaderStyleOne";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import CreateProductModal from "../../../Modal/createProductModal";
 import CustomModal from "../../../Modal/modal";
+import { FaChevronDown } from "react-icons/fa";
 
 const ProductTab = () => {
-  const { profile } = useAppContext();
+  // const { profile } = useAppContext();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [allProducts, setAllProducts] = useState(null);
@@ -19,6 +20,8 @@ const ProductTab = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [totalPages, setTotalPages] = useState(0);
+  const [filterOptions, setFilterOptions] = useState(false);
+  const [filter, setFilter] = useState("all");
 
   const getProductData = () => {
     setLoading(true);
@@ -63,15 +66,54 @@ const ProductTab = () => {
     return <LoaderStyleOne />;
   }
 
+  const filteredProducts = allProducts?.filter((product) => {
+    if (filter === "published") return product.published;
+    if (filter === "unpublished") return !product.published;
+    return true;
+  });
+
   return (
     <>
       <div className="relative w-full overflow-x-auto sm:rounded-lg">
-        <button
-          onClick={handleOpen}
-          className="flex items-center ml-auto rounded justify-center gap-3 bg-red-700 h-[60px] w-[250px] transform focus:scale-75 hover:scale-105 duration-500 text-white text-[16px]"
-        >
-          <IoIosAddCircleOutline size={28} /> Create Product
-        </button>
+        <div className="flex items-center relative ">
+          <button
+            onClick={() => setFilterOptions(!filterOptions)}
+            className="flex items-center gap-2"
+          >
+            Filter By
+            <span>
+              <FaChevronDown />
+            </span>
+          </button>
+          <button
+            onClick={handleOpen}
+            className="flex items-center ml-auto rounded justify-center gap-3 bg-red-700 h-[60px] w-[250px] transform focus:scale-75 hover:scale-105 duration-500 text-white text-[16px]"
+          >
+            <IoIosAddCircleOutline size={28} /> Create Product
+          </button>
+          {filterOptions && (
+            <div className="bg-white p-4 rounded-md text-black flex flex-col gap-4 border border-gray-400 absolute w-[200px] left-[70px] top-[40px] ">
+              <button
+                onClick={() => setFilter("all")}
+                className="bg-opacity-0 hover:bg-opacity-100 py-2 duration-700 hover:duration-700 hover:bg-red-500 rounded"
+              >
+                All
+              </button>
+              <button
+                onClick={() => setFilter("published")}
+                className="bg-opacity-0 hover:bg-opacity-100 py-2 duration-700 hover:duration-700 hover:bg-red-500 rounded"
+              >
+                Published
+              </button>
+              <button
+                onClick={() => setFilter("unpublished")}
+                className="bg-opacity-0 hover:bg-opacity-100 py-2 duration-700 hover:duration-700 hover:bg-red-500 rounded"
+              >
+                Unpublished
+              </button>
+            </div>
+          )}
+        </div>
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <tbody>
             {/* table heading */}
@@ -85,7 +127,7 @@ const ProductTab = () => {
               <td className="py-4 whitespace-nowrap  text-center">Action</td>
             </tr>
             {/* table heading end */}
-            {allProducts?.map((product) => (
+            {filteredProducts?.map((product) => (
               <tr
                 className="bg-white border-b hover:bg-gray-50"
                 key={product.id}
