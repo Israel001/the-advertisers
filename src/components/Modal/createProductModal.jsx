@@ -6,6 +6,7 @@ import CustomEditor from "./CustomEditor";
 import { RiLoader2Fill } from "react-icons/ri";
 
 function CreateProductModal({ isEditMode, product }) {
+  const productId = localStorage.getItem("productId");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [productName, setProductName] = useState(
@@ -28,7 +29,7 @@ function CreateProductModal({ isEditMode, product }) {
     isEditMode ? product.description : ""
   );
   const [published, setPublished] = useState(
-    isEditMode ? product.published : true
+    isEditMode ? product.published : false
   );
   const [categories, setCategories] = useState([]);
   const [mainCategories, setMainCategories] = useState([]);
@@ -87,7 +88,7 @@ function CreateProductModal({ isEditMode, product }) {
   );
   const [discountPriceError, setDiscountPriceError] = useState("");
   const [brandError, setBrandError] = useState("Brand is required");
-  const [categoryError, setCategoryError] = useState("Category is required");
+  // const [categoryError, setCategoryError] = useState("Category is required");
   const [mainCategoryError, setMainCategoryError] = useState(
     "Main category is required"
   );
@@ -159,9 +160,6 @@ function CreateProductModal({ isEditMode, product }) {
   };
 
   const handleSubCategoryChange = async (event) => {
-    event.target.value
-      ? setCategoryError("")
-      : setCategoryError("Category is required");
     setSelectedCategory(event.target.value);
   };
 
@@ -201,7 +199,6 @@ function CreateProductModal({ isEditMode, product }) {
     e.preventDefault();
     if (
       !mainCategoryError &&
-      !categoryError &&
       !featuredImageError &&
       !imagesError &&
       !productNameError &&
@@ -212,7 +209,9 @@ function CreateProductModal({ isEditMode, product }) {
     ) {
       const formData = new FormData();
       formData.append("mainCategoryId", selectedMainCategory);
-      formData.append("categoryId", selectedCategory);
+      if (selectedCategory) {
+        formData.append("categoryId", selectedCategory);
+      }
       if (featuredImageForBackend)
         formData.append("featuredImage", featuredImageForBackend);
       formData.append("name", productName);
@@ -232,14 +231,20 @@ function CreateProductModal({ isEditMode, product }) {
       formData.append("published", String(published));
       if (isEditMode) {
         axios
-          .put(`${import.meta.env.VITE_HOST_URL}/{product.id}`, formData, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-          })
+          .put(
+            `${import.meta.env.VITE_HOST_URL}/products/${productId}`,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          )
           .then(() => {
-            window.location.reload();
             setLoading(false);
+            // window.location.reload();
+            console.log(formData);
+            navigate("/profile#product");
           })
           .catch((error) => {
             if (error.response?.data?.statusCode === 401) {
@@ -250,6 +255,8 @@ function CreateProductModal({ isEditMode, product }) {
               setLoading(false);
             } else {
               alert(error.response?.data?.message);
+              setLoading(false);
+              console.log(formData);
             }
           });
       } else {
@@ -260,7 +267,10 @@ function CreateProductModal({ isEditMode, product }) {
             },
           })
           .then(() => {
+            setLoading(false);
             window.location.reload();
+            // navigate("/profile#product");
+            console.log(formData);
           })
           .catch((error) => {
             if (error.response?.data?.statusCode === 401) {
@@ -271,6 +281,8 @@ function CreateProductModal({ isEditMode, product }) {
             } else {
               console.log(error);
               alert(error.response?.data?.message);
+              setLoading(false);
+              console.log(formData);
             }
           });
       }
@@ -396,7 +408,12 @@ function CreateProductModal({ isEditMode, product }) {
           <CustomEditor description={description} editorRef={editorRef} />
         </div>
         <div>
-          <label htmlFor="mainCategory">Main Category:</label>
+          <label
+            htmlFor="mainCategory"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Main Category:
+          </label>
           <select
             id="state"
             value={selectedMainCategory}
@@ -404,6 +421,7 @@ function CreateProductModal({ isEditMode, product }) {
             style={
               mainCategoryError ? { border: "1px solid red", color: "red" } : {}
             }
+            className="h-[40px] w-full mt-1 rounded-md p-2 outline-none"
           >
             <option value="">Select Main Category</option>
             {mainCategories.map((category, index) => (
@@ -414,14 +432,17 @@ function CreateProductModal({ isEditMode, product }) {
           </select>
         </div>
         <div>
-          <label htmlFor="subCategory">Sub Category:</label>
+          <label
+            htmlFor="subCategory"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Sub Category:
+          </label>
           <select
             id="state"
             value={selectedCategory}
             onChange={handleSubCategoryChange}
-            style={
-              categoryError ? { border: "1px solid red", color: "red" } : {}
-            }
+            className="h-[40px] w-full mt-1 rounded-md p-2 outline-none"
           >
             <option value="">Select Sub Category</option>
             {categories.map((category, index) => (
@@ -465,6 +486,7 @@ function CreateProductModal({ isEditMode, product }) {
                 ? { border: "1px solid red", color: "red" }
                 : {}
             }
+            className="mt-1 p-2 block w-full border rounded-md"
           />
           {featuredImageError && (
             <span style={{ color: "red", display: "block" }}>
@@ -489,6 +511,7 @@ function CreateProductModal({ isEditMode, product }) {
               if (e.target.files && e.target.files.length > 10) {
                 alert("You can only upload a maximum of 10 images");
                 e.target.value = null;
+                setLoading(false);
               } else {
                 previewImage(e, false);
               }
@@ -498,6 +521,7 @@ function CreateProductModal({ isEditMode, product }) {
             }}
             style={imagesError ? { border: "1px solid red", color: "red" } : {}}
             multiple
+            className="mt-1 p-2 block w-full border rounded-md"
           />
           {imagesError && (
             <span style={{ color: "red", display: "block" }}>
@@ -519,7 +543,7 @@ function CreateProductModal({ isEditMode, product }) {
         </div>
         <button
           type="submit"
-          //   disabled={loading}
+          disabled={loading}
           className="flex items-center m-auto mt-4 rounded justify-center gap-3 bg-red-700 h-[60px] w-[250px] transform focus:scale-75 hover:scale-105 duration-500 text-white text-[16px]"
         >
           {loading ? (

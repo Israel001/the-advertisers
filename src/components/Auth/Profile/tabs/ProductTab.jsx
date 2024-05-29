@@ -18,6 +18,7 @@ const ProductTab = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [totalPages, setTotalPages] = useState(0);
 
   const getProductData = () => {
     setLoading(true);
@@ -34,6 +35,7 @@ const ProductTab = () => {
       )
       .then((response) => {
         setAllProducts(response?.data?.data);
+        setTotalPages(Math.ceil(response?.data?.meta?.total / limit));
         setLoading(false);
       })
       .catch((error) => {
@@ -45,6 +47,13 @@ const ProductTab = () => {
   useEffect(() => {
     getProductData();
   }, [page]);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+    }).format(price);
+  };
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -102,12 +111,16 @@ const ProductTab = () => {
                       : product.name}{" "}
                   </span>
                   <br />
-                  {product.published === true ? "(Published)" : "(Unpublished)"}
+                  <span className="text-center">
+                    {product.published === true
+                      ? "(Published)"
+                      : "(Unpublished)"}
+                  </span>
                 </td>
 
                 <td className="text-center py-4 px-2">
                   <span className="text-base text-qblack whitespace-nowrap px-2 ">
-                    {product.price}
+                    {formatPrice(product?.price)}{" "}
                   </span>
                 </td>
                 <td className="text-center py-4">
@@ -130,10 +143,10 @@ const ProductTab = () => {
         <div className="flex justify-center mt-6 ">
           {" "}
           <Pagination
-            count={profile?.orders?.pagination?.total / limit}
+            count={totalPages}
             page={page}
             onChange={handlePageChange}
-            color="error"
+            color="primary"
           />
         </div>
       </div>
