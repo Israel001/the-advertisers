@@ -81,10 +81,13 @@ function CheakoutPage() {
                 },
               }),
               paymentId: Number(response?.data.id),
-              stores: profile?.cart.reduce((prev, cur) => {
-                prev.push(cur.storeId.toString());
-                return prev;
-              }, []),
+              stores: profile?.cart
+                .reduce((prev, cur) => {
+                  if (!prev.includes(cur.storeId.toString()))
+                    prev.push(cur.storeId.toString());
+                  return prev;
+                }, [])
+                .join(","),
             },
             {
               headers: {
