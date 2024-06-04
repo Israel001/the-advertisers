@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ function ViewProduct() {
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
   const [loading, setLoading] = useState(false);
-  const [openDeleteQuery, setDeleteQuery] = useState(false);
+  // const [openDeleteQuery, setDeleteQuery] = useState(false);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -26,8 +26,9 @@ function ViewProduct() {
   const handleEditOpen = () => setOpenEdit(true);
   const handleEditClose = () => setOpenEdit(false);
   const [images, setImages] = useState([]);
+  const [featuredImage, setFeaturedImage] = useState("");
 
-  const getProduct = () => {
+  const getProduct = useCallback(() => {
     setLoading(true);
     axios
       .get(
@@ -41,8 +42,16 @@ function ViewProduct() {
       .then((response) => {
         const productData = response.data;
         setProduct(productData);
-        const imageUrls = productData.images.split(",");
-        console.log(imageUrls);
+        setFeaturedImage(
+          `${import.meta.env.VITE_HOST_URL}/${productData.featuredImage}`
+        );
+        const imageUrls = [
+          `${import.meta.env.VITE_HOST_URL}/${productData.featuredImage}`,
+          ...productData.images
+            .split(",")
+            .map((image) => `${import.meta.env.VITE_HOST_URL}/${image}`),
+        ];
+        // console.log(imageUrls);
         setImages(imageUrls);
         setLoading(false);
       })
@@ -50,13 +59,13 @@ function ViewProduct() {
         console.error("error", error);
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     getProduct();
   }, []);
 
-  const deleteProduct = () => {
+  const deleteProduct = useCallback(() => {
     setLoading(true);
     axios
       .delete(`${import.meta.env.VITE_HOST_URL}/products/${productId}`, {
@@ -73,7 +82,7 @@ function ViewProduct() {
         setLoading(false);
         // Handle error during deletion
       });
-  };
+  }, []);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -190,9 +199,10 @@ function ViewProduct() {
           <div className="w-full  ">
             <div className="flex flex-col lg:flex-row gap-6 items-center">
               <img
-                src={`${import.meta.env.VITE_HOST_URL}/${
-                  product?.featuredImage
-                }`}
+                // src={`${import.meta.env.VITE_HOST_URL}/${
+                //   product?.featuredImage
+                // }`}
+                src={featuredImage}
                 alt={product?.name}
                 className="lg:w-[300px] lg:h-[300px] w-full rounded-lg"
               />
@@ -239,16 +249,27 @@ function ViewProduct() {
             {product?.images === "" ? (
               ""
             ) : (
-              <Slider className="w-[300px] sm:mt-6" {...settings}>
+              <Slider className="w-[300px] sm:mt-6 flex gap-4" {...settings}>
                 {images.map((url, index) => (
-                  <div key={index} className="w-[0px">
+                  <div
+                    key={index}
+                    className="w-[0px]"
+                    onClick={() => setFeaturedImage(url)}
+                  >
                     <img
                       className="w-[50px] h-[50px] rounded"
-                      src={`${import.meta.env.VITE_HOST_URL}/${url}`}
+                      src={url}
                       alt=""
                     />
                   </div>
                 ))}
+                {/* <img
+                  src={`${import.meta.env.VITE_HOST_URL}/${
+                    product?.featuredImage
+                  }`}
+                  className="w-[50px] h-[50px] mr-4 rounded"
+                  alt=""
+                /> */}
               </Slider>
             )}
 
