@@ -81,6 +81,10 @@ function CheakoutPage() {
                 },
               }),
               paymentId: Number(response?.data.id),
+              stores: profile?.cart.reduce((prev, cur) => {
+                prev.push(cur.storeId.toString());
+                return prev;
+              }, []),
             },
             {
               headers: {
