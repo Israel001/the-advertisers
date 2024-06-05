@@ -48,7 +48,7 @@ export default function OrderTab() {
     return <LoaderStyleOne />;
   }
 
-  const formatPrice = (price) => {
+const formatPrice = (price) => {
     return new Intl.NumberFormat("en-NG", {
       style: "currency",
       currency: "NGN",
