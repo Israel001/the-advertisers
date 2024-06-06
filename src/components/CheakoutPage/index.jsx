@@ -22,6 +22,8 @@ function CheakoutPage() {
     useState("free_shipping");
   const [loading, setLoading] = useState(false);
 
+  console.log(profile?.cart);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {

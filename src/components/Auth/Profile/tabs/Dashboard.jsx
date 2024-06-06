@@ -59,6 +59,8 @@ export default function Dashboard() {
       });
   };
 
+  console.log(profile);
+
   return (
     <>
       <div className="welcome-msg w-full">
@@ -126,12 +128,27 @@ export default function Dashboard() {
               Pending Orders
             </p>
             <span className="text-[40px] text-white group-hover:text-white text font-bold leading-none mt-1 block">
-              {
-                profile?.orders?.data?.filter(
-                  (order) =>
-                    order.status === "PENDING" || order.status === "IN_PROGRESS"
-                ).length
-              }
+              {profile?.type === "STORE"
+                ? profile?.orders?.data.reduce((prev, cur) => {
+                    const orderDetails = JSON.parse(cur.details);
+                    if (
+                      orderDetails.cart.some(
+                        (c) =>
+                          c.storeId === profile?.store?.id &&
+                          (!c.status ||
+                            c.status ===
+                              "Mark order as packed, waiting for courier...")
+                      )
+                    ) {
+                      prev.push(cur.id);
+                    }
+                    return prev;
+                  }, []).length
+                : profile?.orders?.data?.filter(
+                    (order) =>
+                      order.status === "PENDING" ||
+                      order.status === "IN_PROGRESS"
+                  ).length}
             </span>
           </div>
           <div className="qv-item w-[100%] h-[208px] bg-qblack group hover:bg-qyellow transition-all duration-300 ease-in-out p-6">
@@ -163,11 +180,25 @@ export default function Dashboard() {
               Completed Orders
             </p>
             <span className="text-[40px] text-white group-hover:text-white text font-bold leading-none mt-1 block">
-              {
-                profile?.orders?.data?.filter(
-                  (order) => order.status === "DELIVERED"
-                ).length
-              }
+              {profile?.type === "STORE"
+                ? profile?.orders?.data.reduce((prev, cur) => {
+                    const orderDetails = JSON.parse(cur.details);
+                    if (
+                      orderDetails.cart.some(
+                        (c) =>
+                          c.storeId === profile?.store?.id &&
+                          c.status &&
+                          c.status !==
+                            "Mark order as packed, waiting for courier..."
+                      )
+                    ) {
+                      prev.push(cur.id);
+                    }
+                    return prev;
+                  }, []).length
+                : profile?.orders?.data?.filter(
+                    (order) => order.status === "DELIVERED"
+                  ).length}
             </span>
           </div>
         </div>
@@ -215,7 +246,9 @@ export default function Dashboard() {
           <div className="mt-5">
             <span className="text-base text-qgraytwo">Main Address:</span>{" "}
             <span className="text-base text-qblack font-medium">
-              {mainAddress && mainAddress[0]?.address}
+              {profile?.type === "STORE"
+                ? profile?.store?.address
+                : mainAddress && mainAddress[0]?.address}
             </span>
           </div>
         </div>
