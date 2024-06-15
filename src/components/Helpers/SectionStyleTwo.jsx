@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import ThinLove from "./icons/ThinLove";
 import { useAppContext } from "../../contexts";
 import ThickLove from "./icons/ThickLove";
+import { useState } from "react";
+import LoadingPulse from "./LoadingPulse";
 
 /* eslint-disable react/prop-types */
 export default function SectionStyleTwo({ className, products, type }) {
@@ -32,7 +34,7 @@ export default function SectionStyleTwo({ className, products, type }) {
                       src={`${import.meta.env.VITE_HOST_URL}/${
                         product.featured_image
                       }`}
-                      alt=""
+                      alt={product.name}
                       className="w-full h-full object-contain"
                     />
                   </div>

@@ -9,13 +9,14 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import CreateProductModal from "../../../Modal/createProductModal";
 import CustomModal from "../../../Modal/modal";
 import { FaChevronDown } from "react-icons/fa";
+import LoadingPulse from "../../../Helpers/LoadingPulse";
 
 const ProductTab = () => {
   // const { profile } = useAppContext();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [allProducts, setAllProducts] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

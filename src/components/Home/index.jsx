@@ -19,6 +19,7 @@ function Home() {
   });
 
   const [topSellingProducts, setTopSellingProducts] = useState([]);
+  // const
 
   useEffect(() => {
     fetchTopSellingProducts();
