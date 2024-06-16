@@ -184,7 +184,7 @@ function ViewOrder() {
                 Order Summary
               </h1>
 
-              <div className="w-full px-10 py-[30px] border border-[#EDEDED]">
+              <div className="w-[100%] m-auto px-3 py-[30px] border border-[#EDEDED]">
                 <div className="sub-total mb-6">
                   <div className=" flex justify-between mb-5">
                     <p className="text-[13px] font-medium text-qblack uppercase">
