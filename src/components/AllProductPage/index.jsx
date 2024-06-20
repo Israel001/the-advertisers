@@ -167,11 +167,11 @@ function AllProductPage() {
                               </button>
                             </div>
                             <div className="reviews flex space-x-[1px] mb-3">
-                              {Array.from(Array(product.avgRating)).map(
+                              {Array.from(Array(product?.avgRating)).map(
                                 (product) => {
                                   return (
                                     <span
-                                      key={product.avgRating + Math.random()}
+                                      key={product?.avgRating + Math.random()}
                                     >
                                       <Star />
                                     </span>

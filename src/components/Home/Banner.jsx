@@ -11,11 +11,11 @@ export default function Banner({ className }) {
   }, []);
 
   const fetchSlider = async () => {
-    setLoading(false);
     const response = await axios.get(
       `${import.meta.env.VITE_HOST_URL}/admin/get-slider`
     );
     setSlider(`${import.meta.env.VITE_HOST_URL}/${response.data}`);
+    setLoading(false);
   };
 
   return (
@@ -25,7 +25,7 @@ export default function Banner({ className }) {
           <div className="main-wrapper w-full">
             <div className="banner-card xl:flex xl:space-x-[30px]  mb-[30px]">
               <div style={{ width: "100%" }}>
-                <Link to="/single-product">
+                <div>
                   <picture>
                     <source media="(min-width:1025px)" srcSet={`${slider}`} />
                     {loading ? (
@@ -39,7 +39,7 @@ export default function Banner({ className }) {
                       />
                     )}
                   </picture>
-                </Link>
+                </div>
               </div>
             </div>
           </div>
