@@ -455,8 +455,13 @@ function Signup() {
                         I agree to all
                         <span className="text-qblack">
                           {" "}
-                          terms and conditions{" "}
-                        </span>
+                          <Link
+                            to="/terms-condition"
+                            className="hover:underline-offset-2 text-red-700 hover:underline"
+                          >
+                            terms and conditions
+                          </Link>
+                        </span>{" "}
                         in The-advertisers.
                       </span>
                     </div>

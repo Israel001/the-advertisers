@@ -25,8 +25,8 @@ import TrackingOrder from "./components/TrackingOrder";
 import Wishlist from "./components/Wishlist";
 import ThankYou from "./components/ThankYou/ThankYou";
 import ViewOrder from "./components/ViewOrder/ViewOrder";
-
-
+import ForgotPassword from "./components/Auth/ForgotPassword/index";
+import VerifyOtp from "./components/Auth/VerifyOtp/index";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -59,6 +59,8 @@ const router = createBrowserRouter([
   { path: "/privacy-policy", element: <PrivacyPolicy /> },
   { path: "/terms-condition", element: <TermsCondition /> },
   { path: "*", element: <FourZeroFour /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/verify-otp", element: <VerifyOtp /> },
 ]);
 
 function Routers() {

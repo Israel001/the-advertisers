@@ -11,9 +11,11 @@ import { useAppContext } from "../../contexts";
 function CardPage({ cart = true }) {
   const { profile } = useAppContext();
 
+  console.log(profile);
+
   return (
     <Layout childrenClasses={cart ? "pt-0 pb-0" : ""}>
-      {profile?.cart?.length < 1 ? (
+      {profile?.cart?.length < 1 || !profile?.cart ? (
         <div className="cart-page-wrapper w-full">
           <div className="container-x mx-auto">
             <BreadcrumbCom
@@ -79,7 +81,7 @@ function CardPage({ cart = true }) {
                     </div>
                     <div className="w-full h-[1px] bg-[#EDEDED]"></div>
                   </div>
-                 
+
                   <Link to="/checkout">
                     <div className="w-full h-[50px] black-btn flex justify-center items-center">
                       <span className="text-sm font-semibold">
