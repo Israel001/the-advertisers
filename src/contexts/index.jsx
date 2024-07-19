@@ -7,11 +7,18 @@ const AppContext = createContext({});
 
 const ContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [profile, setProfile] = useState();
+  const [profile, setProfile] = useState({ cart: [] });
+  const [isAddToCartLoading, setisAddToCartLoading] = useState(false);
+
 
   useEffect(() => {
     saveWishlist();
   }, [profile]);
+
+  useEffect(() => {
+    if (!isLoggedIn)
+      setProfile(JSON.parse(localStorage.getItem("profile")) || { cart: [] });
+  }, [isLoggedIn]);
 
   const saveCart = async (cartData) => {
     await axios.post(
@@ -47,7 +54,8 @@ const ContextProvider = ({ children }) => {
       const clonedProfile = { ...profile };
       clonedProfile.cart.splice(existingCartIdx, 1);
       setProfile(clonedProfile);
-      await saveCart(clonedProfile.cart);
+      if (isLoggedIn) await saveCart(clonedProfile.cart);
+      localStorage.removeItem("profile");
       toast.success("Item removed from cart successfully");
     }
   };
@@ -88,7 +96,11 @@ const ContextProvider = ({ children }) => {
         total: clonedProfile.cart[existingCartIdx].price * newQuantity,
       };
       setProfile(clonedProfile);
-      await saveCart(clonedProfile.cart);
+      setisAddToCartLoading(true)
+
+      if (isLoggedIn) await saveCart(clonedProfile.cart);
+      localStorage.setItem("profile", JSON.stringify(clonedProfile));
+      setisAddToCartLoading(false)
     } else {
       toast.error("Item does not exist");
     }
@@ -130,7 +142,8 @@ const ContextProvider = ({ children }) => {
       clonedProfile.cart.push(cartObj);
       setProfile(clonedProfile);
     }
-    await saveCart(clonedProfile.cart);
+    if (isLoggedIn) await saveCart(clonedProfile.cart);
+    localStorage.setItem("profile", JSON.stringify(clonedProfile));
     toast.success("Product added to cart successfully");
   };
 
@@ -149,6 +162,17 @@ const ContextProvider = ({ children }) => {
     toast.success("Item added to wishlist successfully");
   };
 
+  function formatMoney(amount) {
+    const formatter = new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      minimumFractionDigits: 2,
+    });
+  
+    return formatter.format(amount);
+  }
+  
+
   return (
     <AppContext.Provider
       value={{
@@ -157,12 +181,14 @@ const ContextProvider = ({ children }) => {
         isLoggedIn,
         setIsLoggedIn,
         profile,
+        isAddToCartLoading,
         setProfile,
         addToCart,
         removeFromCart,
         updateCartQty,
         addToWishlist,
         removeFromWishlist,
+        formatMoney
       }}
     >
       {children}

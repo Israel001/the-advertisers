@@ -21,7 +21,7 @@ export default function SectionStyleThree({
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
-  const { addToCart, isLoggedIn, profile, addToWishlist, removeFromWishlist } =
+  const { addToCart, isLoggedIn, profile, addToWishlist, removeFromWishlist,formatMoney } =
     useAppContext();
 
   useEffect(() => {
@@ -116,15 +116,15 @@ export default function SectionStyleThree({
                         {product.discount_price > 0 ? (
                           <>
                             <span className="main-price text-qgray line-through font-600 sm:text-[18px] text-base">
-                              {product.price}
+                            {formatMoney(product.price)}
                             </span>
                             <span className="offer-price text-qred font-600 sm:text-[18px] text-base ml-2">
-                              {product.discount_price}
+                              {formatMoney(product.discount_price)}
                             </span>
                           </>
                         ) : (
                           <span className="offer-price text-qred font-600 sm:text-[18px] text-base">
-                            {product.price}
+                            {formatMoney(product.price)}
                           </span>
                         )}
                       </p>

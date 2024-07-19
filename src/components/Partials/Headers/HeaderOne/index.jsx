@@ -6,7 +6,8 @@ import TopBar from "./TopBar";
 import { useAppContext } from "../../../../contexts";
 
 export default function HeaderOne({ className, drawerAction, type = 1 }) {
-  const { isLoggedIn, profile } = useAppContext();
+  const { profile } = useAppContext();
+  console.log("profile",profile);
 
   return (
     <header className={` ${className || ""} header-section-wrapper relative`}>
@@ -70,16 +71,17 @@ export default function HeaderOne({ className, drawerAction, type = 1 }) {
             )}
           </div>
           <div className="cart relative cursor-pointer">
-            <Link to={isLoggedIn ? "/cart" : "/login"}>
+            <Link to={"/cart"}>
               <span>
                 <ThinBag />
               </span>
             </Link>
-            {isLoggedIn && profile?.cart?.length > 0 && (
+            {profile?.cart?.length > 0 && (
               <span
                 className={`w-[18px] h-[18px] rounded-full  absolute -top-2.5 -right-2.5 flex justify-center items-center text-[9px] ${
                   type === 3 ? "bg-qh3-blue text-white" : "bg-qyellow"
                 }`}
+                style={{ color: "white" }}
               >
                 {profile.cart.length}
               </span>

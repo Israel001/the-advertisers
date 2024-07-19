@@ -20,7 +20,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const { setIsLoggedIn } = useAppContext();
+  const { setIsLoggedIn, saveCart } = useAppContext();
 
   useEffect(() => {
     const email = localStorage.getItem("email");
@@ -39,13 +39,14 @@ function Login() {
           password,
           type: isSellerMode ? "STORE" : "CUSTOMER",
         })
-        .then((response) => {
+        .then(async (response) => {
           if (checked) {
             localStorage.setItem("email", email);
           }
           localStorage.setItem("accessToken", response?.data?.accessToken);
           localStorage.setItem("user", JSON.stringify(response?.data?.user));
           localStorage.setItem("date", new Date().getTime().toString());
+          await saveCart(localStorage.getItem('profile') && JSON.parse(localStorage.getItem('profile')).cart || []);
           setIsLoggedIn(true);
           navigate("/");
         })

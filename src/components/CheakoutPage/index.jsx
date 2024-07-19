@@ -12,7 +12,7 @@ import axios from "axios";
 import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
 
 function CheakoutPage() {
-  const { profile, clearCart, setIsLoggedIn } = useAppContext();
+  const { profile, clearCart, setIsLoggedIn, formatMoney } = useAppContext();
   const [shippingAddress, setShippingAddress] = useState(
     profile?.addresses[0]?.address
   );
@@ -21,8 +21,6 @@ function CheakoutPage() {
   const [selectedShippingType, setSelectedShippingType] =
     useState("free_shipping");
   const [loading, setLoading] = useState(false);
-
-  console.log(profile?.cart);
 
   const navigate = useNavigate();
 
@@ -273,7 +271,7 @@ function CheakoutPage() {
                             </div>
                             <div>
                               <span className="text-[15px] text-qblack font-medium">
-                                N{x.price}
+                                {formatMoney(x.price)}
                               </span>
                             </div>
                           </div>
@@ -289,11 +287,11 @@ function CheakoutPage() {
                         SUBTOTAL
                       </p>
                       <p className="text-[15px] font-medium text-qblack uppercase">
-                        N
-                        {profile?.cart?.reduce(
+                        
+                        {formatMoney(profile?.cart?.reduce(
                           (prev, cur) => prev + cur.total,
                           0
-                        )}
+                        ))}
                       </p>
                     </div>
                   </div>
@@ -419,11 +417,11 @@ function CheakoutPage() {
                     <div className=" flex justify-between mb-5">
                       <p className="text-2xl font-medium text-qblack">Total</p>
                       <p className="text-2xl font-medium text-qred">
-                        N
-                        {profile?.cart?.reduce(
+                       
+                        {formatMoney(profile?.cart?.reduce(
                           (prev, cur) => prev + cur.total,
                           0
-                        ) + selectedShipping}
+                        ) + selectedShipping)}
                       </p>
                     </div>
                   </div>
