@@ -5,6 +5,7 @@ import { useAppContext } from "../../contexts";
 import ThickLove from "./icons/ThickLove";
 import { useState } from "react";
 import LoadingPulse from "./LoadingPulse";
+import LoaderStyleOne from "./Loaders/LoaderStyleOneSmaller";
 
 /* eslint-disable react/prop-types */
 export default function SectionStyleTwo({ className, products, type }) {
@@ -107,7 +108,11 @@ export default function SectionStyleTwo({ className, products, type }) {
                                 -
                               </button>
                               <span className="text-white">
-                                {isInCart?.quantity}
+                                {isAddToCartLoading ? (
+                                  <LoaderStyleOne />
+                                ) : (
+                                  isInCart?.quantity
+                                )}
                               </span>
                               <button
                                 onClick={(event) => {

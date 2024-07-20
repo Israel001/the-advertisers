@@ -79,6 +79,8 @@ const ContextProvider = ({ children }) => {
   };
 
   const updateCartQty = async (item, newQuantity) => {
+    setisAddToCartLoading(true)
+
     const response = await axios.get(
       `${import.meta.env.VITE_HOST_URL}/products/${item.id}`
     );
@@ -96,14 +98,14 @@ const ContextProvider = ({ children }) => {
         total: clonedProfile.cart[existingCartIdx].price * newQuantity,
       };
       setProfile(clonedProfile);
-      setisAddToCartLoading(true)
 
       if (isLoggedIn) await saveCart(clonedProfile.cart);
       localStorage.setItem("profile", JSON.stringify(clonedProfile));
-      setisAddToCartLoading(false)
     } else {
       toast.error("Item does not exist");
     }
+    setisAddToCartLoading(false)
+
   };
 
   const addToCart = async (product, quantity = 1) => {
