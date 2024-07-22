@@ -59,7 +59,7 @@ export default function ProductView({ className, reportHandler, product }) {
     if (product) setSrc(product.featuredImage);
   }, [product]);
 
-  const { addToCart, isLoggedIn, profile, addToWishlist, removeFromWishlist } =
+  const { addToCart, isLoggedIn, profile, addToWishlist, removeFromWishlist, formatMoney } =
     useAppContext();
 
   const navigate = useNavigate();
@@ -138,15 +138,15 @@ export default function ProductView({ className, reportHandler, product }) {
             {product.discountPrice > 0 ? (
               <>
                 <span className="text-sm font-500 text-qgray line-through mt-2">
-                  {product.discountPrice}
+                {formatMoney(product.discountPrice)}
                 </span>
                 <span className="text-2xl font-500 text-qred ml-2">
-                  {product.price}
+                {formatMoney(product.price)}
                 </span>
               </>
             ) : (
               <span className="text-2xl font-500 text-qred">
-                {product.price}
+                {formatMoney(product.price)}
               </span>
             )}
           </div>

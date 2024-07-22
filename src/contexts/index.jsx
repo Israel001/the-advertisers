@@ -7,11 +7,19 @@ const AppContext = createContext({});
 
 const ContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [profile, setProfile] = useState();
+  const [profile, setProfile] = useState({ cart: [] });
+  const [isAddToCartLoading, setisAddToCartLoading] = useState(false);
+  const [isProductId, setisProductId] = useState(null);
+
 
   useEffect(() => {
     saveWishlist();
   }, [profile]);
+
+  useEffect(() => {
+    if (!isLoggedIn)
+      setProfile(JSON.parse(localStorage.getItem("profile")) || { cart: [] });
+  }, [isLoggedIn]);
 
   const saveCart = async (cartData) => {
     await axios.post(
@@ -47,7 +55,8 @@ const ContextProvider = ({ children }) => {
       const clonedProfile = { ...profile };
       clonedProfile.cart.splice(existingCartIdx, 1);
       setProfile(clonedProfile);
-      await saveCart(clonedProfile.cart);
+      if (isLoggedIn) await saveCart(clonedProfile.cart);
+      localStorage.removeItem("profile");
       toast.success("Item removed from cart successfully");
     }
   };
@@ -71,11 +80,14 @@ const ContextProvider = ({ children }) => {
   };
 
   const updateCartQty = async (item, newQuantity) => {
+    setisAddToCartLoading(true)
+
     const response = await axios.get(
       `${import.meta.env.VITE_HOST_URL}/products/${item.id}`
     );
     const product = response.data;
     const existingCartIdx = profile.cart.findIndex((c) => c.id === product.id);
+    setisProductId(product.id)
     if (existingCartIdx !== -1) {
       if (newQuantity > product.quantity) {
         toast.error("Quantity is more than quantity available");
@@ -88,13 +100,17 @@ const ContextProvider = ({ children }) => {
         total: clonedProfile.cart[existingCartIdx].price * newQuantity,
       };
       setProfile(clonedProfile);
-      await saveCart(clonedProfile.cart);
+
+      if (isLoggedIn) await saveCart(clonedProfile.cart);
+      localStorage.setItem("profile", JSON.stringify(clonedProfile));
     } else {
       toast.error("Item does not exist");
     }
+    setisAddToCartLoading(false)
   };
 
   const addToCart = async (product, quantity = 1) => {
+    setisProductId(product.id)
     const prodQty = quantity;
     if (product.out_of_stock || prodQty > product.quantity) {
       toast.error("Product is out of stock");
@@ -130,7 +146,8 @@ const ContextProvider = ({ children }) => {
       clonedProfile.cart.push(cartObj);
       setProfile(clonedProfile);
     }
-    await saveCart(clonedProfile.cart);
+    if (isLoggedIn) await saveCart(clonedProfile.cart);
+    localStorage.setItem("profile", JSON.stringify(clonedProfile));
     toast.success("Product added to cart successfully");
   };
 
@@ -149,6 +166,17 @@ const ContextProvider = ({ children }) => {
     toast.success("Item added to wishlist successfully");
   };
 
+  function formatMoney(amount) {
+    const formatter = new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      minimumFractionDigits: 2,
+    });
+  
+    return formatter.format(amount);
+  }
+  
+
   return (
     <AppContext.Provider
       value={{
@@ -157,12 +185,15 @@ const ContextProvider = ({ children }) => {
         isLoggedIn,
         setIsLoggedIn,
         profile,
+        isAddToCartLoading,
+        isProductId,
         setProfile,
         addToCart,
         removeFromCart,
         updateCartQty,
         addToWishlist,
         removeFromWishlist,
+        formatMoney
       }}
     >
       {children}

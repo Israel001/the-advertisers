@@ -1,7 +1,7 @@
 import { useAppContext } from "../../contexts";
 
 export default function Cart({ className, type }) {
-  const { profile, isLoggedIn, removeFromCart } = useAppContext();
+  const { profile, removeFromCart, formatMoney } = useAppContext();
 
   return (
     <>
@@ -11,7 +11,7 @@ export default function Cart({ className, type }) {
           type === 3 ? "border-qh3-blue" : "cart-wrappwer"
         }  ${className || ""}`}
       >
-        {isLoggedIn && profile?.cart?.length > 0 ? (
+        {profile?.cart?.length > 0 ? (
           <div className="w-full h-full">
             <div
               className="product-items overflow-y-scroll"
@@ -42,7 +42,7 @@ export default function Cart({ className, type }) {
 
                             <p className="price">
                               <span className="offer-price text-qred font-600 text-[15px] ml-2">
-                                {item.price}
+                                {formatMoney(item.price)}
                               </span>
                             </p>
                           </div>
@@ -80,7 +80,7 @@ export default function Cart({ className, type }) {
                   Subtotal
                 </span>
                 <span className="text-[15px] font-500 text-qred ">
-                  {profile?.cart?.reduce((prev, cur) => prev + cur.total, 0)}
+                  {formatMoney(profile?.cart?.reduce((prev, cur) => prev + cur.total, 0))}
                 </span>
               </div>
               <div className="product-action-btn">
@@ -98,14 +98,6 @@ export default function Cart({ className, type }) {
                 </a>
               </div>
             </div>
-            {/* <div className="w-full px-4 mt-[20px]">
-            <div className="h-[1px] bg-[#F0F1F3]"></div>
-          </div>
-          <div className="flex justify-center py-[15px]">
-            <p className="text-[13px] font-500 text-qgray">
-              Get Return within <span className="text-qblack">30 days</span>
-            </p>
-          </div> */}
           </div>
         ) : (
           <div style={{ textAlign: "center", padding: "1rem" }}>

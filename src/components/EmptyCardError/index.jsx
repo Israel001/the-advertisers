@@ -16,7 +16,7 @@ export default function EmptyCardError() {
             <Link to="/">
               <div className="flex justify-center w-full ">
                 <div className="w-[180px] h-[50px] ">
-                  <span type="button" className="yellow-btn">
+                  <span type="button" className="yellow-btn" style={{color:"white"}}>
                     Back to Shop
                   </span>
                 </div>

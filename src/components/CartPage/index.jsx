@@ -5,13 +5,12 @@ import InputCom from "../Helpers/InputCom";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/Layout";
 import ProductsTable from "./ProductsTable";
-import withDashboardContext from "../../hoc/withDashboardContext";
+// import withDashboardContext from "../../hoc/withDashboardContext";
+import withCartContext from "../../hoc/withCartContext";
 import { useAppContext } from "../../contexts";
 
 function CardPage({ cart = true }) {
-  const { profile } = useAppContext();
-
-  console.log(profile);
+  const { profile, formatMoney } = useAppContext();
 
   return (
     <Layout childrenClasses={cart ? "pt-0 pb-0" : ""}>
@@ -73,10 +72,10 @@ function CardPage({ cart = true }) {
                         Subtotal
                       </p>
                       <p className="text-[15px] font-medium text-qred">
-                        {profile?.cart?.reduce(
+                        {formatMoney(profile?.cart?.reduce(
                           (prev, cur) => prev + cur.total,
                           0
-                        )}
+                        ))}
                       </p>
                     </div>
                     <div className="w-full h-[1px] bg-[#EDEDED]"></div>
@@ -99,4 +98,4 @@ function CardPage({ cart = true }) {
   );
 }
 
-export default withDashboardContext(CardPage);
+export default withCartContext(CardPage);

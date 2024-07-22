@@ -5,13 +5,25 @@ import { useAppContext } from "../../contexts";
 import ThickLove from "./icons/ThickLove";
 import { useState } from "react";
 import LoadingPulse from "./LoadingPulse";
+import LoaderStyleOne from "./Loaders/LoaderStyleOneSmaller";
 
 /* eslint-disable react/prop-types */
 export default function SectionStyleTwo({ className, products, type }) {
-  const { addToCart, isLoggedIn, profile, addToWishlist, removeFromWishlist } =
-    useAppContext();
-
+  const {
+    addToCart,
+    isLoggedIn,
+    profile,
+    updateCartQty,
+    addToWishlist,
+    removeFromWishlist,
+    isAddToCartLoading,
+    formatMoney,
+    isProductId,
+  } = useAppContext();
+  const [quantity, setQuantity] = useState(5);
   const navigate = useNavigate();
+
+  console.log("isAddToCartLoading", isAddToCartLoading, isProductId);
 
   return (
     <div
@@ -20,6 +32,8 @@ export default function SectionStyleTwo({ className, products, type }) {
       }`}
     >
       {products.map((product) => {
+        const isInCart = profile.cart.find((c) => c.id === product.id);
+
         return (
           <div key={product.id} className="item w-full">
             <div
@@ -57,35 +71,89 @@ export default function SectionStyleTwo({ className, products, type }) {
                         {product.discount_price > 0 ? (
                           <>
                             <span className="main-price text-qgray line-through font-600 sm:text-[18px] text-base">
-                              {product.price}
+                              {formatMoney(product.price)}
                             </span>
                             <span className="offer-price text-qred font-600 sm:text-[18px] text-base ml-2">
-                              {product.discount_price}
+                              {formatMoney(product.discount_price)}
                             </span>
                           </>
                         ) : (
                           <span className="offer-price text-qred font-600 sm:text-[18px] text-base">
-                            {product.price}
+                            {formatMoney(product.price)}
                           </span>
                         )}
                       </p>
-                      <button
-                        type="button"
-                        className="w-[110px] h-[30px]"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          if (!isLoggedIn) navigate("/login");
-                          addToCart(product);
-                        }}
-                      >
-                        <span
-                          className={type === 3 ? "blue-btn" : "yellow-btn"}
-                          style={{ color: "white" }}
+                      {isInCart ? (
+                        <div className="flex gap-2 items-center">
+                        {isProductId === product.id &&
+                              isAddToCartLoading ? (
+                                <LoaderStyleOne />
+                              ) : (
+                          <div
+                            className="w-[120px] bg-[#b91c1c] h-[40px] px-[26px] flex items-center border border-qgray-border"
+                            style={{ borderRadius: "5px" }}
+                          >
+                            <div className="flex justify-between items-center w-full">
+                              <button
+                                onClick={(event) => {
+                                  event.preventDefault();
+
+                                  if (isInCart?.quantity > 1) {
+                                    updateCartQty(
+                                      product,
+                                      isInCart?.quantity - 1
+                                    );
+                                    setQuantity(isInCart?.quantity - 1);
+                                  }
+                                }}
+                                type="button"
+                                className="text-base  text-white"
+                              >
+                                -
+                              </button>
+
+                              
+                                <span className="text-white">
+                                  {isInCart?.quantity}
+                                </span>
+                              
+                              <button
+                                onClick={(event) => {
+                                  event.preventDefault();
+
+                                  updateCartQty(
+                                    product,
+                                    isInCart?.quantity + 1
+                                  );
+                                  setQuantity(isInCart?.quantity + 1);
+                                }}
+                                type="button"
+                                className="text-base text-white"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="w-[120px] h-[40px] "
+                          onClick={(event) => {
+                            event.preventDefault();
+                            addToCart(product);
+                          }}
                         >
-                          {" "}
-                          Add To Cart
-                        </span>
-                      </button>
+                          <span
+                            className={type === 3 ? "blue-btn" : "yellow-btn"}
+                            style={{ color: "white", borderRadius: "5px" }}
+                          >
+                            {" "}
+                            Add To Cart
+                          </span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
