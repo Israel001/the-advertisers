@@ -85,55 +85,84 @@ export default function SectionStyleTwo({ className, products, type }) {
                       </p>
                       {isInCart ? (
                         <div className="flex gap-2 items-center">
-                        {isProductId === product.id &&
-                              isAddToCartLoading ? (
-                                <LoaderStyleOne />
+                          {isProductId === product.id && isAddToCartLoading ? (
+                            <LoaderStyleOne />
+                          ) : (
+                            <div
+                              className="w-[120px] bg-[#b91c1c] h-[40px] text-center justify-center flex items-center border border-qgray-border"
+                              style={{ borderRadius: "5px" }}
+                            >
+                              {isInCart.quantity === 0 ? (
+                                <button
+                                  type="button"
+                                  // className="w-[120px] h-[40px] "
+                                  onClick={(event) => {
+                                    event.preventDefault();
+                                    addToCart(product);
+                                  }}
+                                >
+                                  <span
+                                    className={
+                                      type === 3 ? "blue-btn" : "yellow-btn"
+                                    }
+                                    style={{
+                                      color: "white",
+                                      borderRadius: "5px",
+                                    }}
+                                  >
+                                    {" "}
+                                    {isAddToCartLoading ? (
+                                      <LoaderStyleOne />
+                                    ) : (
+                                      "Add To Cart"
+                                    )}
+                                  </span>
+                                </button>
                               ) : (
-                          <div
-                            className="w-[120px] bg-[#b91c1c] h-[40px] px-[26px] flex items-center border border-qgray-border"
-                            style={{ borderRadius: "5px" }}
-                          >
-                            <div className="flex justify-between items-center w-full">
-                              <button
-                                onClick={(event) => {
-                                  event.preventDefault();
+                                <div className="flex justify-between items-center px-[26px] w-full">
+                                  <button
+                                    onClick={(event) => {
+                                      event.preventDefault();
 
-                                  if (isInCart?.quantity > 1) {
-                                    updateCartQty(
-                                      product,
-                                      isInCart?.quantity - 1
-                                    );
-                                    setQuantity(isInCart?.quantity - 1);
-                                  }
-                                }}
-                                type="button"
-                                className="text-base  text-white"
-                              >
-                                -
-                              </button>
+                                      if (isInCart?.quantity > 1) {
+                                        updateCartQty(
+                                          product,
+                                          isInCart?.quantity - 1
+                                        );
+                                        setQuantity(isInCart?.quantity - 1);
+                                      } else if (isInCart?.quantity === 1) {
+                                        updateCartQty(product, 0);
+                                        setQuantity(0);
+                                      }
+                                    }}
+                                    type="button"
+                                    className="text-base text-white"
+                                  >
+                                    -
+                                  </button>
 
-                              
-                                <span className="text-white">
-                                  {isInCart?.quantity}
-                                </span>
-                              
-                              <button
-                                onClick={(event) => {
-                                  event.preventDefault();
+                                  <span className="text-white">
+                                    {isInCart?.quantity}
+                                  </span>
 
-                                  updateCartQty(
-                                    product,
-                                    isInCart?.quantity + 1
-                                  );
-                                  setQuantity(isInCart?.quantity + 1);
-                                }}
-                                type="button"
-                                className="text-base text-white"
-                              >
-                                +
-                              </button>
+                                  <button
+                                    onClick={(event) => {
+                                      event.preventDefault();
+
+                                      updateCartQty(
+                                        product,
+                                        isInCart?.quantity + 1
+                                      );
+                                      setQuantity(isInCart?.quantity + 1);
+                                    }}
+                                    type="button"
+                                    className="text-base text-white"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              )}
                             </div>
-                          </div>
                           )}
                         </div>
                       ) : (
@@ -150,7 +179,11 @@ export default function SectionStyleTwo({ className, products, type }) {
                             style={{ color: "white", borderRadius: "5px" }}
                           >
                             {" "}
-                            Add To Cart
+                            {isAddToCartLoading ? (
+                              <LoaderStyleOne />
+                            ) : (
+                              "Add To Cart"
+                            )}
                           </span>
                         </button>
                       )}
