@@ -9,6 +9,7 @@ const ContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profile, setProfile] = useState({ cart: [] });
   const [isAddToCartLoading, setisAddToCartLoading] = useState(false);
+  const [isProductId, setisProductId] = useState(null);
 
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const ContextProvider = ({ children }) => {
     );
     const product = response.data;
     const existingCartIdx = profile.cart.findIndex((c) => c.id === product.id);
+    setisProductId(product.id)
     if (existingCartIdx !== -1) {
       if (newQuantity > product.quantity) {
         toast.error("Quantity is more than quantity available");
@@ -105,10 +107,10 @@ const ContextProvider = ({ children }) => {
       toast.error("Item does not exist");
     }
     setisAddToCartLoading(false)
-
   };
 
   const addToCart = async (product, quantity = 1) => {
+    setisProductId(product.id)
     const prodQty = quantity;
     if (product.out_of_stock || prodQty > product.quantity) {
       toast.error("Product is out of stock");
@@ -184,6 +186,7 @@ const ContextProvider = ({ children }) => {
         setIsLoggedIn,
         profile,
         isAddToCartLoading,
+        isProductId,
         setProfile,
         addToCart,
         removeFromCart,

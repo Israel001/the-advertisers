@@ -18,11 +18,12 @@ export default function SectionStyleTwo({ className, products, type }) {
     removeFromWishlist,
     isAddToCartLoading,
     formatMoney,
+    isProductId,
   } = useAppContext();
   const [quantity, setQuantity] = useState(5);
   const navigate = useNavigate();
 
-  console.log("isAddToCartLoading", isAddToCartLoading);
+  console.log("isAddToCartLoading", isAddToCartLoading, isProductId);
 
   return (
     <div
@@ -84,7 +85,10 @@ export default function SectionStyleTwo({ className, products, type }) {
                       </p>
                       {isInCart ? (
                         <div className="flex gap-2 items-center">
-                          {/* <p>(1 item(s) added)</p> */}
+                        {isProductId === product.id &&
+                              isAddToCartLoading ? (
+                                <LoaderStyleOne />
+                              ) : (
                           <div
                             className="w-[120px] bg-[#b91c1c] h-[40px] px-[26px] flex items-center border border-qgray-border"
                             style={{ borderRadius: "5px" }}
@@ -107,13 +111,12 @@ export default function SectionStyleTwo({ className, products, type }) {
                               >
                                 -
                               </button>
-                              <span className="text-white">
-                                {isAddToCartLoading ? (
-                                  <LoaderStyleOne />
-                                ) : (
-                                  isInCart?.quantity
-                                )}
-                              </span>
+
+                              
+                                <span className="text-white">
+                                  {isInCart?.quantity}
+                                </span>
+                              
                               <button
                                 onClick={(event) => {
                                   event.preventDefault();
@@ -131,6 +134,7 @@ export default function SectionStyleTwo({ className, products, type }) {
                               </button>
                             </div>
                           </div>
+                          )}
                         </div>
                       ) : (
                         <button

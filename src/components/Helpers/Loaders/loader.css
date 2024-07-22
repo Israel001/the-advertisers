@@ -81,20 +81,19 @@
 }
 /* loader style one end*/
 
-
-
 /* loader style one */
 
 .lds-spinnersmaller {
   color: official;
   display: flex;
   position: relative;
-  width: 20px;
-  height: 20px;
-  margin: 20% auto;
+  width: 3px;
+  height: 3px;
+  z-index: 1;
+  margin: 2% 18%;
 }
 .lds-spinnersmaller div {
-  transform-origin: 40px 40px;
+  transform-origin: 20px 20px;
   animation: lds-spinnersmaller 1.2s linear infinite;
 }
 .lds-spinnersmaller div:after {
@@ -102,10 +101,10 @@
   display: block;
   position: absolute;
   top: 3px;
-  left: 37px;
-  width: 6px;
-  height: 18px;
-  border-radius: 20%;
+  left: 17px;
+  width: 3px;
+  height: 10px;
+  border-radius: 10%;
   background: #b72323;
 }
 .lds-spinnersmaller div:nth-child(1) {
@@ -164,4 +163,3 @@
     opacity: 0;
   }
 }
-/* loader style one end*/
