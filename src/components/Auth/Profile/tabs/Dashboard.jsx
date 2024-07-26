@@ -287,6 +287,7 @@ export default function Dashboard() {
                   onChange={handleChange}
                   defaultValue={profile?.email}
                   placeholder="Email"
+                  disabled
                 />
               </div>
               <div className="mb-4">
@@ -304,6 +305,7 @@ export default function Dashboard() {
                   onChange={handleChange}
                   defaultValue={profile?.phone}
                   placeholder="Phone"
+                  disabled
                 />
               </div>
               <div className="mb-6">

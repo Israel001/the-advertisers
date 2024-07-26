@@ -16,6 +16,7 @@ export default function SectionStyleTwo({ className, products, type }) {
     updateCartQty,
     addToWishlist,
     removeFromWishlist,
+    removeFromCart,
     isAddToCartLoading,
     formatMoney,
     isProductId,
@@ -23,7 +24,7 @@ export default function SectionStyleTwo({ className, products, type }) {
   const [quantity, setQuantity] = useState(5);
   const navigate = useNavigate();
 
-  console.log("isAddToCartLoading", isAddToCartLoading, isProductId);
+  // console.log("isAddToCartLoading", isAddToCartLoading, isProductId);
 
   return (
     <div
@@ -119,7 +120,7 @@ export default function SectionStyleTwo({ className, products, type }) {
                                   </span>
                                 </button>
                               ) : (
-                                <div className="flex justify-between items-center px-[26px] w-full">
+                                <div className="flex justify-between items-center py-0  w-full">
                                   <button
                                     onClick={(event) => {
                                       event.preventDefault();
@@ -131,17 +132,17 @@ export default function SectionStyleTwo({ className, products, type }) {
                                         );
                                         setQuantity(isInCart?.quantity - 1);
                                       } else if (isInCart?.quantity === 1) {
-                                        updateCartQty(product, 0);
+                                        removeFromCart(product);
                                         setQuantity(0);
                                       }
                                     }}
                                     type="button"
-                                    className="text-base text-white"
+                                    className="text-base w-[80px] h-[40px] text-white"
                                   >
                                     -
                                   </button>
 
-                                  <span className="text-white">
+                                  <span className="text-white w-[20px] h-[40px] flex items-center">
                                     {isInCart?.quantity}
                                   </span>
 
@@ -156,7 +157,7 @@ export default function SectionStyleTwo({ className, products, type }) {
                                       setQuantity(isInCart?.quantity + 1);
                                     }}
                                     type="button"
-                                    className="text-base text-white"
+                                    className="text-base w-[80px] h-[40px] text-white"
                                   >
                                     +
                                   </button>
