@@ -7,17 +7,15 @@ export default function InputQuantityCom({ item }) {
   const { updateCartQty, removeFromCart } = useAppContext();
 
   useEffect(() => {
-    if (quantity === 0) {
-      removeFromCart(item);
-    }
-  }, [quantity, removeFromCart, item]);
+    setQuantity(item?.quantity);
+  }, [item?.quantity]);
 
   const handleDecrement = () => {
     if (quantity > 1) {
       updateCartQty(item, quantity - 1);
       setQuantity(quantity - 1);
     } else if (quantity === 1) {
-      updateCartQty(item, 0);
+      removeFromCart(item);
       setQuantity(0);
     }
   };
@@ -26,10 +24,6 @@ export default function InputQuantityCom({ item }) {
     updateCartQty(item, quantity + 1);
     setQuantity(quantity + 1);
   };
-
-  if (quantity === 0) {
-    return null;
-  }
 
   return (
     <div className="w-[120px] h-[40px] px-[26px] flex items-center border border-qgray-border">

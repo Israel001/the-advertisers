@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAppContext } from "../../contexts";
 
 export default function Cart({ className, type }) {
@@ -80,15 +81,17 @@ export default function Cart({ className, type }) {
                   Subtotal
                 </span>
                 <span className="text-[15px] font-500 text-qred ">
-                  {formatMoney(profile?.cart?.reduce((prev, cur) => prev + cur.total, 0))}
+                  {formatMoney(
+                    profile?.cart?.reduce((prev, cur) => prev + cur.total, 0)
+                  )}
                 </span>
               </div>
               <div className="product-action-btn">
-                <a href="/cart">
+                <Link to="/cart">
                   <div className="gray-btn w-full h-[50px] mb-[10px] ">
                     <span>View Cart</span>
                   </div>
-                </a>
+                </Link>
                 <a href="/checkout">
                   <div className="w-full h-[50px]">
                     <div className={type === 3 ? "blue-btn" : "yellow-btn"}>

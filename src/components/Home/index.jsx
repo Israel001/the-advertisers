@@ -45,14 +45,14 @@ function Home() {
         >
           <SectionStyleTwo products={topSellingProducts} />
         </ViewMoreTitle>
-        <ProductsAds
+        {/* <ProductsAds
           ads={[
             `${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-1.png`,
             `${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-2.png`,
           ]}
           sectionHeight="sm:h-[295px] h-full"
           className="products-ads-section mb-[60px]"
-        />
+        /> */}
         <ViewMoreTitle
           className="best-sallers-section mb-[60px]"
           seeMoreUrl="/sallers"
@@ -73,10 +73,10 @@ function Home() {
           className="category-products mb-[60px]"
           showViewMore={false}
         />
-        <ProductsAds
+        {/* <ProductsAds
           ads={[`${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-3.png`]}
           className="products-ads-section mb-[60px]"
-        />
+        /> */}
         <SectionStyleThree
           products={products}
           sectionTitle="Explore your interests"

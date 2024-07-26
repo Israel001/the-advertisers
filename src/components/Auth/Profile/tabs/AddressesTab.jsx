@@ -92,6 +92,7 @@ export default function AddressesTab() {
         toast.error("Error deleting address, try again later!");
       });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -121,6 +122,7 @@ export default function AddressesTab() {
           setLoading(false);
           toast.success("Address updated successfully");
           setOpen(false);
+          window.location.reload();
         })
         .catch((error) => {
           setLoading(false);
@@ -373,7 +375,7 @@ export default function AddressesTab() {
       <CustomModal open={openDelete} handleClose={handleCloseDeleteModal}>
         <p className=" text-center text-lg font-semibold mt-5">
           {" "}
-          Are you sure you want to delete this address??
+          Are you sure you want to delete this address?
         </p>
         <div className="flex gap-6 my-7">
           <button
