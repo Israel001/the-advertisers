@@ -73,10 +73,7 @@ function Home() {
           className="category-products mb-[60px]"
           showViewMore={false}
         />
-        {/* <ProductsAds
-          ads={[`${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-3.png`]}
-          className="products-ads-section mb-[60px]"
-        /> */}
+
         <SectionStyleThree
           products={products}
           sectionTitle="Explore your interests"

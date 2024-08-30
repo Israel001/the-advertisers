@@ -8,6 +8,8 @@ import ThinLove from "./icons/ThinLove";
 import ThickLove from "./icons/ThickLove";
 import LoaderStyleOne from "./Loaders/LoaderStyleOne";
 import { useAppContext } from "../../contexts";
+import Show1 from "../../assets/images/show1.jpg";
+import Show2 from "../../assets/images/show2.jpg";
 
 export default function SectionStyleThree({
   className,
@@ -45,7 +47,7 @@ export default function SectionStyleThree({
     const response = await axios.get(
       `${
         import.meta.env.VITE_HOST_URL
-      }/products?pagination[page]=${page}&pagination[limit]=12`
+      }/products?pagination[page]=${page}&pagination[limit]=8`
     );
     setShowMore(
       response.data.pagination.page !== response.data.pagination.pages
@@ -57,10 +59,17 @@ export default function SectionStyleThree({
 
   return (
     <div className={`section-style-one ${className || ""}`}>
+      <div className="container-x mx-auto mb-8">
+        <div className="flex">
+          <img src={Show1} alt="Show Image" className="w-[50%]" />
+          <img src={Show2} alt="Show Image" className="w-[50%]" />
+        </div>
+      </div>
       <ViewMoreTitle
         categoryTitle={sectionTitle}
         seeMoreUrl={seeMoreUrl}
         showViewMore={showViewMore}
+        viewAll="View All"
       >
         <div className="products-section w-full">
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5">
