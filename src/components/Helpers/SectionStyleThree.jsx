@@ -59,12 +59,12 @@ export default function SectionStyleThree({
 
   return (
     <div className={`section-style-one ${className || ""}`}>
-      <div className="container-x mx-auto mb-8">
+      {/* <div className="container-x mx-auto mb-8">
         <div className="flex">
           <img src={Show1} alt="Show Image" className="w-[50%]" />
           <img src={Show2} alt="Show Image" className="w-[50%]" />
         </div>
-      </div>
+      </div> */}
       <ViewMoreTitle
         categoryTitle={sectionTitle}
         seeMoreUrl={seeMoreUrl}
@@ -74,7 +74,7 @@ export default function SectionStyleThree({
         <div className="products-section w-full">
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5">
             {allProducts.map((product) => {
-              const isInCart = profile.cart.find((c) => c.id === product.id);
+              const isInCart = profile?.cart?.find((c) => c.id === product.id);
               return (
                 <Link to={`/single-product/${product.id}`} key={product.id}>
                   <div

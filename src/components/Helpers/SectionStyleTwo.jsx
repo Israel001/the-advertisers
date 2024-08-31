@@ -33,7 +33,7 @@ export default function SectionStyleTwo({ className, products, type }) {
         className="slick-arrow slick-next"
         style={{
           right: "10px",
-          backgroundColor: "rgb(156,163,175)",
+          backgroundColor: "rgb(185,28,28)",
           width: "40px",
           height: "40px",
           borderRadius: "50%",
@@ -54,7 +54,7 @@ export default function SectionStyleTwo({ className, products, type }) {
         className="slick-arrow slick-prev"
         style={{
           left: "10px",
-          backgroundColor: "rgb(156,163,175)",
+          backgroundColor: "rgb(185,28,28)",
           width: "40px",
           height: "40px",
           borderRadius: "50%",
@@ -98,7 +98,7 @@ export default function SectionStyleTwo({ className, products, type }) {
     <div className={`section-content w-full ${className || ""}`}>
       <Slider {...settings}>
         {products.map((product) => {
-          const isInCart = profile.cart.find((c) => c.id === product.id);
+          const isInCart = profile?.cart?.find((c) => c.id === product.id);
 
           return (
             <div key={product?.id} className="h-[400px] px-4">

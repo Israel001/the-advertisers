@@ -4,6 +4,10 @@ import axios from "axios";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./banner.css";
+import Shop3 from "../../assets/images/shop3.jpeg";
+import Shop4 from "../../assets/images/shop4.jpeg";
+import Extra1 from "../../assets/images/extra1.jpg";
+import Extra2 from "../../assets/images/extra3.jpg";
 
 export default function Banner({ className }) {
   // const [slider, setSlider] = useState("");
@@ -28,17 +32,18 @@ export default function Banner({ className }) {
           <div className="main-wrapper w-full">
             <div className="banner-card xl:flex xl:space-x-[30px]  mb-[30px]">
               <div style={{ width: "100%" }}>
-                <div>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-5 w-full">
                   <Carousel
                     showArrows={false}
                     showThumbs={false}
                     infiniteLoop={true}
                     autoPlay={true}
                     interval={3000}
+                    className="w-full sm:w-[70%]"
                   >
                     <div>
                       <img
-                        className="carousel-image"
+                        className="w-full max-w-full h-[400px] object-cover"
                         src={`${
                           import.meta.env.VITE_PUBLIC_URL
                         }/assets/Banner/shop1.jpg`}
@@ -46,19 +51,15 @@ export default function Banner({ className }) {
                     </div>
                     <div>
                       <img
-                        className="carousel-image"
-                        src={`${
-                          import.meta.env.VITE_PUBLIC_URL
-                        }/assets/Banner/newshop.png`}
+                        className="w-full max-w-full h-[400px] object-cover"
+                        src={Shop3}
                       />
                     </div>
                     <div>
                       <img
-                        className="carousel-image"
-                        // className="w-full max-w-full h-auto object-cover"
-                        src={`${
-                          import.meta.env.VITE_PUBLIC_URL
-                        }/assets/Banner/Shop3.png`}
+                        // className="carousel-image"
+                        className="w-full max-w-full h-[400px] object-cover"
+                        src={Shop4}
                       />
                     </div>
                     {/* {slides.map((slide, index) => (
@@ -72,6 +73,16 @@ export default function Banner({ className }) {
                     </div>
                   ))} */}
                   </Carousel>
+                  <div className="flex flex-col w-full sm:w-[30%] gap-4">
+                    <img
+                      className="w-full max-w-full sm:h-[195px] object-cover"
+                      src={Extra1}
+                    />
+                    <img
+                      className="w-full max-w-full sm:h-[195px] object-cover"
+                      src={Extra2}
+                    />
+                  </div>
                 </div>
                 {/* <div>
                   <picture>
