@@ -147,7 +147,7 @@ export default function SectionStyleOne({
                       }}
                     >
                       <div
-                        className="product-card-img w-full h-[300px]"
+                        className="product-card-img w-full h-[250px]"
                         style={{
                           background: `url(${import.meta.env.VITE_HOST_URL}/${
                             product?.featured_image
@@ -288,7 +288,7 @@ export default function SectionStyleOne({
                             </span>
                           ))}
                         </div>
-                        <p className="title mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
+                        <p className="title mt-8 mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                           {product.name}
                         </p>
                         <p className="price">
