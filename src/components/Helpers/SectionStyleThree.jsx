@@ -8,6 +8,8 @@ import ThinLove from "./icons/ThinLove";
 import ThickLove from "./icons/ThickLove";
 import LoaderStyleOne from "./Loaders/LoaderStyleOne";
 import { useAppContext } from "../../contexts";
+import Show1 from "../../assets/images/show1.jpg";
+import Show2 from "../../assets/images/show2.jpg";
 
 export default function SectionStyleThree({
   className,
@@ -45,27 +47,55 @@ export default function SectionStyleThree({
     const response = await axios.get(
       `${
         import.meta.env.VITE_HOST_URL
-      }/products?pagination[page]=${page}&pagination[limit]=12`
+      }/products?pagination[page]=${page}&pagination[limit]=8`
     );
-    setShowMore(
-      response.data.pagination.page !== response.data.pagination.pages
-    );
+    // setShowMore(
+    //   response.data.pagination.page !== response.data.pagination.pages
+    // );
     const updatedProducts = [...allProducts, ...response.data.data];
     setProducts(updatedProducts);
     setLoading(false);
   };
 
+  const renderStars = () => {
+    const rating = parseFloat(allProducts?.avgRating);
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.push(
+          <span key={i} className="text-yellow-500 mt-4">
+            ★
+          </span>
+        );
+      } else {
+        stars.push(
+          <span key={i} className="text-gray-300 mt-4">
+            ★
+          </span>
+        );
+      }
+    }
+    return stars;
+  };
+
   return (
     <div className={`section-style-one ${className || ""}`}>
+      {/* <div className="container-x mx-auto mb-8">
+        <div className="flex">
+          <img src={Show1} alt="Show Image" className="w-[50%]" />
+          <img src={Show2} alt="Show Image" className="w-[50%]" />
+        </div>
+      </div> */}
       <ViewMoreTitle
         categoryTitle={sectionTitle}
         seeMoreUrl={seeMoreUrl}
         showViewMore={showViewMore}
+        viewAll="View All"
       >
         <div className="products-section w-full">
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5">
             {allProducts.map((product) => {
-              const isInCart = profile.cart.find((c) => c.id === product.id);
+              const isInCart = profile?.cart?.find((c) => c.id === product.id);
               return (
                 <Link to={`/single-product/${product.id}`} key={product.id}>
                   <div
@@ -74,14 +104,21 @@ export default function SectionStyleThree({
                       boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)",
                     }}
                   >
-                    <div
+                    {/* <div
                       className="product-card-img w-full h-[300px]"
                       style={{
                         background: `url(${import.meta.env.VITE_HOST_URL}/${
                           product.featuredImage
                         }) no-repeat center`,
                       }}
-                    ></div>
+                    ></div> */}
+                    <img
+                      src={`${import.meta.env.VITE_HOST_URL}/${
+                        product.featuredImage
+                      }`}
+                      alt={product?.name}
+                      className="h-[250px] w-full "
+                    />
                     <div className="product-card-details px-[30px] pb-[30px] relative">
                       {isInCart ? (
                         <div>
@@ -207,12 +244,13 @@ export default function SectionStyleThree({
                           </button>
                         </div>
                       )}
-                      <div className="reviews flex space-x-[1px] mb-3">
-                        {Array.from(Array(product.avg_rating), () => (
+                      <div className="reviews flex space-x-[1px] mb-1">
+                        {/* {Array.from(Array(product.avg_rating), () => (
                           <span key={product.avg_rating + Math.random()}>
                             <Star />
                           </span>
-                        ))}
+                        ))} */}
+                        {renderStars()}
                       </div>
                       <p className="title mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                         {product.name}
@@ -267,7 +305,7 @@ export default function SectionStyleThree({
               );
             })}
           </div>
-          {showMore && (
+          {/* {showMore && (
             <div
               style={{ marginTop: "30px", width: "100%", textAlign: "center" }}
             >
@@ -292,7 +330,7 @@ export default function SectionStyleThree({
                 </button>
               )}
             </div>
-          )}
+          )} */}
         </div>
       </ViewMoreTitle>
     </div>

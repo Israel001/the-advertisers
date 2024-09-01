@@ -71,6 +71,7 @@ export default function AddressesTab() {
       [name]: value,
     }));
   };
+  Delete;
   const handleDeleteAddress = (e) => {
     axios
       .delete(

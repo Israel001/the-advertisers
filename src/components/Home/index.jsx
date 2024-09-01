@@ -10,6 +10,9 @@ import BestSellers from "./BestSellers";
 import ProductsAds from "./ProductsAds";
 import axios from "axios";
 import withDashboardContext2 from "../../hoc/withDashboardContext2";
+import Display1 from "../../assets/images/display1.jpg";
+import Display2 from "../../assets/images/display2.jpg";
+import Display3 from "../../assets/images/display3.jpg";
 
 function Home() {
   const { products } = datas;
@@ -61,6 +64,13 @@ function Home() {
         >
           <BestSellers />
         </ViewMoreTitle>
+        <div className="container-x mx-auto flex justify-center items-center my-8 ">
+          <div className="grid grid-cols-1 sm:grid-cols-3 place-content-center gap-3">
+            <img src={Display1} alt="Show Image" className="w-full" />
+            <img src={Display2} alt="Show Image" className="w-full" />
+            <img src={Display3} alt="Show Image" className="w-full" />
+          </div>
+        </div>
         <SectionStyleOne
           categoryBackground={`${
             import.meta.env.VITE_PUBLIC_URL
@@ -73,10 +83,7 @@ function Home() {
           className="category-products mb-[60px]"
           showViewMore={false}
         />
-        {/* <ProductsAds
-          ads={[`${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-3.png`]}
-          className="products-ads-section mb-[60px]"
-        /> */}
+
         <SectionStyleThree
           products={products}
           sectionTitle="Explore your interests"

@@ -11,6 +11,9 @@ import ThinLove from "./icons/ThinLove";
 import ThickLove from "./icons/ThickLove";
 import { useAppContext } from "../../contexts";
 import LoaderStyleOne from "./Loaders/LoaderStyleOneSmaller";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function SectionStyleOne({
   className,
@@ -55,6 +58,74 @@ export default function SectionStyleOne({
   } = useAppContext();
   const [quantity, setQuantity] = useState(5);
 
+  const NextArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <div
+        className="slick-arrow slick-next"
+        style={{
+          right: "10px",
+          backgroundColor: "rgb(185,28,28)",
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 2,
+        }}
+        onClick={onClick}
+      ></div>
+    );
+  };
+
+  const PrevArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <div
+        className="slick-arrow slick-prev"
+        style={{
+          left: "10px",
+          backgroundColor: "rgb(185,28,28)",
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 2,
+        }}
+        onClick={onClick}
+      ></div>
+    );
+  };
+
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
   return (
     <div data-aos="fade-up" className={`section-style-one ${className || ""}`}>
       <ViewMoreTitle
@@ -63,18 +134,11 @@ export default function SectionStyleOne({
         showViewMore={showViewMore}
       >
         <div className="products-section w-full">
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5">
-            <div className="category-card hidden xl:block w-full">
-              <CategoryCard
-                background={categoryBackground}
-                title={categoryTitle}
-                brands={filterBrands}
-              />
-            </div>
-            {popularSales.map((product) => {
-              const isInCart = profile.cart.find((c) => c.id === product.id);
+          <Slider {...settings}>
+            {popularSales?.map((product) => {
+              const isInCart = profile?.cart?.find((c) => c.id === product.id);
               return (
-                <div key={product?.id} className="item">
+                <div key={product?.id} className="h-[400px] px-4">
                   <Link to={`/single-product/${product?.id}`}>
                     <div
                       className="product-card-one w-full h-full bg-white relative group overflow-hidden"
@@ -83,7 +147,7 @@ export default function SectionStyleOne({
                       }}
                     >
                       <div
-                        className="product-card-img w-full h-[300px]"
+                        className="product-card-img w-full h-[250px]"
                         style={{
                           background: `url(${import.meta.env.VITE_HOST_URL}/${
                             product?.featured_image
@@ -224,7 +288,7 @@ export default function SectionStyleOne({
                             </span>
                           ))}
                         </div>
-                        <p className="title mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
+                        <p className="title mt-8 mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                           {product.name}
                         </p>
                         <p className="price">
@@ -277,7 +341,7 @@ export default function SectionStyleOne({
                 </div>
               );
             })}
-          </div>
+          </Slider>
         </div>
       </ViewMoreTitle>
     </div>
