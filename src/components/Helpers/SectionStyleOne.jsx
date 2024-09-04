@@ -103,7 +103,7 @@ export default function SectionStyleOne({
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
 
     nextArrow: <NextArrow />,
@@ -134,7 +134,7 @@ export default function SectionStyleOne({
         showViewMore={showViewMore}
       >
         <div className="products-section w-full">
-          <Slider {...settings}>
+          <Slider {...settings} className="w-full">
             {popularSales?.map((product) => {
               const isInCart = profile?.cart?.find((c) => c.id === product.id);
               return (
@@ -146,14 +146,23 @@ export default function SectionStyleOne({
                         boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)",
                       }}
                     >
-                      <div
+                      {/* <div
                         className="product-card-img w-full h-[250px]"
                         style={{
                           background: `url(${import.meta.env.VITE_HOST_URL}/${
                             product?.featured_image
                           }) no-repeat center`,
                         }}
-                      ></div>
+                      ></div> */}
+
+                      <img
+                        src={`${import.meta.env.VITE_HOST_URL}/${
+                          product?.featured_image
+                        }`}
+                        alt={product?.name}
+                        className="h-[250px] w-full "
+                      />
+
                       <div className="product-card-details px-[30px] pb-[30px] relative">
                         {isInCart ? (
                           <div>
@@ -291,7 +300,10 @@ export default function SectionStyleOne({
                         <p className="title mt-8 mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                           {product.name}
                         </p>
-                        <p className="price">
+                        <p
+                          className="price 
+ text-[15px]"
+                        >
                           {product.discount_price > 0 ? (
                             <>
                               <span className="main-price text-qgray line-through font-600 sm:text-[18px] text-base">

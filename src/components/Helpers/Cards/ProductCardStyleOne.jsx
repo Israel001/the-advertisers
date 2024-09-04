@@ -61,11 +61,14 @@ export default function ProductCardStyleOne({ datas, type }) {
             {datas.title}
           </p>
         </Link>
-        <p className="price">
-          <span className="main-price text-qgray line-through font-600 text-[18px]">
+        <p
+          className="price 
+ text-[15px]"
+        >
+          <span className="main-price text-qgray line-through font-600">
             {datas.price}
           </span>
-          <span className="offer-price text-qred font-600 text-[18px] ml-2">
+          <span className="offer-price text-qred font-600 ml-2">
             {datas.offer_price}
           </span>
         </p>

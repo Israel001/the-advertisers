@@ -41,7 +41,10 @@ export default function Cart({ className, type }) {
                               {item.name}
                             </p>
 
-                            <p className="price">
+                            <p
+                              className="price 
+ text-[15px]"
+                            >
                               <span className="offer-price text-qred font-600 text-[15px] ml-2">
                                 {formatMoney(item.price)}
                               </span>

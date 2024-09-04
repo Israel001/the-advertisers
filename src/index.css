@@ -1,46 +1,46 @@
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-Black.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-Black.ttf");
   font-weight: 900;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-Bold.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-Bold.ttf");
   font-weight: 700;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-ExtraBold.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-ExtraBold.ttf");
   font-weight: 800;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-ExtraLight.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-ExtraLight.ttf");
   font-weight: 200;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-Light.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-Light.ttf");
   font-weight: 300;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-Medium.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-Medium.ttf");
   font-weight: 500;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-Regular.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-Regular.ttf");
   font-weight: 400;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-SemiBold.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-SemiBold.ttf");
   font-weight: 600;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/public/assets/fonts/Inter-Thin.ttf");
+  font-family: "Montserrat";
+  src: url("/public/assets/fonts/Montserrat-Thin.ttf");
   font-weight: 100;
 }
 
@@ -57,7 +57,7 @@
   padding: 0;
 }
 html {
-  font-family: "Inter", sans-serif;
+  font-family: "Montserrat", sans-serif;
   background-color: #f8f8f8;
 }
 body {

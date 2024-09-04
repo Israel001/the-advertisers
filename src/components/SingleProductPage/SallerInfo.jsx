@@ -98,18 +98,21 @@ export default function SallerInfo({ products, product }) {
                       <p className="title mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                         {prod.name}
                       </p>
-                      <p className="price">
+                      <p
+                        className="price 
+ text-[15px]"
+                      >
                         {prod.discount_price ? (
                           <>
-                            <span className="main-price text-qgray line-through font-600 text-[18px]">
+                            <span className="main-price text-qgray line-through font-600">
                               {prod.discount_price}
                             </span>
-                            <span className="offer-price text-qred font-600 text-[18px] ml-2">
+                            <span className="offer-price text-qred font-600 ml-2">
                               {prod.price}
                             </span>
                           </>
                         ) : (
-                          <span className="offer-price text-qred font-600 text-[18px] ml-2">
+                          <span className="offer-price text-qred font-600 ml-2">
                             {prod.price}
                           </span>
                         )}
