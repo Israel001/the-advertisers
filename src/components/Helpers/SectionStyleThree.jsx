@@ -240,10 +240,7 @@ export default function SectionStyleThree({
                       <p className="title mt-4 mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                         {product.name}
                       </p>
-                      <p
-                        className="price 
- text-[15px]"
-                      >
+                      <p className="price text-[15px]">
                         {product.discount_price > 0 ? (
                           <>
                             <span className="main-price text-qgray line-through font-600 sm:text-[18px] text-base">
