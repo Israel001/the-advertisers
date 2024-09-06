@@ -21,11 +21,12 @@ export default function BestSellers({ className }) {
       <div className="grid xl:grid-cols-6 lg:grid-cols-5 sm:grid-cols-3 grid-cols-1 xl:gap-[30px] gap-5">
         {categories.map((category) => {
           return (
-            <div
+            <Link
               data-aos="fade-left"
               data-aos-duration="500"
               className="item w-full flex flex-col items-center"
               key={category?.id}
+              to={`/all-products?subCategoryId=${category.id}`}
             >
               <div className="w-[170px] h-[170px] rounded-full bg-white flex justify-center items-center overflow-hidden mb-2">
                 <img
@@ -35,12 +36,12 @@ export default function BestSellers({ className }) {
                   alt=""
                 />
               </div>
-              <Link to="/saller-page">
+              <div>
                 <p className="text-base font-500 text-center">
                   {category.name}
                 </p>
-              </Link>
-            </div>
+              </div>
+            </Link>
           );
         })}
       </div>

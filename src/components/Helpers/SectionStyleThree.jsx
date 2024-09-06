@@ -93,7 +93,7 @@ export default function SectionStyleThree({
         viewAll="View All"
       >
         <div className="products-section w-full">
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5">
+          <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5">
             {allProducts.map((product) => {
               const isInCart = profile?.cart?.find((c) => c.id === product.id);
               return (
@@ -104,17 +104,9 @@ export default function SectionStyleThree({
                       boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)",
                     }}
                   >
-                    {/* <div
-                      className="product-card-img w-full h-[300px]"
-                      style={{
-                        background: `url(${import.meta.env.VITE_HOST_URL}/${
-                          product.featuredImage
-                        }) no-repeat center`,
-                      }}
-                    ></div> */}
                     <img
                       src={`${import.meta.env.VITE_HOST_URL}/${
-                        product.featuredImage
+                        product?.featuredImage
                       }`}
                       alt={product?.name}
                       className="h-[250px] w-full "
@@ -244,18 +236,11 @@ export default function SectionStyleThree({
                           </button>
                         </div>
                       )}
-                      <div className="reviews flex space-x-[1px] mb-1">
-                        {/* {Array.from(Array(product.avg_rating), () => (
-                          <span key={product.avg_rating + Math.random()}>
-                            <Star />
-                          </span>
-                        ))} */}
-                        {renderStars()}
-                      </div>
-                      <p className="title mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
+
+                      <p className="title mt-4 mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                         {product.name}
                       </p>
-                      <p className="price">
+                      <p className="price text-[15px]">
                         {product.discount_price > 0 ? (
                           <>
                             <span className="main-price text-qgray line-through font-600 sm:text-[18px] text-base">
@@ -271,6 +256,9 @@ export default function SectionStyleThree({
                           </span>
                         )}
                       </p>
+                      <div className="reviews flex space-x-[1px] mb-1">
+                        {renderStars()}
+                      </div>
                     </div>
                     {/* quick-access-btns */}
                     <div className="quick-access-btns flex flex-col space-y-2 absolute group-hover:right-4 -right-10 top-20  transition-all duration-300 ease-in-out">

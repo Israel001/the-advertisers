@@ -31,17 +31,16 @@ export default function SectionStyleOne({
   const [productLength] = useState(3);
   const [popularSales, setPopularSales] = useState([]);
 
-  useEffect(() => {
-    fetchPopularSales();
-  }, []);
-
   const fetchPopularSales = async () => {
     const response = await axios.get(
       `${import.meta.env.VITE_HOST_URL}/products/popular-sales`
     );
     setPopularSales(response.data);
   };
-
+  useEffect(() => {
+    console.log("Component mounted or updated");
+    fetchPopularSales();
+  }, []);
   const navigate = useNavigate();
 
   const {
@@ -103,7 +102,7 @@ export default function SectionStyleOne({
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
 
     nextArrow: <NextArrow />,
@@ -137,6 +136,26 @@ export default function SectionStyleOne({
           <Slider {...settings}>
             {popularSales?.map((product) => {
               const isInCart = profile?.cart?.find((c) => c.id === product.id);
+              const renderStars = () => {
+                const rating = parseFloat(product?.avgRating);
+                const stars = [];
+                for (let i = 1; i <= 5; i++) {
+                  if (i <= rating) {
+                    stars.push(
+                      <span key={i} className="text-yellow-500 mt-4">
+                        ★
+                      </span>
+                    );
+                  } else {
+                    stars.push(
+                      <span key={i} className="text-gray-300 mt-4">
+                        ★
+                      </span>
+                    );
+                  }
+                }
+                return stars;
+              };
               return (
                 <div key={product?.id} className="h-[400px] px-4">
                   <Link to={`/single-product/${product?.id}`}>
@@ -146,14 +165,23 @@ export default function SectionStyleOne({
                         boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)",
                       }}
                     >
-                      <div
+                      {/* <div
                         className="product-card-img w-full h-[250px]"
                         style={{
                           background: `url(${import.meta.env.VITE_HOST_URL}/${
                             product?.featured_image
                           }) no-repeat center`,
                         }}
-                      ></div>
+                      ></div> */}
+
+                      <img
+                        src={`${import.meta.env.VITE_HOST_URL}/${
+                          product?.featured_image
+                        }`}
+                        alt={product?.name}
+                        className="h-[250px] w-full "
+                      />
+
                       <div className="product-card-details px-[30px] pb-[30px] relative">
                         {isInCart ? (
                           <div>
@@ -281,17 +309,11 @@ export default function SectionStyleOne({
                             </button>
                           </div>
                         )}
-                        <div className="reviews flex space-x-[1px] mb-3">
-                          {Array.from(Array(product.avg_rating), () => (
-                            <span key={product.avg_rating + Math.random()}>
-                              <Star />
-                            </span>
-                          ))}
-                        </div>
-                        <p className="title mt-8 mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
+
+                        <p className="title mt-4 mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                           {product.name}
                         </p>
-                        <p className="price">
+                        <p className="price text-[15px]">
                           {product.discount_price > 0 ? (
                             <>
                               <span className="main-price text-qgray line-through font-600 sm:text-[18px] text-base">
@@ -307,6 +329,9 @@ export default function SectionStyleOne({
                             </span>
                           )}
                         </p>
+                        <div className="reviews flex space-x-[1px] mb-1">
+                          {renderStars()}
+                        </div>
                       </div>
                       {/* quick-access-btns */}
                       <div className="quick-access-btns flex flex-col space-y-2 absolute group-hover:right-4 -right-10 top-20  transition-all duration-300 ease-in-out">

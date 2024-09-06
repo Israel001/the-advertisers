@@ -103,8 +103,14 @@ function SingleProductPage() {
     setProduct(response.data);
   };
 
-  const { addToCart, isLoggedIn, profile, addToWishlist, removeFromWishlist,formatMoney } =
-    useAppContext();
+  const {
+    addToCart,
+    isLoggedIn,
+    profile,
+    addToWishlist,
+    removeFromWishlist,
+    formatMoney,
+  } = useAppContext();
 
   const navigate = useNavigate();
 
@@ -315,19 +321,22 @@ function SingleProductPage() {
                             <p className="title mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
                               {product.name}
                             </p>
-                            <p className="price">
+                            <p
+                              className="price 
+ text-[15px]"
+                            >
                               {product.discount_price > 0 ? (
                                 <>
                                   {" "}
-                                  <span className="main-price text-qgray line-through font-600 text-[18px]">
-                                  {formatMoney(product.discount_price)}
+                                  <span className="main-price text-qgray line-through font-600">
+                                    {formatMoney(product.discount_price)}
                                   </span>
-                                  <span className="offer-price text-qred font-600 text-[18px] ml-2">
-                                  {formatMoney(product.price)}
+                                  <span className="offer-price text-qred font-600 ml-2">
+                                    {formatMoney(product.price)}
                                   </span>
                                 </>
                               ) : (
-                                <span className="offer-price text-qred font-600 text-[18px]">
+                                <span className="offer-price text-qred font-600">
                                   {formatMoney(product.price)}
                                 </span>
                               )}
