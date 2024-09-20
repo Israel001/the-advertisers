@@ -40,7 +40,7 @@ export default function Navbar({ className, type }) {
 
   return (
     <div
-      className={`nav-widget-wrapper w-full  h-[60px] relative z-30 ${
+      className={`nav-widget-wrapper w-full  h-[70px] relative z-30 ${
         type === 3 ? "bg-qh3-blue" : "bg-qyellow"
       }  ${className || ""}`}
     >
@@ -48,7 +48,7 @@ export default function Navbar({ className, type }) {
         <div className="w-full h-full relative">
           <div className="w-full h-full flex justify-between items-center">
             <div className="category-and-nav flex xl:space-x-7 space-x-3 items-center">
-              <div className="category w-[270px] h-[53px] bg-white px-5 rounded-t-md mt-[6px] relative">
+              <div className="category w-[270px] h-[53px] px-5 rounded-t-md mt-[6px] relative">
                 <button
                   onClick={handler}
                   type="button"
@@ -58,8 +58,9 @@ export default function Navbar({ className, type }) {
                     <span>
                       <svg
                         className="fill-current"
-                        width="14"
-                        height="9"
+                        style={{ color: "white" }}
+                        width="20"
+                        height="11"
                         viewBox="0 0 14 9"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -69,16 +70,16 @@ export default function Navbar({ className, type }) {
                         <rect y="4" width="10" height="1" />
                       </svg>
                     </span>
-                    <span className="text-sm font-600 text-qblacktext">
-                      All Categories
+                    <span className="text-sm font-600 text-white">
+                      Shop by Categories
                     </span>
                   </div>
                   <div>
-                    <Arrow
+                    {/* <Arrow
                       width="5.78538"
                       height="1.28564"
-                      className="fill-current text-qblacktext"
-                    />
+                      className="fill-current text-white"
+                    /> */}
                   </div>
                 </button>
                 {categoryToggle && (
@@ -164,7 +165,7 @@ export default function Navbar({ className, type }) {
                   </ul>
                 </div>
               </div>
-              <div className="nav">
+              {/* <div className="nav">
                 <ul className="nav-wrapper flex xl:space-x-10 space-x-5">
                   <li className="relative">
                     <span
@@ -174,7 +175,7 @@ export default function Navbar({ className, type }) {
                     </span>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
             {!isLoggedIn && (
               <div className="become-seller-btn">
