@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../contexts";
 
-export default function Cart({ className, type }) {
+export default function   Cart({ className, type }) {
   const { profile, removeFromCart, formatMoney } = useAppContext();
 
   return (

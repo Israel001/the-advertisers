@@ -10,7 +10,10 @@ export default function Middlebar({ className, type }) {
   const { isLoggedIn, profile } = useAppContext();
 
   return (
-    <div className={`w-full h-[86px] bg-white ${className}`}>
+    <div
+      className={`w-full h-[70px] ${className}`}
+      style={{ background: "rgb(185 28 28 / 1)" }}
+    >
       <div className="container-x mx-auto h-full">
         <div className="relative h-full">
           <div className="flex justify-between items-center h-full">
@@ -50,7 +53,8 @@ export default function Middlebar({ className, type }) {
                 </Link>
               )}
             </div>
-            <div className="w-[517px] h-[44px]">
+            
+            <div className="w-[517px] h-[40px]"  >
               <SearchBox type={type} className="search-com" />
             </div>
             <div className="flex space-x-6 items-center">
@@ -89,10 +93,10 @@ export default function Middlebar({ className, type }) {
                     </span>
                   )}
                 </div>
-                  <Cart
-                    type={type}
-                    className="absolute -right-[45px] top-11 z-50 hidden group-hover:block"
-                  />
+                <Cart
+                  type={type}
+                  className="absolute -right-[45px] top-11 z-50 hidden group-hover:block"
+                />
               </div>
               <div>
                 <Link to={isLoggedIn ? "/profile" : "/login"}>

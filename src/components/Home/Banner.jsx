@@ -4,10 +4,12 @@ import axios from "axios";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./banner.css";
-import Shop3 from "../../assets/images/shop3.jpeg";
-import Shop4 from "../../assets/images/shop4.jpeg";
-import Extra1 from "../../assets/images/extra1.jpg";
-import Extra2 from "../../assets/images/extra3.jpg";
+import Shop1 from "../../assets/images/s1-1.jpg";
+import Shop2 from "../../assets/images/s2-2.jpg";
+import Shop3 from "../../assets/images/s3-2.jpg";
+
+import Extra1 from "../../assets/images/b1.jpg";
+import Extra2 from "../../assets/images/b2.jpg";
 
 export default function Banner({ className }) {
   // const [slider, setSlider] = useState("");
@@ -44,22 +46,20 @@ export default function Banner({ className }) {
                     <div>
                       <img
                         className="w-full max-w-full h-[400px] object-cover"
-                        src={`${
-                          import.meta.env.VITE_PUBLIC_URL
-                        }/assets/Banner/shop1.jpg`}
+                        src={Shop1}
                       />
                     </div>
                     <div>
                       <img
                         className="w-full max-w-full h-[400px] object-cover"
-                        src={Shop3}
+                        src={Shop2}
                       />
                     </div>
                     <div>
                       <img
                         // className="carousel-image"
                         className="w-full max-w-full h-[400px] object-cover"
-                        src={Shop4}
+                        src={Shop3}
                       />
                     </div>
                     {/* {slides.map((slide, index) => (

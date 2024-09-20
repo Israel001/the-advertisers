@@ -10,9 +10,9 @@ import BestSellers from "./BestSellers";
 import ProductsAds from "./ProductsAds";
 import axios from "axios";
 import withDashboardContext2 from "../../hoc/withDashboardContext2";
-import Display1 from "../../assets/images/display1.jpg";
-import Display2 from "../../assets/images/display2.jpg";
-import Display3 from "../../assets/images/display3.jpg";
+import Display1 from "../../assets/images/b3.jpg";
+import Display2 from "../../assets/images/b4.jpg";
+import Display3 from "../../assets/images/b5.jpg";
 
 function Home() {
   const { products } = datas;
@@ -39,60 +39,16 @@ function Home() {
     <>
       <Layout>
         <div className="btn w-5 h-5 "></div>
-        <Banner className="banner-wrapper mb-[60px]" />
-        <ViewMoreTitle
-          className="top-selling-product mb-[60px]"
-          seeMoreUrl="/all-products"
-          categoryTitle="Top Selling Products"
-          showViewMore={false}
+        <Banner className="banner-wrapper mb-[30px]" />
+        <div
+          style={{ border: "1px solid #d9d9d9", margin: "10px auto" }}
+          className="best-services w-[96%]  bg-white flex flex-col space-y-10 lg:space-y-0 lg:flex-row lg:justify-between
+         lg:items-center lg:h-[110px] px-10 lg:py-0 py-10 mb-[30px] "
         >
-          <SectionStyleTwo products={topSellingProducts} />
-        </ViewMoreTitle>
-        {/* <ProductsAds
-          ads={[
-            `${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-1.png`,
-            `${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-2.png`,
-          ]}
-          sectionHeight="sm:h-[295px] h-full"
-          className="products-ads-section mb-[60px]"
-        /> */}
-        <ViewMoreTitle
-          className="best-sallers-section mb-[60px]"
-          seeMoreUrl="/sallers"
-          categoryTitle="Categories"
-          showViewMore={false}
-        >
-          <BestSellers />
-        </ViewMoreTitle>
-        <div className="container-x mx-auto flex justify-center items-center my-8 ">
-          <div className="grid grid-cols-1 sm:grid-cols-3 place-content-center gap-3">
-            <img src={Display1} alt="Show Image" className="w-full" />
-            <img src={Display2} alt="Show Image" className="w-full" />
-            <img src={Display3} alt="Show Image" className="w-full" />
-          </div>
-        </div>
-        <SectionStyleOne
-          categoryBackground={`${
-            import.meta.env.VITE_PUBLIC_URL
-          }/assets/images/section-category-2.jpg`}
-          products={products.slice(4, products.length)}
-          brands={brands}
-          categoryTitle="Electronics"
-          sectionTitle="Popular Sales"
-          seeMoreUrl="/all-products"
-          className="category-products mb-[60px]"
-          showViewMore={false}
-        />
-
-        <SectionStyleThree
-          products={products}
-          sectionTitle="Explore your interests"
-          seeMoreUrl="/all-products"
-          className="new-products mb-[60px]"
-          showViewMore={false}
-        />
-        <div className="best-services w-full bg-white flex flex-col space-y-10 lg:space-y-0 lg:flex-row lg:justify-between lg:items-center lg:h-[110px] px-10 lg:py-0 py-10">
-          <div className="item">
+          <div
+            className="item"
+            style={{ borderRight: "1px solid #d9d9d9", paddingRight: "15px" }}
+          >
             <div className="flex space-x-5 items-center">
               <div>
                 <span>
@@ -145,11 +101,14 @@ function Home() {
                 <p className="text-black text-[15px] font-700 tracking-wide mb-1">
                   Free Shipping
                 </p>
-                <p className="text-sm text-qgray">When ordering over $100</p>
+                <p className="text-sm text-qgray"> ordering over $100</p>
               </div>
             </div>
           </div>
-          <div className="item">
+          <div
+            className="item"
+            style={{ borderRight: "1px solid #d9d9d9", paddingRight: "15px" }}
+          >
             <div className="flex space-x-5 items-center">
               <div>
                 <span>
@@ -184,7 +143,10 @@ function Home() {
               </div>
             </div>
           </div>
-          <div className="item">
+          <div
+            className="item"
+            style={{ borderRight: "1px solid  #d9d9d9", paddingRight: "15px" }}
+          >
             <div className="flex space-x-5 items-center">
               <div>
                 <span>
@@ -284,6 +246,76 @@ function Home() {
             </div>
           </div>
         </div>
+        <div className="container-x mx-auto flex justify-center items-center my-12 ">
+          <div className="grid grid-cols-1 sm:grid-cols-3 place-content-center gap-7">
+            <img src={Display1} alt="Show Image" className="w-full" />
+            <img src={Display2} alt="Show Image" className="w-full" />
+            <img src={Display3} alt="Show Image" className="w-full" />
+          </div>
+        </div>
+        <ViewMoreTitle
+          className="best-sallers-section mb-[60px]"
+          seeMoreUrl="/sallers"
+          categoryTitle="Categories"
+          showViewMore={false}
+        >
+          <BestSellers />
+        </ViewMoreTitle>
+        <div
+          className=""
+          style={{
+            backgroundColor: "#f4f4f4",
+            padding: "10px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #e3e3e3",
+            width:"96%",
+            // marginBottom: "30px",
+            margin: "10px auto"
+          }}
+        >
+          <p style={{ fontWeight:500, fontSize:"20px"}}>Consumer Electronics</p>
+          <p>View all</p>
+        </div>
+        {/* <ViewMoreTitle
+          className="top-selling-product mb-[60px]"
+          seeMoreUrl="/all-products"
+          categoryTitle="Top Selling Products"
+          showViewMore={false}
+        >
+          <SectionStyleTwo products={topSellingProducts} />
+        </ViewMoreTitle> */}
+
+        {/* <ProductsAds
+          ads={[
+            `${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-1.png`,
+            `${import.meta.env.VITE_PUBLIC_URL}/assets/images/ads-2.png`,
+          ]}
+          sectionHeight="sm:h-[295px] h-full"
+          className="products-ads-section mb-[60px]"
+        /> */}
+{/* 
+        <SectionStyleOne
+          categoryBackground={`${
+            import.meta.env.VITE_PUBLIC_URL
+          }/assets/images/section-category-2.jpg`}
+          products={products.slice(4, products.length)}
+          brands={brands}
+          categoryTitle="Electronics"
+          sectionTitle="Popular Sales"
+          seeMoreUrl="/all-products"
+          className="category-products mb-[60px]"
+          showViewMore={false}
+        /> */}
+
+        {/* <SectionStyleThree
+          products={products}
+          sectionTitle="Explore your interests"
+          seeMoreUrl="/all-products"
+          className="new-products mb-[60px]"
+          showViewMore={false}
+        /> */}
       </Layout>
     </>
   );

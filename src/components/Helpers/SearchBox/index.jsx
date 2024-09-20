@@ -7,12 +7,13 @@ export default function SearchBox({ className, type }) {
 
   return (
     <>
+    
       <div
-        className={`w-full h-full flex items-center  border border-qgray-border bg-white ${
+        className={`w-full h-full flex items-center ${
           className || ""
         }`}
       >
-        <div className="flex-1 bg-red-500 h-full">
+        <div className="flex-1 h-full">
           <form
             action="#"
             className="h-full"
@@ -26,6 +27,7 @@ export default function SearchBox({ className, type }) {
               className="search-input"
               placeholder="Search Product..."
               value={searchValue}
+              style={{borderTopLeftRadius:"10px", borderBottomLeftRadius:"10px"}}
               onChange={(event) => setSearchValue(event.target.value)}
             />
           </form>
@@ -36,7 +38,10 @@ export default function SearchBox({ className, type }) {
           }`}
           type="button"
           style={{
-            background: "rgb(185 28 28 / 1)",
+            background:"black",
+            borderTopRightRadius:"10px",
+            borderBottomRightRadius:"10px",
+            // background: "rgb(185 28 28 / 1)",
             color: "white",
           }}
           onClick={() => {
