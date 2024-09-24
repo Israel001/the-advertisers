@@ -13,6 +13,7 @@ import withDashboardContext2 from "../../hoc/withDashboardContext2";
 import Display1 from "../../assets/images/b3.jpg";
 import Display2 from "../../assets/images/b4.jpg";
 import Display3 from "../../assets/images/b5.jpg";
+import ProductCard from "./ProductCard";
 
 function Home() {
   const { products } = datas;
@@ -278,6 +279,7 @@ function Home() {
           <p style={{ fontWeight:500, fontSize:"20px"}}>Consumer Electronics</p>
           <p>View all</p>
         </div>
+        <ProductCard/>
         {/* <ViewMoreTitle
           className="top-selling-product mb-[60px]"
           seeMoreUrl="/all-products"
@@ -309,13 +311,13 @@ function Home() {
           showViewMore={false}
         /> */}
 
-        {/* <SectionStyleThree
+        <SectionStyleThree
           products={products}
           sectionTitle="Explore your interests"
           seeMoreUrl="/all-products"
           className="new-products mb-[60px]"
           showViewMore={false}
-        /> */}
+        />
       </Layout>
     </>
   );
