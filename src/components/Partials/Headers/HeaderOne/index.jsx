@@ -28,7 +28,7 @@ export default function HeaderOne({ className, drawerAction, type = 1 }) {
   return (
     <header
       className={` ${className || ""} header-section-wrapper relative `}
-      style={{ background: "rgb(185 28 28 / 1)", border: "1px solid red" }}
+      style={{ background: "rgb(185 28 28 / 1)" }}
     >
       {/* <TopBar className="quomodo-shop-top-bar" /> */}
 
