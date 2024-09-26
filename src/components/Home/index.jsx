@@ -47,7 +47,7 @@ function Home() {
         >
           <div
             className="item"
-            style={{ borderRight: "1px solid #d9d9d9", paddingRight: "15px" }}
+            // style={{ borderRight: "1px solid #d9d9d9", paddingRight: "15px" }}
           >
             <div className="flex space-x-5 items-center">
               <div>
@@ -107,7 +107,7 @@ function Home() {
           </div>
           <div
             className="item"
-            style={{ borderRight: "1px solid #d9d9d9", paddingRight: "15px" }}
+            // style={{ borderRight: "1px solid #d9d9d9", paddingRight: "15px" }}
           >
             <div className="flex space-x-5 items-center">
               <div>
@@ -145,7 +145,7 @@ function Home() {
           </div>
           <div
             className="item"
-            style={{ borderRight: "1px solid  #d9d9d9", paddingRight: "15px" }}
+            // style={{ borderRight: "1px solid  #d9d9d9", paddingRight: "15px" }}
           >
             <div className="flex space-x-5 items-center">
               <div>
@@ -276,7 +276,7 @@ function Home() {
           }}
         >
           <p style={{ fontWeight:500, fontSize:"20px"}}>Consumer Electronics</p>
-          <p>View all</p>
+          <a href="/all-products">View all</a>
         </div>
         {/* <ViewMoreTitle
           className="top-selling-product mb-[60px]"

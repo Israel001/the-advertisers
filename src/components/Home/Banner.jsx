@@ -36,7 +36,6 @@ export default function Banner({ className }) {
               <div style={{ width: "100%" }}>
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-5 w-full">
                   <Carousel
-                    showArrows={false}
                     showThumbs={false}
                     infiniteLoop={true}
                     autoPlay={true}

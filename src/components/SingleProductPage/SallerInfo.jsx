@@ -55,14 +55,21 @@ export default function SallerInfo({ products, product }) {
                       boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)",
                     }}
                   >
-                    <div
+                    {/* <div
                       className="product-card-img w-full h-[300px]"
                       style={{
                         background: `url(${import.meta.env.VITE_HOST_URL}/${
                           prod.featured_image
                         }) no-repeat center`,
                       }}
-                    ></div>
+                    ></div> */}
+                    <img
+                      src={`${import.meta.env.VITE_HOST_URL}/${
+                        prod.featured_image
+                      }`}
+                      alt={prod?.name}
+                      className="h-[250px] w-full "
+                    />
                     <div className="product-card-details px-[30px] pb-[30px] relative">
                       {/* add to card button */}
                       <div className="absolute w-full h-10 px-[30px] left-0 top-40 group-hover:top-[43px] transition-all duration-300 ease-in-out">
