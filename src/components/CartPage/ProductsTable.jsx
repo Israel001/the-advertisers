@@ -4,6 +4,8 @@ import InputQuantityCom from "../Helpers/InputQuantityCom";
 export default function ProductsTable({ className }) {
   const { profile, removeFromCart, formatMoney } = useAppContext();
 
+  console.log("profile", profile);
+
   return (
     <div className={`w-full ${className || ""}`}>
       <div className="relative w-full overflow-x-auto border border-[#EDEDED]">

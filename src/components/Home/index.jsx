@@ -23,10 +23,14 @@ function Home() {
   });
 
   const [topSellingProducts, setTopSellingProducts] = useState([]);
-  // const
+  const [topCategories, setTopCategories] = useState([]);
 
   useEffect(() => {
     fetchTopSellingProducts();
+  }, []);
+
+  useEffect(() => {
+    fetchTopCategories();
   }, []);
 
   const fetchTopSellingProducts = async () => {
@@ -34,6 +38,14 @@ function Home() {
       `${import.meta.env.VITE_HOST_URL}/products/top-selling`
     );
     setTopSellingProducts(response.data);
+  };
+
+  const fetchTopCategories = async () => {
+    const response = await axios.get(
+      `${import.meta.env.VITE_HOST_URL}/category/top-categories`
+    );
+    console.log("response", response.data);
+    setTopCategories(response.data);
   };
 
   return (
@@ -262,24 +274,37 @@ function Home() {
         >
           <BestSellers />
         </ViewMoreTitle>
-        <div
-          className=""
-          style={{
-            backgroundColor: "#f4f4f4",
-            padding: "10px 20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            borderBottom: "1px solid #e3e3e3",
-            width:"96%",
-            // marginBottom: "30px",
-            margin: "10px auto"
-          }}
-        >
-          <p style={{ fontWeight:500, fontSize:"20px"}}>Consumer Electronics</p>
-          <a href="/all-products">View all</a>
-        </div>
-        <ProductCard/>
+        {topCategories.map((category, index) => {
+          return (
+            <>
+              <div
+                key={index}
+                className=""
+                style={{
+                  backgroundColor: "#f4f4f4",
+                  padding: "10px 20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderBottom: "1px solid #e3e3e3",
+                  width: "96%",
+                  // marginBottom: "30px",
+                  margin: "10px auto",
+                  marginTop: "3rem",
+                }}
+              >
+                <p style={{ fontWeight: 500, fontSize: "20px" }}>
+                  {category.name}
+                </p>
+                <a href={`/all-products?subCategoryId=${category.id}`}>
+                  View all
+                </a>
+              </div>
+              <ProductCard products={category.products} />
+            </>
+          );
+        })}
+        {/* <ProductCard/> */}
         {/* <ViewMoreTitle
           className="top-selling-product mb-[60px]"
           seeMoreUrl="/all-products"
@@ -297,7 +322,7 @@ function Home() {
           sectionHeight="sm:h-[295px] h-full"
           className="products-ads-section mb-[60px]"
         /> */}
-{/* 
+        {/* 
         <SectionStyleOne
           categoryBackground={`${
             import.meta.env.VITE_PUBLIC_URL
@@ -311,13 +336,13 @@ function Home() {
           showViewMore={false}
         /> */}
 
-        <SectionStyleThree
+        {/* <SectionStyleThree
           products={products}
           sectionTitle="Explore your interests"
           seeMoreUrl="/all-products"
           className="new-products mb-[60px]"
           showViewMore={false}
-        />
+        /> */}
       </Layout>
     </>
   );

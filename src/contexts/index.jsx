@@ -11,7 +11,6 @@ const ContextProvider = ({ children }) => {
   const [isAddToCartLoading, setisAddToCartLoading] = useState(false);
   const [isProductId, setisProductId] = useState(null);
 
-
   useEffect(() => {
     saveWishlist();
   }, [profile]);
@@ -80,14 +79,14 @@ const ContextProvider = ({ children }) => {
   };
 
   const updateCartQty = async (item, newQuantity) => {
-    setisAddToCartLoading(true)
+    setisAddToCartLoading(true);
 
     const response = await axios.get(
       `${import.meta.env.VITE_HOST_URL}/products/${item.id}`
     );
     const product = response.data;
     const existingCartIdx = profile.cart.findIndex((c) => c.id === product.id);
-    setisProductId(product.id)
+    setisProductId(product.id);
     if (existingCartIdx !== -1) {
       if (newQuantity > product.quantity) {
         toast.error("Quantity is more than quantity available");
@@ -106,11 +105,11 @@ const ContextProvider = ({ children }) => {
     } else {
       toast.error("Item does not exist");
     }
-    setisAddToCartLoading(false)
+    setisAddToCartLoading(false);
   };
 
   const addToCart = async (product, quantity = 1) => {
-    setisProductId(product.id)
+    setisProductId(product.id);
     const prodQty = quantity;
     if (product.out_of_stock || prodQty > product.quantity) {
       toast.error("Product is out of stock");
@@ -136,12 +135,12 @@ const ContextProvider = ({ children }) => {
     } else {
       const cartObj = {
         id: product.id,
-        image: product.featured_image,
+        image: product.featuredImage,
         name: product.name,
         price: prodPrice,
         quantity: prodQty,
         total: prodPrice * prodQty,
-        storeId: product.store_id,
+        storeId: product?.store.id,
       };
       clonedProfile.cart.push(cartObj);
       setProfile(clonedProfile);
@@ -167,15 +166,14 @@ const ContextProvider = ({ children }) => {
   };
 
   function formatMoney(amount) {
-    const formatter = new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN',
+    const formatter = new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
       minimumFractionDigits: 2,
     });
-  
+
     return formatter.format(amount);
   }
-  
 
   return (
     <AppContext.Provider
@@ -193,7 +191,7 @@ const ContextProvider = ({ children }) => {
         updateCartQty,
         addToWishlist,
         removeFromWishlist,
-        formatMoney
+        formatMoney,
       }}
     >
       {children}
