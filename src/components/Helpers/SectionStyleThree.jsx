@@ -260,7 +260,6 @@ export default function SectionStyleThree({
                         {renderStars()}
                       </div>
                     </div>
-                    {/* quick-access-btns */}
                     <div className="quick-access-btns flex flex-col space-y-2 absolute group-hover:right-4 -right-10 top-20  transition-all duration-300 ease-in-out">
                       <a
                         href="#"
@@ -293,32 +292,6 @@ export default function SectionStyleThree({
               );
             })}
           </div>
-          {/* {showMore && (
-            <div
-              style={{ marginTop: "30px", width: "100%", textAlign: "center" }}
-            >
-              {loading ? (
-                <LoaderStyleOne />
-              ) : (
-                <button
-                  type="button"
-                  className="w-[110px] h-[40px]"
-                  onClick={() => {
-                    setLoading(true);
-                    setPage(page + 1);
-                  }}
-                >
-                  <span
-                    className={type === 3 ? "blue-btn" : "yellow-btn"}
-                    style={{ color: "white" }}
-                  >
-                    {" "}
-                    Show More
-                  </span>
-                </button>
-              )}
-            </div>
-          )} */}
         </div>
       </ViewMoreTitle>
     </div>

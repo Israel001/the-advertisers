@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import datas from "../../data/products.json";
-import SectionStyleOne from "../Helpers/SectionStyleOne";
-import SectionStyleThree from "../Helpers/SectionStyleThree";
-import SectionStyleTwo from "../Helpers/SectionStyleTwo";
 import ViewMoreTitle from "../Helpers/ViewMoreTitle";
 import Layout from "../Partials/Layout";
 import Banner from "./Banner";
 import BestSellers from "./BestSellers";
-import ProductsAds from "./ProductsAds";
 import axios from "axios";
 import withDashboardContext2 from "../../hoc/withDashboardContext2";
 import Display1 from "../../assets/images/b3.jpg";
@@ -22,7 +18,7 @@ function Home() {
     brands.push(product.brand);
   });
 
-  const [topSellingProducts, setTopSellingProducts] = useState([]);
+  const [, setTopSellingProducts] = useState([]);
   const [topCategories, setTopCategories] = useState([]);
 
   useEffect(() => {
@@ -274,36 +270,39 @@ function Home() {
         >
           <BestSellers />
         </ViewMoreTitle>
-        {topCategories.map((category, index) => {
-          return (
-            <>
-              <div
-                key={index}
-                className=""
-                style={{
-                  backgroundColor: "#f4f4f4",
-                  padding: "10px 20px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderBottom: "1px solid #e3e3e3",
-                  width: "96%",
-                  // marginBottom: "30px",
-                  margin: "10px auto",
-                  marginTop: "3rem",
-                }}
-              >
-                <p style={{ fontWeight: 500, fontSize: "20px" }}>
-                  {category.name}
-                </p>
-                <a href={`/all-products?subCategoryId=${category.id}`}>
-                  View all
-                </a>
-              </div>
-              <ProductCard products={category.products} />
-            </>
-          );
-        })}
+        <div className="max-w-[1440px] mx-auto w-full overflow-hidden">
+          {topCategories.map((category, index) => {
+            return (
+              <>
+                <div
+                  key={index}
+                  className=""
+                  style={{
+                    backgroundColor: "#f4f4f4",
+                    padding: "10px 20px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderBottom: "1px solid #e3e3e3",
+                    width: "96%",
+                    // marginBottom: "30px",
+                    margin: "10px auto",
+                    marginTop: "3rem",
+                  }}
+                >
+                  <p style={{ fontWeight: 500, fontSize: "20px" }}>
+                    {category.name}
+                  </p>
+                  <a href={`/all-products?subCategoryId=${category.id}`}>
+                    View all
+                  </a>
+                </div>
+
+                <ProductCard products={category.products} />
+              </>
+            );
+          })}
+        </div>
         {/* <ProductCard/> */}
         {/* <ViewMoreTitle
           className="top-selling-product mb-[60px]"

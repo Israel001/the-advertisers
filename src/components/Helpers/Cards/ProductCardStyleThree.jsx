@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unescaped-entities */
 import QuickViewIco from "../icons/QuickViewIco";
 import ThinLove from "../icons/ThinLove";
 import Compair from "../icons/Compair";
