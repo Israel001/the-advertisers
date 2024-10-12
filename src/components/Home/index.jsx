@@ -270,39 +270,39 @@ function Home() {
         >
           <BestSellers />
         </ViewMoreTitle>
-        <div className="max-w-[1440px] mx-auto w-full overflow-hidden">
-          {topCategories.map((category, index) => {
-            return (
-              <>
-                <div
-                  key={index}
-                  className=""
-                  style={{
-                    backgroundColor: "#f4f4f4",
-                    padding: "10px 20px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    borderBottom: "1px solid #e3e3e3",
-                    width: "96%",
-                    // marginBottom: "30px",
-                    margin: "10px auto",
-                    marginTop: "3rem",
-                  }}
-                >
-                  <p style={{ fontWeight: 500, fontSize: "20px" }}>
-                    {category.name}
-                  </p>
-                  <a href={`/all-products?subCategoryId=${category.id}`}>
-                    View all
-                  </a>
-                </div>
 
-                <ProductCard products={category.products} />
-              </>
-            );
-          })}
-        </div>
+        {topCategories.map((category, index) => {
+          return (
+            <>
+              <div
+                key={index}
+                className=""
+                style={{
+                  backgroundColor: "#f4f4f4",
+                  padding: "10px 20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderBottom: "1px solid #e3e3e3",
+                  width: "96%",
+                  // marginBottom: "30px",
+                  margin: "10px auto",
+                  marginTop: "3rem",
+                }}
+              >
+                <p style={{ fontWeight: 500, fontSize: "20px" }}>
+                  {category.name}
+                </p>
+                <a href={`/all-products?subCategoryId=${category.id}`}>
+                  View all
+                </a>
+              </div>
+
+              <ProductCard products={category.products} />
+            </>
+          );
+        })}
+
         {/* <ProductCard/> */}
         {/* <ViewMoreTitle
           className="top-selling-product mb-[60px]"

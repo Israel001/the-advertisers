@@ -10,7 +10,35 @@ import { useAppContext } from "../../contexts";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Loader } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
+
+export function PrevArrow(props) {
+  const { className, onClick } = props;
+  return (
+    <div
+      className={`${className} absolute left-[2px] top[200px] z-40`}
+      onClick={onClick}
+    >
+      <div className=" left0 bg-white rounded-full w-[40px] absolute top-[-10px] h-[40px] flex items-center justify-center shadow-md">
+        <ChevronLeft size={20} color="red" />
+      </div>
+    </div>
+  );
+}
+
+export function NextArrow(props) {
+  const { className, onClick } = props;
+  return (
+    <div
+      className={`${className} absolute right-[0px] top-[200px]`}
+      onClick={onClick}
+    >
+      <div className=" right-0 bg-white rounded-full w-[40px] absolute top-[-10px] h-[40px] flex items-center justify-center shadow-md">
+        <ChevronRight size={20} color="red" />
+      </div>
+    </div>
+  );
+}
 
 export default function ProductCard({
   className,
@@ -84,50 +112,50 @@ export default function ProductCard({
     centerMode: true,
     infinite: true,
     // centerPadding: "60px",
-    slidesToShow: 2.79,
+    slidesToShow: 4.6,
     slidesToScroll: 1,
-    autoplay: true,
-    speed: 5000,
-    autoplaySpeed: 4000,
+    autoplay: false,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
     cssEase: "linear",
     dots: false,
-    arrows: false,
+    arrows: true,
     draggable: true,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 1.6,
+          slidesToShow: 2.8,
           slidesToScroll: 1,
           infinite: true,
           dots: false,
-          autoplay: true,
-          speed: 5000,
-          autoplaySpeed: 5000,
-          cssEase: "linear",
-        },
-      },
-      {
-        breakpoint: 800,
-        settings: {
-          slidesToShow: 1.37,
-          slidesToScroll: 1,
-          initialSlide: 0,
-          autoplay: true,
-          speed: 4000,
-          autoplaySpeed: 4000,
+          autoplay: false,
+          prevArrow: <PrevArrow />,
+          nextArrow: <NextArrow />,
           cssEase: "linear",
         },
       },
       {
         breakpoint: 700,
         settings: {
-          slidesToShow: 0.9,
+          slidesToShow: 2,
           slidesToScroll: 1,
           initialSlide: 0,
-          autoplay: true,
-          speed: 4000,
-          autoplaySpeed: 4000,
+          autoplay: false,
+          prevArrow: <PrevArrow />,
+          nextArrow: <NextArrow />,
+          cssEase: "linear",
+        },
+      },
+      {
+        breakpoint: 500,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 0,
+          autoplay: false,
+          prevArrow: <PrevArrow />,
+          nextArrow: <NextArrow />,
           cssEase: "linear",
         },
       },
@@ -149,29 +177,24 @@ export default function ProductCard({
                 <Loader size={50} className="animate-spin text-red-600" />
               </div>
             ) : (
-              <Slider {...settings} className="w-full">
+              <Slider {...settings} className="w-full bg-white">
                 {products.map((product) => {
                   const isInCart = profile?.cart?.find(
                     (c) => c.id === product.id
                   );
                   return (
                     <Link to={`/single-product/${product.id}`} key={product.id}>
-                      <div
-                        className="product-card-one w-fit mx-2 h-[450px] bg-white relative group overflow-hidden"
-                        style={{
-                          boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)",
-                        }}
-                      >
+                      <div className="product-card-one w-fit mx-2 shadow-sm hover:shadow-md h-[400px] bg-white relative group overflow-hidden">
                         <img
                           src={`${import.meta.env.VITE_HOST_URL}/${
                             product?.featuredImage
                           }`}
                           alt={product?.name}
-                          className="w-[350px] sm:w-[400px] h-[250px] object-cover"
+                          className="w-[300px] h-[200px] object-cover"
                         />
                         {/* <div className=""> */}
                         <div
-                          className="  absolute w-full flex justify-around h-15 px-[30px] py-[5px] opacity-0 group-hover:opacity-100 left-0 group-hover:bottom- -mt-12 group-hover:top-[-13px 
+                          className="  absolute w-full flex justify-around h-15 px-[30px] py-[5px] opacity-0 group-hover:opacity-100 left-0 group-hover:bottom- -mt-12 
                       transition-all duration-500 ease-in-out bg-white "
                         >
                           <span
