@@ -135,7 +135,7 @@ function AllProductPage() {
                     <Loader size={50} className="animate-spin text-red-600" />
                   </div>
                 ) : (
-                  <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1  xl:gap-[30px] gap-5 mb-[40px]">
+                  <div className="grid lg:grid-cols-5 sm:grid-cols-3 grid-cols-2 xl:gap-[30px] gap-5 mb-[40px]">
                     {allProducts.map((product) => {
                       const isInCart = profile?.cart?.find(
                         (c) => c.id === product.id
@@ -166,19 +166,13 @@ function AllProductPage() {
                           key={product.id}
                           className="w-full"
                         >
-                          <div
-                            className="product-card-one w-full h-full bg-white relative group overflow-hidden"
-                            style={{
-                              boxShadow:
-                                "0px 15px 64px 0px rgba(0, 0, 0, 0.05)",
-                            }}
-                          >
+                          <div className="product-card-one w-full h-[350px] bg-white relative group overflow-hidden shadow-sm hover:shadow-md">
                             <img
                               src={`${import.meta.env.VITE_HOST_URL}/${
                                 product.featuredImage
                               }`}
                               alt={product?.name}
-                              className="h-[250px] w-full sm:w-[400px] object-cover"
+                              className="h-[200px] w-full object-cover"
                             />
                             <div className="product-card-details px-[30px] pb-[30px] relative">
                               <div
@@ -330,28 +324,21 @@ function AllProductPage() {
                       textAlign: "center",
                     }}
                   >
-                    {loading ? (
-                      <LoaderStyleOne />
-                    ) : (
-                      <button
-                        type="button"
-                        className="w-[110px] h-[40px]"
-                        onClick={() => {
-                          if (allProducts.length) {
-                            setLoading(true);
-                            setPage(page + 1);
-                          }
-                        }}
-                      >
-                        <span
-                          className={"yellow-btn"}
-                          style={{ color: "white" }}
-                        >
-                          {" "}
-                          Show More
-                        </span>
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      className="w-[110px] h-[40px]"
+                      onClick={() => {
+                        if (allProducts.length) {
+                          setLoading(true);
+                          setPage(page + 1);
+                        }
+                      }}
+                    >
+                      <span className={"yellow-btn"} style={{ color: "white" }}>
+                        {" "}
+                        Show More
+                      </span>
+                    </button>
                   </div>
                 )}
               </div>

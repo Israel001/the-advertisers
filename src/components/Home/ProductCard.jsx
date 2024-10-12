@@ -325,10 +325,6 @@ export default function ProductCard({
                           <p className="title mt-4 mb-2 text-[14px] font-600 text-qblack leading-[24px] line-clamp-2 duration-500 hover:text-blue-600">
                             {product.name}
                           </p>
-                          <span className=" block text-[13px] font-medium">
-                            Sold by:{" "}
-                            <span className="hover:text-[#fcb800] ">Dummy</span>
-                          </span>
 
                           <div className="reviews flex space-x-[1px] mb-1">
                             {renderStars()}

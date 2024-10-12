@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-children-prop */
 import { useRef, useState, useEffect } from "react";
 import InputCom from "../Helpers/InputCom";
@@ -175,7 +176,7 @@ function BecomeSaller() {
           <div className="container-x mx-auto">
             <div className="w-full bg-white sm:p-[30px] p-3">
               <div className="flex xl:flex-row flex-col-reverse xl:space-x-11">
-                <div className="xl:w-[824px]">
+                <div className="w-full">
                   <div className="title w-full mb-4">
                     <h1 className="text-[22px] font-semibold text-qblack mb-1">
                       Seller Information
@@ -184,7 +185,7 @@ function BecomeSaller() {
                       Fill the form below to create a new store account
                     </p>
                   </div>
-                  <div className="input-area">
+                  <div className="input-area w-full">
                     <div className="input-item mb-5">
                       <InputCom
                         placeholder="Your full name here"
@@ -500,7 +501,7 @@ function BecomeSaller() {
                     </div>
                   </div>
                 </div>
-                <div className="flex-1 mb-10 xl:mb-0">
+                {/* <div className="flex-1 mb-10 xl:mb-0">
                   <div className="update-profile w-full mb-9">
                     <h1 className="text-xl tracking-wide font-bold text-qblack flex items-center mb-2">
                       Update Profile
@@ -700,7 +701,7 @@ function BecomeSaller() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
