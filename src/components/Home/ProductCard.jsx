@@ -11,6 +11,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
+import { toast } from "react-toastify";
 
 export function PrevArrow(props) {
   const { className, onClick } = props;
@@ -46,7 +47,7 @@ export default function ProductCard({
   seeMoreUrl,
   products,
 }) {
-  const [allProducts, setProducts] = useState([]);
+  // const [allProducts, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page] = useState(1);
 
@@ -62,43 +63,48 @@ export default function ProductCard({
   } = useAppContext();
   // const [quantity, setQuantity] = useState(5);
 
-  useEffect(() => {
-    fetchProducts();
-  }, [page]);
+  console.log("another test;")
+
+  // useEffect(() => {
+  //   fetchProducts();
+  // }, [page]);
+
+  let user = JSON.parse(localStorage.getItem("user"));
+  let role = user?.role?.name;
 
   const navigate = useNavigate();
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_HOST_URL
-        }/products?pagination[page]=${page}&pagination[limit]=8`
-      );
+  // const fetchProducts = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.get(
+  //       `${
+  //         import.meta.env.VITE_HOST_URL
+  //       }/products?pagination[page]=${page}&pagination[limit]=8`
+  //     );
 
-      const updatedProducts = [...allProducts, ...response.data.data];
-      setProducts(updatedProducts);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     const updatedProducts = [...allProducts, ...response.data.data];
+  //     setProducts(updatedProducts);
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const renderStars = () => {
-    const rating = parseFloat(allProducts?.avgRating);
+    const rating = parseFloat(products?.avgRating);
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= rating) {
         stars.push(
-          <span key={i} className="text-yellow-500 mt-4">
+          <span key={i} className="text-yellow-500 mt-2">
             ★
           </span>
         );
       } else {
         stars.push(
-          <span key={i} className="text-gray-300 mt-4">
+          <span key={i} className="text-gray-300 mt-2">
             ★
           </span>
         );
@@ -107,12 +113,14 @@ export default function ProductCard({
     return stars;
   };
 
+  const slidesToShowDynamic = products.length >= 5 ? 4.6 : products.length;
+
   const settings = {
     // className: "center",
     centerMode: true,
     infinite: true,
     // centerPadding: "60px",
-    slidesToShow: 4.6,
+    slidesToShow: slidesToShowDynamic,
     slidesToScroll: 1,
     autoplay: false,
     prevArrow: <PrevArrow />,
@@ -179,6 +187,7 @@ export default function ProductCard({
             ) : (
               <Slider {...settings} className="w-full bg-white">
                 {products.map((product) => {
+                  console.log("productEach", product);
                   const isInCart = profile?.cart?.find(
                     (c) => c.id === product.id
                   );
@@ -187,7 +196,7 @@ export default function ProductCard({
                       <div className="product-card-one w-fit mx-2 shadow-sm hover:shadow-md h-[400px] bg-white relative group overflow-hidden">
                         <img
                           src={`${import.meta.env.VITE_HOST_URL}/${
-                            product?.featuredImage
+                            product?.featuredImage || product?.featured_image
                           }`}
                           alt={product?.name}
                           className="w-[300px] h-[200px] object-cover"
@@ -204,6 +213,12 @@ export default function ProductCard({
                             onClick={(event) => {
                               event.preventDefault();
                               event.stopPropagation();
+                              if (role === "Owner") {
+                                toast.error(
+                                  "Action cannot be undertaken by sellers."
+                                );
+                                return;
+                              }
                               if (isInCart) {
                                 navigate("/cart");
                               } else {
@@ -254,6 +269,12 @@ export default function ProductCard({
                                 href="#"
                                 onClick={(event) => {
                                   event.preventDefault();
+                                  if (role === "Owner") {
+                                    toast.error(
+                                      "Action cannot be undertaken by owners."
+                                    );
+                                    return;
+                                  }
                                   if (!isLoggedIn) navigate("/login");
                                   const isProductWishlisted =
                                     profile?.wishlist?.find(
@@ -280,6 +301,12 @@ export default function ProductCard({
                                 href="#"
                                 onClick={(event) => {
                                   event.preventDefault();
+                                  if (role === "Owner") {
+                                    toast.error(
+                                      "Action cannot be undertaken by owners."
+                                    );
+                                    return;
+                                  }
                                   if (!isLoggedIn) navigate("/login");
                                   const isProductWishlisted =
                                     profile?.wishlist?.find(
@@ -305,7 +332,7 @@ export default function ProductCard({
 
                         {/* start */}
 
-                        <div className="product-card-details mt-6 px-[30px] pb-[30px] relative">
+                        <div className="product-card-details mt-6 px-[30px] pb-[30px] relative flex flex-col items-center">
                           <p className="price text-[15px]">
                             {product.discount_price > 0 ? (
                               <>
@@ -322,11 +349,11 @@ export default function ProductCard({
                               </span>
                             )}
                           </p>
-                          <p className="title mt-4 mb-2 text-[14px] font-600 text-qblack leading-[24px] line-clamp-2 duration-500 hover:text-blue-600">
+                          <p className="title mt-0 mb-0 text-[14px] w-[250px] font-600 text-qblack leading-[24px] line-clamp-2 duration-500 hover:text-blue-600 text-center">
                             {product.name}
                           </p>
 
-                          <div className="reviews flex space-x-[1px] mb-1">
+                          <div className="reviews flex space-x-[1px] mb-1 mt-0">
                             {renderStars()}
                           </div>
                         </div>

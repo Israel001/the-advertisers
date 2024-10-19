@@ -40,7 +40,6 @@ function Home() {
     const response = await axios.get(
       `${import.meta.env.VITE_HOST_URL}/category/top-categories`
     );
-    console.log("response", response.data);
     setTopCategories(response.data);
   };
 
@@ -278,7 +277,7 @@ function Home() {
                 key={index}
                 className=""
                 style={{
-                  backgroundColor: "#f4f4f4",
+                  backgroundColor: "white",
                   padding: "10px 20px",
                   display: "flex",
                   alignItems: "center",

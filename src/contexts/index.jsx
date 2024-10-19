@@ -11,14 +11,18 @@ const ContextProvider = ({ children }) => {
   const [isAddToCartLoading, setisAddToCartLoading] = useState(false);
   const [isProductId, setisProductId] = useState(null);
 
-  useEffect(() => {
-    saveWishlist();
-  }, [profile]);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     if (!isLoggedIn)
       setProfile(JSON.parse(localStorage.getItem("profile")) || { cart: [] });
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (user?.role?.name !== "Owner") {
+      saveWishlist();
+    }
+  }, [profile]);
 
   const saveCart = async (cartData) => {
     await axios.post(
@@ -35,17 +39,21 @@ const ContextProvider = ({ children }) => {
   };
 
   const saveWishlist = async () => {
-    await axios.post(
-      `${import.meta.env.VITE_HOST_URL}/users/save-wishlist`,
-      {
-        wishlistData: JSON.stringify(profile.wishlist),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    if (user?.role?.name === "Owner") {
+      return;
+    } else {
+      await axios.post(
+        `${import.meta.env.VITE_HOST_URL}/users/save-wishlist`,
+        {
+          wishlistData: JSON.stringify(profile.wishlist),
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+    }
   };
 
   const removeFromCart = async (product) => {

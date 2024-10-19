@@ -38,6 +38,24 @@ export default function ProductView({ className, reportHandler, product }) {
   ];
 
   const [src, setSrc] = useState(product.featuredImage);
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const MAX_WORDS = 30;
+  const words = product.description ? product.description.split(" ") : [];
+
+  const truncatedDescription =
+    words.length > MAX_WORDS
+      ? words.slice(0, MAX_WORDS).join(" ") + "..."
+      : product.description;
+
+  const handleReadMoreClick = (e) => {
+    e.preventDefault();
+    const descriptionTab = document.getElementById("des");
+    if (descriptionTab) {
+      descriptionTab.scrollIntoView({top: 2, behavior: "smooth" });
+    }
+    // setShowFullDescription(true);
+  };
+
   const changeImgHandler = (current) => {
     setSrc(current);
   };
@@ -59,8 +77,14 @@ export default function ProductView({ className, reportHandler, product }) {
     if (product) setSrc(product.featuredImage);
   }, [product]);
 
-  const { addToCart, isLoggedIn, profile, addToWishlist, removeFromWishlist, formatMoney } =
-    useAppContext();
+  const {
+    addToCart,
+    isLoggedIn,
+    profile,
+    addToWishlist,
+    removeFromWishlist,
+    formatMoney,
+  } = useAppContext();
 
   const navigate = useNavigate();
 
@@ -138,10 +162,10 @@ export default function ProductView({ className, reportHandler, product }) {
             {product.discountPrice > 0 ? (
               <>
                 <span className="text-sm font-500 text-qgray line-through mt-2">
-                {formatMoney(product.discountPrice)}
+                  {formatMoney(product.discountPrice)}
                 </span>
                 <span className="text-2xl font-500 text-qred ml-2">
-                {formatMoney(product.price)}
+                  {formatMoney(product.price)}
                 </span>
               </>
             ) : (
@@ -154,8 +178,19 @@ export default function ProductView({ className, reportHandler, product }) {
           <p
             data-aos="fade-up"
             className="text-qgray text-sm text-normal mb-[30px] leading-7"
-            dangerouslySetInnerHTML={{ __html: `${product.description}` }}
-          />
+          >
+            {showFullDescription ? product.description : truncatedDescription}
+
+            {words.length > MAX_WORDS && !showFullDescription && (
+              <a
+                href="#description-tab"
+                onClick={handleReadMoreClick}
+                className="text-blue-500 cursor-pointer ml-2"
+              >
+                ...read more
+              </a>
+            )}
+          </p>
 
           {/* <div data-aos="fade-up" className="colors mb-[30px]">
             <span className="text-sm font-normal uppercase text-qgray mb-[14px] inline-block">
@@ -267,9 +302,12 @@ export default function ProductView({ className, reportHandler, product }) {
               >
                 <span>
                   {profile?.wishlist?.find((item) => item.id === product.id) ? (
-                    <ThickLove style={{ width: "25px", height: "35px" }} />
+                    <ThickLove
+                      className="text-blue-400"
+                      style={{ width: "25px", height: "35px" }}
+                    />
                   ) : (
-                    <ThinLove />
+                    <ThinLove stroke={"black"} />
                   )}
                 </span>
               </button>
