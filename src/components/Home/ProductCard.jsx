@@ -113,7 +113,7 @@ export default function ProductCard({
     return stars;
   };
 
-  const slidesToShowDynamic = products.length >= 5 ? 4.6 : products.length;
+  const slidesToShowDynamic = products.length >= 4 ? 4 : products.length;
 
   const settings = {
     // className: "center",
@@ -187,7 +187,6 @@ export default function ProductCard({
             ) : (
               <Slider {...settings} className="w-full bg-white">
                 {products.map((product) => {
-                  console.log("productEach", product);
                   const isInCart = profile?.cart?.find(
                     (c) => c.id === product.id
                   );
@@ -332,7 +331,7 @@ export default function ProductCard({
 
                         {/* start */}
 
-                        <div className="product-card-details mt-6 px-[30px] pb-[30px] relative flex flex-col items-center">
+                        <div className="product-card-details mt-6 px-[30px] pb-[30px] relative flex flex-col items-left">
                           <p className="price text-[15px]">
                             {product.discount_price > 0 ? (
                               <>
@@ -349,7 +348,7 @@ export default function ProductCard({
                               </span>
                             )}
                           </p>
-                          <p className="title mt-0 mb-0 text-[14px] w-[250px] font-600 text-qblack leading-[24px] line-clamp-2 duration-500 hover:text-blue-600 text-center">
+                          <p className="title mt-0 mb-0 text-[14px] w-[250px] font-600 text-qblack leading-[24px] line-clamp-2 duration-500 hover:text-blue-600 text-left">
                             {product.name}
                           </p>
 

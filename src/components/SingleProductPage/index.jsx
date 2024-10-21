@@ -198,7 +198,6 @@ function SingleProductPage() {
                     <ul className="flex space-x-12 ">
                       <li>
                         <span
-                          id="des"
                           onClick={() => setTab("des")}
                           className={`py-[15px] sm:text-[15px] text-sm sm:block border-b font-medium cursor-pointer  ${
                             tab === "des"
@@ -353,7 +352,7 @@ function SingleProductPage() {
                 </div>
               </div>
               <div className=" flex justify-center m-4 lg:mr-10">
-                <img src="/assets/Banner/iphonead.png" alt="iphone ad" />
+                <img src="/assets/Banner/iphonead.png" alt="iphone ad" className="w-[400px]" />
               </div>
               <div className="m-4 lg:mr-10 border-solid border h-full ">
                 <div className=" border-solid border-b">
@@ -383,7 +382,7 @@ function SingleProductPage() {
                       </div>
                       <div>
                         {Array.from(Array(product.avg_rating), (_, idx) => (
-                          <span key={idx + Math.random()}>
+                          <span key={idx + Math.random()} className="flex">
                             <Star />
                           </span>
                         ))}

@@ -49,9 +49,9 @@ export default function ProductView({ className, reportHandler, product }) {
 
   const handleReadMoreClick = (e) => {
     e.preventDefault();
-    const descriptionTab = document.getElementById("des");
+    const descriptionTab = document.getElementById("category-name");
     if (descriptionTab) {
-      descriptionTab.scrollIntoView({top: 2, behavior: "smooth" });
+      descriptionTab.scrollIntoView({ top: 2, behavior: "smooth" });
     }
     // setShowFullDescription(true);
   };
@@ -179,7 +179,23 @@ export default function ProductView({ className, reportHandler, product }) {
             data-aos="fade-up"
             className="text-qgray text-sm text-normal mb-[30px] leading-7"
           >
-            {showFullDescription ? product.description : truncatedDescription}
+            {showFullDescription ? (
+              <div
+                data-aos="fade-up"
+                className="w-full tab-content-item"
+                dangerouslySetInnerHTML={{
+                  __html: product?.description,
+                }}
+              ></div>
+            ) : (
+              <div
+                data-aos="fade-up"
+                className="w-full tab-content-item"
+                dangerouslySetInnerHTML={{
+                  __html: truncatedDescription,
+                }}
+              ></div>
+            )}
 
             {words.length > MAX_WORDS && !showFullDescription && (
               <a
@@ -187,7 +203,7 @@ export default function ProductView({ className, reportHandler, product }) {
                 onClick={handleReadMoreClick}
                 className="text-blue-500 cursor-pointer ml-2"
               >
-                ...read more
+                ...Read more
               </a>
             )}
           </p>
@@ -327,7 +343,7 @@ export default function ProductView({ className, reportHandler, product }) {
             </div>
           </div>
 
-          <div data-aos="fade-up" className="mb-[20px]">
+          <div data-aos="fade-up" className="mb-[20px]" id="category-name">
             <p className="text-[13px] text-qgray leading-7">
               <span className="text-qblack">Category :</span>{" "}
               {product?.mainCategory?.name}

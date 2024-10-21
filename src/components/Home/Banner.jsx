@@ -41,17 +41,31 @@ export default function Banner({ className }) {
     },
   ];
 
-  // Handle slide change to trigger animations
+  const secondary = [
+    {
+      image: Extra1,
+      alt: "Extra 1",
+      title: "Unio Leather Bags",
+      subtitle: "100% Leather Handmade",
+      percentOff: "20% OFF",
+    },
+    {
+      image: Extra2,
+      alt: "Extra 2",
+      title: "iPhone 6+ 32Gb",
+      subtitle: "Experience with best smartphone on the world",
+      percentOff: "40% OFF",
+    },
+  ];
+
   const handleSlideChange = (index) => {
-    setAnimate(false); // Reset animation
-    setActiveSlide(index); // Update active slide
-    // Re-trigger animation after a short delay
+    setAnimate(false);
+    setActiveSlide(index);
     setTimeout(() => {
       setAnimate(true);
-    }, 100); // Adjust delay as needed
+    }, 100);
   };
 
-  // Detect screen size and disable auto-play for mobile devices
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
@@ -61,13 +75,10 @@ export default function Banner({ className }) {
       }
     };
 
-    // Initial check
     handleResize();
 
-    // Add resize listener
     window.addEventListener("resize", handleResize);
 
-    // Cleanup the event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -111,24 +122,43 @@ export default function Banner({ className }) {
                               {slide.price}
                             </span>
                           </h2>
-                          <p className="text-left text-[13px]">{slide.description}</p>
+                          <p className="text-left text-[13px]">
+                            {slide.description}
+                          </p>
                         </div>
                       </div>
                     </div>
                   ))}
                 </Carousel>
-
                 <div className="flex flex-col w-full sm:w-[30%] gap-4">
-                  <img
-                    className="w-full max-w-full sm:h-[195px] object-cover"
-                    src={Extra1}
-                    alt="Extra 1"
-                  />
-                  <img
-                    className="w-full max-w-full sm:h-[195px] object-cover"
-                    src={Extra2}
-                    alt="Extra 2"
-                  />
+                  {secondary.map((child, index) => (
+                    <div className="relative w-full sm:w-full" key={index}>
+                      <img
+                        className="w-full max-w-full sm:h-[195px] object-cover"
+                        src={child.image}
+                        alt={child.alt}
+                      />
+                      <div
+                        className={`absolute top-0 left-4 w-4/5 md:w-3/5 h-full flex items-center justify-center text-black text-left p-4 lg:left-0 `}
+                      >
+                        <div>
+                          <div className="flex justify-center items-center">
+                            <h2 className="text-[10px] font-medium sm:text-[25px] w-25 leading-tight">
+                              {child.title}
+                            </h2>
+                            <div className="flex border rounded-full bg-red-600 w-[100px] h-[65px] items-center justify-center">
+                              <p className="text-[13px] w-[40%] text-white text-bold ">
+                                {child.percentOff}
+                              </p>
+                            </div>
+                          </div>
+                          <p className="text-xs w-[90px] mt-6 mb-4 sm:text-xs">
+                            {child.subtitle}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
