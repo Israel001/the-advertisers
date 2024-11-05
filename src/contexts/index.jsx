@@ -149,6 +149,7 @@ const ContextProvider = ({ children }) => {
         quantity: prodQty,
         total: prodPrice * prodQty,
         storeId: product?.store.id,
+        storeName: product?.store?.storeName,
       };
       clonedProfile.cart.push(cartObj);
       setProfile(clonedProfile);

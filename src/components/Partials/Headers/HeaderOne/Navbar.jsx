@@ -25,7 +25,7 @@ export default function Navbar({ className, type }) {
 
   useEffect(() => {
     if (!categories.length) fetchCategories();
-  }, [categories]);
+  }, []);
 
   const fetchCategories = async () => {
     const response = await axios.get(

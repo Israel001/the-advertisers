@@ -27,9 +27,7 @@ function ViewOrder() {
             (c) => c.storeId === profile?.store?.id
           );
           setOrderStatus(
-            prod.status === "Mark order as sent to courier"
-              ? "Sent to courier"
-              : prod.status
+            prod.status || "Mark order as packed, waiting for courier..."
           );
         }
         setOrder(response?.data);
@@ -52,7 +50,7 @@ function ViewOrder() {
         `${import.meta.env.VITE_HOST_URL}/order/${orderId}`,
         {
           products: orderObject?.cart.reduce((prev, cur) => {
-            if (cur.id === profile?.store?.id) {
+            if (cur.storeId === profile?.store?.id) {
               prev.push(cur.id);
             }
             return prev;
@@ -66,11 +64,7 @@ function ViewOrder() {
         }
       )
       .then(() => {
-        if (oldStatus === "Mark order as packed, waiting for courier...") {
-          setOrderStatus("Mark order as sent to courier");
-        } else {
-          setOrderStatus("Sent to courier");
-        }
+        setOrderStatus(oldStatus);
         setLoading(false);
       })
       .catch((error) => {
@@ -87,14 +81,14 @@ function ViewOrder() {
       <div className="checkout-main-content w-full">
         <div className="container-x mx-auto">
           {profile?.type === "STORE" ? (
-            orderStatus !== "Sent to courier" ? (
+            orderStatus !== "Given to courier" ? (
               <button
                 onClick={() =>
                   updateOrderStatus(
                     orderStatus ===
                       "Mark order as packed, waiting for courier..."
-                      ? "Mark order as packed, waiting for courier..."
-                      : "Mark order as sent to courier"
+                      ? "Mark order as given to courier"
+                      : "Given to courier"
                   )
                 }
                 className="flex items-center ml-auto rounded justify-center gap-3 bg-red-700 h-[60px] w-[250px] transform focus:scale-75 hover:scale-105 duration-500 text-white text-[16px]"
