@@ -19,7 +19,7 @@ function ThankYou() {
               </div>
               <div className=" flex justify-center items-center">
                 <Link to="/profile#order">
-                  <p className="bg-red-700 text-white p-4 font-semibold rounded-lg">
+                  <p className="bg-red-700 text-white p-4 font-semibold rounded-lg cursor-pointer">
                     View Order Details
                   </p>
                 </Link>

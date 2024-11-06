@@ -13,6 +13,7 @@ export default function AddressesTab() {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [allStates, setAllStates] = React.useState(null);
+  const [selectedState, setSelectedState] = React.useState("Select...");
   const [selectedID, setSelectedID] = React.useState(null);
   const [addressDefaultValues, setAddressDefaultValues] = React.useState(null);
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -66,10 +67,20 @@ export default function AddressesTab() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+
+    if (name === "stateId") {
+      const state = allStates.find((s) => s.id === Number(value));
+      setSelectedState(state ? state.name : "Select...");
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        stateId: value,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleDeleteAddress = (e) => {
@@ -144,6 +155,15 @@ export default function AddressesTab() {
           setLoading(false);
           toast.success("New address created successfully");
           setOpen(false);
+          window.location.reload();
+
+          // const newAddress = response;
+          // console.log("newAdress", newAddress);
+          // console.log(profile?.addresses);
+          // setProfile((prevProfile) => ({
+          //   ...prevProfile,
+          //   addresses: [...prevProfile.addresses, newAddress],
+          // }));
         })
         .catch((error) => {
           setLoading(false);
@@ -354,10 +374,12 @@ export default function AddressesTab() {
                 }
                 onChange={handleChange}
               >
-                <option value="">Select...</option>
+                <option value="">{selectedState}</option>
                 {allStates &&
                   allStates?.map((state) => (
-                    <option value={state.id}>{state.name}</option>
+                    <option key={state.id} value={state.id}>
+                      {state.name}
+                    </option>
                   ))}
               </select>
             </div>
