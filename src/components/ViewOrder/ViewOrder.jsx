@@ -22,17 +22,57 @@ function ViewOrder() {
         },
       })
       .then((response) => {
+        console.log(response);
+        console.log(profile);
         if (profile?.type === "STORE") {
           const prod = JSON.parse(response?.data?.details).cart.find(
             (c) => c.storeId === profile?.store?.id
           );
-          setOrderStatus(
-            prod.status === "Assigned to Courier"
-              ? `Mark order as given to courier (Name: ${
+          let orderStatus = response?.data?.status;
+          let refinedStatus;
+          if (orderStatus === "PICKED_UP") {
+            refinedStatus = "Picked up by customer";
+          } else {
+            switch (prod.status) {
+              case "Assigned to Courier":
+                refinedStatus = `Mark order as given to courier (Name: ${
                   prod.agentName || ""
-                }, Phone: ${prod.agentPhone || ""})`
-              : prod.status || "Mark order as packed, waiting for courier..."
-          );
+                }, Phone: ${prod.agentPhone || ""})`;
+                break;
+              case "PRODUCT_COLLECTED_FROM_SELLER_BY_DELIVERY_AGENT":
+                refinedStatus = `Product collected from seller`;
+                break;
+              case "PRODUCT_DROPPED_AT_DISTRIBUTION_CENTER_BY_DELIVERY_AGENT":
+                refinedStatus = `Product dropped at distribution center`;
+                break;
+              default:
+                refinedStatus =
+                  prod.status || "Mark order as packed, waiting for courier...";
+            }
+          }
+          setOrderStatus(refinedStatus);
+        }
+        if (profile?.type === "CUSTOMER") {
+          let orderStatus = response?.data?.status;
+          let refinedStatus;
+            switch (orderStatus) {
+              case "PENDING":
+                refinedStatus = `Pending`;
+                break;
+              case "IN_PROGRESS":
+                refinedStatus = `In Progress`;
+                break;
+              case "PACKED_AND_READY_TO_PICKUP":
+                refinedStatus = `Packaged and ready for pickup`;
+                break;
+              case "PICKED_UP":
+                refinedStatus = `Your order has been picked up`;
+                break;
+              default:
+                refinedStatus =
+                  prod.status || "Mark order as packed, waiting for courier...";
+            }
+          setOrderStatus(refinedStatus);
         }
         setOrder(response?.data);
         setLoading(false);
@@ -86,6 +126,9 @@ function ViewOrder() {
         <div className="container-x mx-auto">
           {profile?.type === "STORE" ? (
             orderStatus !== "Given to courier" &&
+            orderStatus !== "Product collected from seller" &&
+            orderStatus !== "Product dropped at distribution center" &&
+            orderStatus !== "Picked up by customer" &&
             orderStatus !== "Waiting for Courier" ? (
               <button
                 onClick={() =>
@@ -181,9 +224,17 @@ function ViewOrder() {
             )}
 
             <div>
-              <h1 className="sm:text-2xl text-xl text-qblack font-medium mb-5">
-                Order Summary
-              </h1>
+              <div className="flex justify-between">
+                <h1 className="sm:text-2xl text-xl text-qblack font-medium mb-5">
+                  Order Summary
+                </h1>
+                {profile?.type === "CUSTOMER" ? (
+                <span style={{ float: "right", color: "rgb(148, 22, 22)" }}>
+                  {orderStatus}
+                </span>
+                ): <></> }
+
+              </div>
 
               <div className="w-[100%] m-auto px-3 py-[30px] border border-[#EDEDED]">
                 <div className="sub-total mb-6">

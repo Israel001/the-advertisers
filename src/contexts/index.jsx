@@ -151,6 +151,7 @@ const ContextProvider = ({ children }) => {
         storeId: product?.store.id,
         storeName: product?.store?.storeName,
         storePhone: product?.store?.contactPhone,
+        storeAddress: product?.store?.address,
       };
       clonedProfile.cart.push(cartObj);
       setProfile(clonedProfile);
