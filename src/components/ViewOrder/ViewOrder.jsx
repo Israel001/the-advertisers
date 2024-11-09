@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../contexts";
 import axios from "axios";
 import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
+import moment from "moment";
+
+
 
 function ViewOrder() {
   const { profile } = useAppContext();
@@ -100,6 +103,7 @@ function ViewOrder() {
             return prev;
           }, []),
           status: oldStatus,
+          storeId: profile?.store?.id,
         },
         {
           headers: {
@@ -228,12 +232,24 @@ function ViewOrder() {
                 <h1 className="sm:text-2xl text-xl text-qblack font-medium mb-5">
                   Order Summary
                 </h1>
-                {profile?.type === "CUSTOMER" ? (
-                <span style={{ float: "right", color: "rgb(148, 22, 22)" }}>
-                  {orderStatus}
-                </span>
-                ): <></> }
-
+                {profile?.type === "CUSTOMER" &&
+                orderStatus !== "Your order has been picked up" ? (
+                  <span style={{ float: "right", color: "rgb(148, 22, 22)" }}>
+                    {orderStatus}
+                  </span>
+                ) : (
+                  <></>
+                )}
+                <div>
+                  {profile?.type === "CUSTOMER" ? (
+                    <span style={{ float: "right", color: "rgb(148, 22, 22)" }}>
+                      Your order has been picked up at:{" "}
+                      {moment(order?.updatedAt).format("MMMM D, YYYY, h:mm A")}
+                    </span>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
 
               <div className="w-[100%] m-auto px-3 py-[30px] border border-[#EDEDED]">

@@ -8,11 +8,14 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAppContext } from "../../contexts";
 import withLoginContext from "../../hoc/withLoginContext";
+import CustomModal from "./CustomModal";
 
 function BecomeSaller() {
   const [profileImg, setProfileImg] = useState(null);
   const [logoImg, setLogoImg] = useState(null);
   const [coverImg, setCoverImg] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // logo img
   const logoImgInput = useRef(null);
   const browseLogoImg = () => {
@@ -84,6 +87,18 @@ function BecomeSaller() {
   const [streetError, setStreetError] = useState("Street is required");
   const [passwordError, setPasswordError] = useState("Password is required");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleVerifyOtp = (otp) => {
+    console.log("OTP verified:", otp);
+    handleCloseModal();
+  };
+
+  const handleResendOtp = () => {
+    console.log("OTP resent");
+  };
 
   useEffect(() => {
     if (password !== confirmPassword) {
@@ -484,11 +499,19 @@ function BecomeSaller() {
                         <button
                           type="button"
                           className="black-btn text-sm text-white w-[490px] h-[50px] font-semibold flex justify-center bg-purple items-center"
-                          onClick={handleSignup}
+                          // onClick={handleSignup}
+                          onClick={handleOpenModal}
                         >
                           <span>Create Seller Account</span>
                         </button>
                       </div>
+
+                      <CustomModal
+                        open={isModalOpen}
+                        handleClose={handleCloseModal}
+                        onVerify={handleVerifyOtp}
+                        resendOtp={handleResendOtp}
+                      />
                     </div>
 
                     <div className="signup-area flex justify-center">

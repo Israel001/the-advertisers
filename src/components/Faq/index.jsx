@@ -20,7 +20,7 @@ export default function Faq() {
       <div className="contact-wrapper w-full mb-10">
         <div className="container-x mx-auto">
           <div className="main-wrapper w-full lg:flex lg:space-x-[30px]">
-            <div className="lg:w-1/2 w-full mb-10 lg:mb-0">
+            {/* <div className="lg:w-1/2 w-full mb-10 lg:mb-0">
               <h1 className="text-qblack font-bold text-[22px] mb-4">
                 Frequently asked questions
               </h1>
@@ -116,7 +116,7 @@ humour, or randomised words"
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

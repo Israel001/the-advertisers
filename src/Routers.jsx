@@ -27,6 +27,8 @@ import ThankYou from "./components/ThankYou/ThankYou";
 import ViewOrder from "./components/ViewOrder/ViewOrder";
 import ForgotPassword from "./components/Auth/ForgotPassword/index";
 import VerifyOtp from "./components/Auth/VerifyOtp/index";
+import BestProducts from "./components/BestProducts/index.jsx";
+import Support from "./components/Support/index.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -42,12 +44,14 @@ const router = createBrowserRouter([
   // { path: "/view-order/:id", element: <ViewOrder /> },
 
   { path: "/wishlist", element: <Wishlist /> },
-  // { path: "/flash-sale", element: <FlashSale /> },
+  { path: "/flash-sale", element: <FlashSale /> },
   { path: "/saller-page", element: <SallerPage /> },
   // { path: "/products-compaire", element: <ProductsCompaire /> },
   { path: "/sallers", element: <Sallers /> },
   { path: "/about", element: <About /> },
-  // { path: "/blogs", element: <Blogs /> },
+  { path: "/blogs", element: <Blogs /> },
+  { path: "/best-products", element: <BestProducts /> },
+  { path: "/support", element: <Support /> },
   // { path: "/blogs/blog", element: <Blog /> },
   { path: "/tracking-order", element: <TrackingOrder /> },
   { path: "/contact", element: <Contact /> },

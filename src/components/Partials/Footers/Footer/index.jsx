@@ -66,7 +66,7 @@ export default function Footer({ type }) {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/all-products">
+                    <Link to="/best-products">
                       <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack cursor-pointer capitalize">
                         Best Products
                       </span>
@@ -131,7 +131,7 @@ export default function Footer({ type }) {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/about">
+                      <Link to="/support">
                         <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack cursor-pointer capitalize">
                           Support
                         </span>

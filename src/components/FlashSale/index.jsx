@@ -10,7 +10,8 @@ export default function FlashSale() {
   return (
     <Layout>
       <div className="flashsale-wrapper w-full">
-        <div className="container-x mx-auto">
+        <h1 className="text-[30px] p-[20px]" >Flash-Sale</h1>
+        {/* <div className="container-x mx-auto">
           <div className="w-full">
             <div
               style={{
@@ -81,7 +82,7 @@ export default function FlashSale() {
               </DataIteration>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );

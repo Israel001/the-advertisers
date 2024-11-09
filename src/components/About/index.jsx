@@ -60,7 +60,7 @@ export default function About() {
           />
         </div>
 
-        <div className="aboutus-wrapper w-full">
+        {/* <div className="aboutus-wrapper w-full">
           <div className="container-x mx-auto">
             <div className="w-full min-h-[665px] lg:flex lg:space-x-12 items-center pb-10 lg:pb-0">
               <div className="md:w-[570px] w-full md:h-[560px] h-auto rounded overflow-hidden my-5 lg:my-0">
@@ -741,7 +741,7 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );

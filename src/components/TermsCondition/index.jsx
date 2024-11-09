@@ -14,7 +14,7 @@ export default function TermsCondition() {
             title="Terms and Condition"
           />
         </div>
-        <div className="w-full">
+        {/* <div className="w-full">
           <div className="container-x mx-auto">
             <div className="content-item w-full mb-10">
               <h2 className="text-[18px] font-medium text-qblack mb-5">
@@ -165,7 +165,7 @@ export default function TermsCondition() {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );
