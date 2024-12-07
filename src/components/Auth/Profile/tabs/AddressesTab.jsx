@@ -87,7 +87,6 @@ export default function AddressesTab() {
     axios
       .delete(
         `${import.meta.env.VITE_HOST_URL}/users/customer/address/${selectedID}`,
-        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
